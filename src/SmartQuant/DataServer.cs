@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SmartQuant
 {
-    public class DataServer : IDisposable
+    public abstract class DataServer : IDisposable
     {
         protected Framework framework;
         protected bool tapeMode;

@@ -1,17 +1,12 @@
-
-using System;
-using System.IO;
-using System.Text;
-using System.Xml.Serialization;
+// Licensed under the Apache License, Version 2.0. 
+// Copyright (c) Alex Lee. All rights reserved.
 
 namespace SmartQuant
 {
-    public class FileDataServer
+    public class FileDataServer : DataServer
 	{
-        public FileDataServer(Framework framework, string fileName, string host)
+        public FileDataServer(Framework framework, string fileName, string host = null) : base(framework)
         {
-            throw new NotImplementedException();
         }
 	}
-
 }

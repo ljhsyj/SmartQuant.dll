@@ -2,6 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.Threading;
 
 namespace SmartQuant
 {
@@ -9,6 +10,7 @@ namespace SmartQuant
     {
         private Framework framework;
         private EventBus bus;
+        private bool stepping = false;
 
         public EventManagerStatus Status { get; private set; }
 
@@ -30,6 +32,10 @@ namespace SmartQuant
         {
             this.framework = framework;
             this.bus = bus;
+            Thread thread  = new Thread(new ThreadStart(this.Run));
+            thread.Name = "Event Manager Thread";
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         public void Start()
@@ -61,7 +67,7 @@ namespace SmartQuant
         {
             throw new NotImplementedException();
         }
-
+            
         public void OnEvent(Event e)
         {
             throw new NotImplementedException();
@@ -69,6 +75,18 @@ namespace SmartQuant
 
         public void Clear()
         {
+        }
+
+        private void Run()
+        {
+            this.Status = EventManagerStatus.Running;
+            while (true)
+            {
+                if (this.Status != EventManagerStatus.Running && (this.Status != EventManagerStatus.Paused || !this.stepping))
+                    Thread.Sleep(1);
+                else
+                    this.OnEvent(this.bus.Dequeue());
+            }
         }
     }
 }

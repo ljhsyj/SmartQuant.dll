@@ -320,6 +320,21 @@
     <Compile Include="PortfolioStatisticsItemList.cs" />
     <Compile Include="BarSliceFactory.cs" />
     <Compile Include="BarFactory.cs" />
+    <Compile Include="LinkedList.cs" />
+    <Compile Include="StrategyComponent.cs" />
+    <Compile Include="Scenario.cs" />
+    <Compile Include="DataFileServer.cs" />
+    <Compile Include="DataFileServerClient.cs" />
+    <Compile Include="FileManager.cs" />
+    <Compile Include="OrderBook.cs" />
+    <Compile Include="TickSeries.cs" />
+    <Compile Include="BarSeries.cs" />
+    <Compile Include="SqliteInstrumentServer.cs" />
+    <Compile Include="ProviderList.cs" />
+    <Compile Include="DataSimulator.cs" />
+    <Compile Include="SlippageProvider.cs" />
+    <Compile Include="Pricer.cs" />
+    <Compile Include="PortfolioList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

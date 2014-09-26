@@ -1,6 +1,8 @@
 // Licensed under the Apache License, Version 2.0. 
 // Copyright (c) Alex Lee. All rights reserved.
 
+using System;
+
 namespace SmartQuant
 {
 	public class EventServer
@@ -16,7 +18,7 @@ namespace SmartQuant
 
         public void OnFrameworkCleared(Framework framework)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 	}
 

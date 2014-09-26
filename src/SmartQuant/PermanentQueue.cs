@@ -6,5 +6,4 @@ namespace SmartQuant
 	public class PermanentQueue<T>
 	{
 	}
-
 }

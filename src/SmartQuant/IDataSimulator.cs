@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SmartQuant
 {
-    public interface IDataSimulator : IDataProvider, IProvider
+    public interface IDataSimulator : IDataProvider
     {
         DateTime DateTime1 { get; set; }
 

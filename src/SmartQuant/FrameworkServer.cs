@@ -9,7 +9,7 @@ namespace SmartQuant
     {
         public Framework Framework { get; internal set; }
 
-        public string ConnectionString{ get; set; }
+        public string ConnectionString { get; set; }
        
         protected FrameworkServer()
         {

@@ -5,7 +5,7 @@ using System;
 
 namespace SmartQuant
 {
-    public class InstrumentServer : IDisposable
+    public abstract class InstrumentServer : IDisposable
     {
         protected Framework framework;
         protected InstrumentList instruments = new InstrumentList();

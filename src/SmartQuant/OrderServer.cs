@@ -7,6 +7,10 @@ namespace SmartQuant
 {
     public abstract class OrderServer : FrameworkServer
     {
+        protected OrderServer()
+        {
+        }
+
         public abstract List<ExecutionMessage> Load();
 
         public abstract void Save(ExecutionMessage message);

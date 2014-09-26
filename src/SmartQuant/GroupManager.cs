@@ -9,6 +9,5 @@ namespace SmartQuant
         {
             throw new System.NotImplementedException();
         }
-	}
-
+    }
 }

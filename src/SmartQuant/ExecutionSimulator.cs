@@ -6,36 +6,41 @@ using System.Xml.Serialization;
 
 namespace SmartQuant
 {
-    public class ExecutionSimulator : IExecutionSimulator
+    public class ExecutionSimulator : Provider, IExecutionSimulator
 	{
         public ExecutionSimulator(Framework framework)
         {
-            throw new NotImplementedException();
+            this.CommissionProvider = new CommissionProvider();
+            this.SlippageProvider = new SlippageProvider();
         }
 
-        public ICommissionProvider CommissionProvider
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ICommissionProvider CommissionProvider { get; set; }
 
-        public ISlippageProvider SlippageProvider
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ISlippageProvider SlippageProvider { get; set; }
+
+        public bool FillOnQuote { get; set; }
+
+        public bool FillOnTrade { get; set; }
+
+        public bool FillOnBarOpen { get; set; }
+
+        public bool FillOnBar { get; set; }
+
+        public bool FillOnLevel2 { get; set; }
+
+        public bool FillMarketOnNext { get; set; }
+
+        public bool FillLimitOnNext { get; set; }
+
+        public bool FillStopOnNext { get; set; }
+
+        public bool FillStopLimitOnNext { get; set; }
+
+        public bool FillAtLimitPrice { get; set; }
+
+        public bool PartialFills { get; set; }
+
+        public bool Queued { get; set; }
 
         public void OnBid(Bid bid)
         {
@@ -71,36 +76,5 @@ namespace SmartQuant
         {
             throw new NotImplementedException();
         }
-
-        public void Send(ExecutionCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ProviderStatus Status
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public byte Id
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public void Connect()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Disconnect()
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

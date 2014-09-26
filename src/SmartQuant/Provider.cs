@@ -6,10 +6,13 @@ namespace SmartQuant
 	{
         private Framework framework;
 
+        // TODO: remove this?!!
+        public Provider() {}
         public Provider(Framework framework)
         {
             this.framework = framework;
         }
+
         public ProviderStatus Status
         {
             get { throw new NotImplementedException(); }

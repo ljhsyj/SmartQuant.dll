@@ -31,6 +31,7 @@ namespace SmartQuant
 
         public void Attach(EventBus bus)
         {
+            throw new NotImplementedException();
         }
 
         public Event Dequeue()
