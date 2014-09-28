@@ -7,16 +7,12 @@ namespace SmartQuant
 {
     public class Clock
     {
+        private Framework framework;
+
         public DateTime DateTime
         {
             get;
-            set;
-        }
-
-        public Clock(Framework framework, ClockMode mode = ClockMode.Simulation, bool isStandalone = false) 
-        {
-            this.Mode = mode;
-            throw new System.NotImplementedException();
+            private set;
         }
 
         public ClockMode Mode { get; set; }
@@ -25,6 +21,12 @@ namespace SmartQuant
 
         public long Ticks { get {  throw new System.NotImplementedException(); } }
 
+        public Clock(Framework framework, ClockMode mode = ClockMode.Simulation, bool isStandalone = false) 
+        {
+            this.framework = framework;
+            this.Mode = mode;
+        }
+            
         public void AddReminder(ReminderCallback callback, DateTime dateTime, object data = null)
         {
             this.AddReminder(new Reminder(callback, dateTime, data));

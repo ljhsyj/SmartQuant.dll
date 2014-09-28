@@ -15,11 +15,13 @@ namespace SmartQuant
             }
         }
 
-        public Ask(DateTime dateTime, byte providerId, int instrument, double price, int size) : base(dateTime, providerId, instrument, price, size)
+        public Ask(DateTime dateTime, byte providerId, int instrument, double price, int size)
+            : base(dateTime, providerId, instrument, price, size)
         {
         }
 
-        public Ask(DateTime dateTime, DateTime exchangeDateTime, byte providerId, int instrument, double price, int size) : base(dateTime, exchangeDateTime, providerId, instrument, price, size)
+        public Ask(DateTime dateTime, DateTime exchangeDateTime, byte providerId, int instrument, double price, int size)
+            : base(dateTime, exchangeDateTime, providerId, instrument, price, size)
         {
         }
 
@@ -27,7 +29,8 @@ namespace SmartQuant
         {
         }
 
-        public Ask(Ask ask) : base(ask)
+        public Ask(Ask ask)
+            : base(ask)
         {
         }
 

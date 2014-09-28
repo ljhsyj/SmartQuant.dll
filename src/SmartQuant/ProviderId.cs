@@ -2,6 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SmartQuant
 {
@@ -43,66 +44,38 @@ namespace SmartQuant
         public const byte Integral = 35;
         public const byte QuantBase = 36;
         public const byte QuantRouter = 38;
-        public const byte MatchingEngine = 100;
+        public const byte IQFeed = 39;
+        public const byte MatchingEngine = 99;
 
-        private static Dictionary<string, byte> map;
+        private static Dictionary<string, byte> mapping;
 
         static ProviderId()
         {
-            map = new Dictionary<string, byte>();
-            map.Add("DataSimulator", DataSimulator);
-            map.Add("ExecutionSimulator", ExecutionSimulator);
-            map.Add("QuickFIX42", QuickFIX42);
-            map.Add("IB", IB);
-            map.Add("ESignal", ESignal);
-            map.Add("MBTrading", MBTrading);
-            map.Add("Opentick", Opentick);
-            map.Add("QuoteTracker", QuoteTracker);
-            map.Add("TAL", TAL);
-            map.Add("TTFIX", TTFIX);
-            map.Add("TTAPI", TTAPI);
-            map.Add("Genesis", Genesis);
-            map.Add("MyTrack", MyTrack);
-            map.Add("Photon", Photon);
-            map.Add("Bloomberg", Bloomberg);
-            map.Add("Reuters", Reuters);
-            map.Add("Yahoo", Yahoo);
-            map.Add("DC", DC);
-            map.Add("CSI", CSI);
-            map.Add("QuantHouse", QuantHouse);
-            map.Add("PATSAPI", PATSAPI);
-            map.Add("OpenECry", OpenECry);
-            map.Add("OpenTick", OpenTick);
-            map.Add("FIX", FIX);
-            map.Add("Google", Google);
-            map.Add("Hotspot", Hotspot);
-            map.Add("AlfaDirect", AlfaDirect);
-            map.Add("Currenex", Currenex);
-            map.Add("SmartCOM", SmartCOM);
-            map.Add("GenericEOD", GenericEOD);
-            map.Add("QUIKFIX", QUIKFIX);
-            map.Add("OSLFIX", OSLFIX);
-            map.Add("Nordnet", Nordnet);
-            map.Add("Integral", Integral);
-            map.Add("QuantBase", QuantBase);
-            map.Add("QuantRouter", QuantRouter);
-            map.Add("MatchingEngine", MatchingEngine);
+            mapping = new Dictionary<string, byte>();
+
+            foreach (FieldInfo info in typeof(ProviderId).GetFields(BindingFlags.Static | BindingFlags.Public))
+            {
+                if (info.FieldType == typeof(byte))
+                {
+                    mapping.Add(info.Name, (byte)info.GetValue(null));
+                }
+            }
         }
 
         public static void Add(string name, byte id)
         {
-            map.Add(name, id);
+            mapping.Add(name, id);
         }
 
         public static void Remove(string name)
         {
-            map.Remove(name);
+            mapping.Remove(name);
         }
 
         public static byte Get(string name)
         {
             byte id;
-            map.TryGetValue(name, out id);
+            mapping.TryGetValue(name, out id);
             return id;
         }
     }

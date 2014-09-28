@@ -13,10 +13,7 @@ namespace SmartQuant
             get { throw new NotImplementedException(); }
         }
 
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public string Name { get; private set; }
 
         public DateTime DateTime1
         {
@@ -33,11 +30,14 @@ namespace SmartQuant
             get { throw new NotImplementedException(); }
         }
 
-        public DataSeries()
+        public DataObject this [DateTime dateTime]
         {
+            get { throw new NotImplementedException(); }
         }
 
-        public DataSeries(string name)
+        public bool CacheObjects { get; set; }
+
+        public DataSeries(string name = null)
         {
         }
 
@@ -45,12 +45,7 @@ namespace SmartQuant
         {
             throw new NotImplementedException();
         }
-
-        public void Update(long index, DataObject obj)
-        {
-            throw new NotImplementedException();
-        }
-
+            
         public void Add(DataObject obj)
         {
             throw new NotImplementedException();
@@ -61,16 +56,21 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        public void Remove(long index)
-        {
-            throw new NotImplementedException();
-        }
-            
         public DataObject Get(DateTime dateTime)
         {
             throw new NotImplementedException();
         }
 
+        public void Update(long index, DataObject obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(long index)
+        {
+            throw new NotImplementedException();
+        }
+            
         public void Clear()
         {
             throw new NotImplementedException();

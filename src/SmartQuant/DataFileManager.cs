@@ -3,16 +3,19 @@
 
 using System.IO;
 using System;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
 	public class DataFileManager
 	{
         private string path;
+        private Dictionary<string, DataFile> dataFiles;
 
         public DataFileManager(string path)
         {
             this.path = path;
+            dataFiles = new Dictionary<string, DataFile>();
         }
 
         public DataFile GetFile(string name, FileMode mode = FileMode.OpenOrCreate)
@@ -27,7 +30,7 @@ namespace SmartQuant
 
         public void Delete(string fileName, string objectName)
         {
-            throw new NotImplementedException();
+            this.GetFile(fileName, FileMode.OpenOrCreate).Delete(objectName);
         }
 
         public void Close(string name)
@@ -37,8 +40,8 @@ namespace SmartQuant
 
         public void Close()
         {
-            throw new NotImplementedException();
+            foreach (DataFile file in this.dataFiles.Values)
+                file.Close();
         }
 	}
-
 }

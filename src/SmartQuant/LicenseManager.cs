@@ -15,7 +15,7 @@ namespace SmartQuant
         public string GetHardwareID()
         {
             // return whatever you wants
-            return "3684350e-8d22-40f0-9ece-91bc369d0053";
+            return "AAAA-1111-BBBB-2222-CCCC";
         }
 
         public void LoadLicense(byte[] license)

@@ -15,11 +15,13 @@ namespace SmartQuant
             }
         }
 
-        public Bid(DateTime dateTime, byte providerId, int instrumentId, double price, int size) : base(dateTime, providerId, instrumentId, price, size)
+        public Bid(DateTime dateTime, byte providerId, int instrumentId, double price, int size)
+            : base(dateTime, providerId, instrumentId, price, size)
         {
         }
 
-        public Bid(DateTime dateTime, DateTime exchangeDateTime, byte providerId, int instrumentId, double price, int size) : base(dateTime, exchangeDateTime, providerId, instrumentId, price, size)
+        public Bid(DateTime dateTime, DateTime exchangeDateTime, byte providerId, int instrumentId, double price, int size)
+            : base(dateTime, exchangeDateTime, providerId, instrumentId, price, size)
         {
         }
 
@@ -27,7 +29,8 @@ namespace SmartQuant
         {
         }
 
-        public Bid(Bid bid) : base(bid)
+        public Bid(Bid bid)
+            : base(bid)
         {
         }
 

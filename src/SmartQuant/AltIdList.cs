@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace SmartQuant
 {
-    public class AltIdList : IEnumerable<AltId>, IEnumerable
+    public class AltIdList : IEnumerable<AltId>
     {
         public AltIdList()
         {

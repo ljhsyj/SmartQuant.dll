@@ -1,19 +1,20 @@
 // Licensed under the Apache License, Version 2.0. 
 // Copyright (c) Alex Lee. All rights reserved.
 
+using System;
+
 namespace SmartQuant
 {
-	public class AccountDataManager
+	public partial class AccountDataManager
 	{
-        public AccountDataManager(Framework framework)
+        public AccountDataSnapshot GetSnapshot(byte providerId, byte route)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void Clear()
+        public AccountDataSnapshot[] GetSnapshots()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 	}
-
 }

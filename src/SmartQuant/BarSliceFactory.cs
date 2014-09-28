@@ -5,6 +5,11 @@ namespace SmartQuant
 {
 	public class BarSliceFactory
 	{
-	}
+        private Framework framework;
 
+        public BarSliceFactory(Framework framework)
+        {
+            this.framework = framework;
+        }          
+	}
 }

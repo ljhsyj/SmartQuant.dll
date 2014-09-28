@@ -12,13 +12,14 @@ namespace SmartQuant
 
         private FrameworkMode mode;
 
+        public Clock Clock {   get { throw new NotImplementedException();} }
+
         public static Framework Current { get; private set; }
 
         public string Name { get; private set; }
 
         public Configuration Configuration { get; private set; }
 
-        // Events
         public EventBus EventBus { get; private set; }
 
         public EventServer EventServer { get; private set; }
@@ -48,6 +49,10 @@ namespace SmartQuant
         public CurrencyConverter CurrencyConverter { get; set; }
 
         public GroupManager GroupManager { get; private set; }
+
+        public StreamerManager StreamerManager { get; private set; }
+
+        public DataFileManager DataFileManager { get; private set; }
 
         public FrameworkMode Mode
         {
@@ -80,10 +85,7 @@ namespace SmartQuant
         {
             this.Name = name;
             this.LoadConfiguration();
-
 //            this.Mode = FrameworkMode.Simulation;
-
-
             this.EventBus = new EventBus(this, EventBusMode.Simulation);
             if (externalBus != null)
                 externalBus.Attach(this.EventBus);
@@ -93,13 +95,17 @@ namespace SmartQuant
             this.InstrumentManager = new InstrumentManager(this, this.InstrumentServer);
             this.DataServer = createServers ? (!this.Configuration.IsDataFileLocal ? new FileDataServer(this, "data.quant", this.Configuration.DataFileHost) : new FileDataServer(this, this.Configuration.DataFileName, null)) : dataServer;
             this.DataManager = new DataManager(this, this.DataServer);
+            this.StreamerManager = new StreamerManager();
+            this.LoadStreamerPlugins();
             this.ProviderManager = new ProviderManager(this);
+            this.LoadProviderPlugins();
             this.OrderManager = new OrderManager(this, null);
             this.PortfolioManager = new PortfolioManager(this);
             this.StatisticsManager = new StatisticsManager(this);
             this.StrategyManager = new StrategyManager(this);
             this.GroupManager = new GroupManager(this);
             this.CurrencyConverter = new CurrencyConverter(this);
+            this.DataFileManager = new DataFileManager(Installation.DataDir.FullName);
             Framework.Current = Framework.Current == null ? this : Framework.Current;
         }
 
@@ -135,13 +141,34 @@ namespace SmartQuant
 
         private void Dispose(bool disposing)
         {
-            if (this.disposed)
-                return;
-            if (disposing)
+            if (!this.disposed)
             {
-                this.SaveConfiguration();
+                if (disposing)
+                {
+                    this.SaveConfiguration();
+                }
+                this.disposed = true;
             }
-            this.disposed = true;
+        }
+
+        private void LoadProviderPlugins()
+        {
+            foreach (ProviderPlugin plugin in this.Configuration.Providers)
+            {
+                Type type = Type.GetType(plugin.TypeName);
+                IProvider provider = (Provider)Activator.CreateInstance(type);
+                this.ProviderManager.AddProvider(provider);
+            }
+        }
+
+        private void LoadStreamerPlugins()
+        {
+            foreach (StreamerPlugin plugin in this.Configuration.Streamers)
+            {
+                Type type = Type.GetType(plugin.TypeName);
+                ObjectStreamer streamer = (ObjectStreamer)Activator.CreateInstance(type);
+                this.StreamerManager.Add(streamer);
+            }
         }
     }
 }

@@ -2,162 +2,63 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
     class DataSimulator : Provider, IDataSimulator
 	{
-		public DataSimulator(Framework framework)
-		{
-		}
+        public DateTime DateTime1 { get; set; }
 
-        #region IDataSimulator implementation
+        public DateTime DateTime2 { get; set; }
 
-        public void Clear()
-        {
-            throw new System.NotImplementedException();
-        }
+        public bool SubscribeBid { get; set; }
 
-        public DateTime DateTime1
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public bool SubscribeAsk { get; set; }
 
-        public DateTime DateTime2
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public bool SubscribeTrade { get; set; }
 
-        public bool SubscribeBid
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public bool SubscribeBar { get; set; }
 
-        public bool SubscribeAsk
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public bool SubscribeLevelII { get; set; }
 
-        public bool SubscribeTrade
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public bool SubscribeNews { get; set; }
 
-        public bool SubscribeBar
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public bool SubscribeLevelII
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public bool SubscribeNews
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public bool SubscribeFundamental
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public bool SubscribeFundamental { get; set; }
 
         public bool SubscribeAll
         {
             set
             {
-                throw new System.NotImplementedException();
+                this.SubscribeBid = value;
+                this.SubscribeAsk = value;
+                this.SubscribeTrade = value;
+                this.SubscribeBar = value;
+                this.SubscribeLevelII = value;
+                this.SubscribeNews = value;
+                this.SubscribeFundamental = value;
             }
         }
 
-        public DataProcessor Processor
+        public DataProcessor Processor { get; set; }
+
+        public List<IDataSeries> Series { get; set; }
+
+        public DataSimulator(Framework framework) : base(framework)
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
+            this.id = ProviderId.DataSimulator;
+            this.name = "DataSimulator";
+            this.description = "Default data simulator";
+            this.url = "www.smartquant.com";
+            this.DateTime1 = DateTime.MinValue;
+            this.DateTime2 = DateTime.MaxValue;
+            this.Series = new List<IDataSeries>();
         }
 
-        public System.Collections.Generic.List<IDataSeries> Series
+        public void Clear()
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
+            this.Series.Clear();
         }
 
-        #endregion
 	}
 }

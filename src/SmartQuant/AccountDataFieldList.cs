@@ -2,6 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System.Collections;
+using System;
 
 namespace SmartQuant
 {
@@ -9,7 +10,7 @@ namespace SmartQuant
 	{
         public void CopyTo(System.Array array, int index)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public int Count

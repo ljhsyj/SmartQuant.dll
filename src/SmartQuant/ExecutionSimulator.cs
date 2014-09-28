@@ -8,12 +8,6 @@ namespace SmartQuant
 {
     public class ExecutionSimulator : Provider, IExecutionSimulator
 	{
-        public ExecutionSimulator(Framework framework)
-        {
-            this.CommissionProvider = new CommissionProvider();
-            this.SlippageProvider = new SlippageProvider();
-        }
-
         public ICommissionProvider CommissionProvider { get; set; }
 
         public ISlippageProvider SlippageProvider { get; set; }
@@ -41,6 +35,12 @@ namespace SmartQuant
         public bool PartialFills { get; set; }
 
         public bool Queued { get; set; }
+
+        public ExecutionSimulator(Framework framework) : base(framework)
+        {
+            this.CommissionProvider = new CommissionProvider();
+            this.SlippageProvider = new SlippageProvider();
+        }
 
         public void OnBid(Bid bid)
         {
