@@ -20,6 +20,21 @@ namespace SmartQuant
         {
             throw new NotImplementedException();
         }
+
+        public void OnLog(Event e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnEvent(Event e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnData(DataObject data)
+        {
+            throw new NotImplementedException();
+        }
 	}
 
 }

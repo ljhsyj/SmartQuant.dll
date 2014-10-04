@@ -36,10 +36,10 @@ namespace SmartQuant
 
         public EventQueue(byte id, byte type = EventQueueType.Master, byte priority = EventQueuePriority.Normal, int size = 100000)
         {
-            this.Id = id;
-            this.Type = type;
-            this.Priority = priority;
-            this.Size = size;
+            Id = id;
+            Type = type;
+            Priority = priority;
+            Size = size;
         }
 
         public Event Peek()

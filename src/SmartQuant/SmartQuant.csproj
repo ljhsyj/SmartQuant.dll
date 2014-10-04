@@ -367,6 +367,12 @@
     <Compile Include="StrategyList.cs" />
     <Compile Include="TimeBarFactoryItem.cs" />
     <Compile Include="VolumeBarFactoryItem.cs" />
+    <Compile Include="FreeKeyListStreamer.cs" />
+    <Compile Include="ObjectKeyListStreamer.cs" />
+    <Compile Include="DataKeyIdArrayStreamer.cs" />
+    <Compile Include="AlphaComponent.cs" />
+    <Compile Include="OnStrategyEvent.cs" />
+    <Compile Include="Fundamental.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

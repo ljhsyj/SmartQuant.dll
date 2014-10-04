@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public DataSeriesListEventArgs(params DataSeries[] seriesList)
         {
-            this.SeriesList = seriesList;
+            SeriesList = seriesList;
         }
     }
 }

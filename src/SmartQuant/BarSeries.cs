@@ -16,15 +16,20 @@ namespace SmartQuant
 
         public int MaxLength { get; set; }
 
-        public BarSeries(int maxLength) : this(null, null, maxLength)
+        public List<Indicator> Indicators { get; private set; }
+
+        public BarSeries(int maxLength)
+            : this(null, null, maxLength)
         {
         }
 
-        public BarSeries(string name = "", string description = "", int maxLength = -1) 
+        public BarSeries(string name = "", string description = "", int maxLength = -1)
         {
             this.name = name;
             this.description = description;
             this.MaxLength = maxLength;
+
+            this.Indicators = new List<Indicator>();
         }
 
         public int GetIndex(DateTime dateTime, IndexOption option = IndexOption.Null)
@@ -62,14 +67,6 @@ namespace SmartQuant
             get
             {
                 return this.description;
-            }
-        }
-
-        public List<Indicator> Indicators
-        {
-            get
-            {
-                throw new NotImplementedException();
             }
         }
 
@@ -160,7 +157,7 @@ namespace SmartQuant
             }
         }
 
-        public DataObject this[long index]
+        public DataObject this [long index]
         {
             get
             {

@@ -30,13 +30,13 @@ namespace SmartQuant
         {
             set
             {
-                this.SubscribeBid = value;
-                this.SubscribeAsk = value;
-                this.SubscribeTrade = value;
-                this.SubscribeBar = value;
-                this.SubscribeLevelII = value;
-                this.SubscribeNews = value;
-                this.SubscribeFundamental = value;
+                SubscribeBid = value;
+                SubscribeAsk = value;
+                SubscribeTrade = value;
+                SubscribeBar = value;
+                SubscribeLevelII = value;
+                SubscribeNews = value;
+                SubscribeFundamental = value;
             }
         }
 
@@ -59,6 +59,5 @@ namespace SmartQuant
         {
             this.Series.Clear();
         }
-
 	}
 }

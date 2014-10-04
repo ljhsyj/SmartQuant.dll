@@ -21,12 +21,12 @@ namespace SmartQuant
 
         public DataObject(DateTime dateTime)
         {
-            this.DateTime = dateTime;
+            DateTime = dateTime;
         }
 
         public DataObject(DataObject obj)
         {
-            this.DateTime = obj.DateTime;
+            DateTime = obj.DateTime;
         }
     }
 }

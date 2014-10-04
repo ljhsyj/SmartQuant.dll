@@ -1,31 +1,23 @@
 // Licensed under the Apache License, Version 2.0. 
 // Copyright (c) Alex Lee. All rights reserved.
 
-using System;
-using System.Threading;
 using System.Collections.Generic;
+using System.Collections;
+using System;
 
 namespace SmartQuant
 {
     public class TickSeries : IDataSeries, IEnumerable<Tick>
 	{
-        #region IEnumerable implementation
-
         public IEnumerator<Tick> GetEnumerator()
         {
             throw new NotImplementedException();
         }
 
-        #endregion
-
-        #region IEnumerable implementation
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }
-
-        #endregion
 
         #region IDataSeries implementation
         public long GetIndex(DateTime dateTime, SearchOption option = SearchOption.Prev)
@@ -69,6 +61,4 @@ namespace SmartQuant
         }
         #endregion
 	}
-
-
 }

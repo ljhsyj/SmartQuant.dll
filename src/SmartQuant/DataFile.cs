@@ -12,6 +12,8 @@ namespace SmartQuant
         private Dictionary<string, ObjectKey> keys = new Dictionary<string, ObjectKey>();
         private StreamerManager streamerManager;
 
+        private string name;
+
         public byte CompressionMethod { set; get; }
 
         public byte CompressionLevel { set; get; }
@@ -21,10 +23,11 @@ namespace SmartQuant
 
         public DataFile(string name, StreamerManager streamerManager)
         {
+            this.name = name;
+            this.streamerManager = streamerManager;
             this.Keys = new Dictionary<string, ObjectKey>();
             this.CompressionLevel = 1;
             this.CompressionMethod = 1;
-            this.streamerManager = streamerManager;
         }
 
         ~DataFile()

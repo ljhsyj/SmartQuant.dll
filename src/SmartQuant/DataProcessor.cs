@@ -21,8 +21,8 @@ namespace SmartQuant
 
         public DataProcessor()
         {
-            this.EmitBar = true;
-            this.EmitBarOpen = true;
+            EmitBar = true;
+            EmitBarOpen = true;
         }
 
 

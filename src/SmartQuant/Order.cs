@@ -7,6 +7,6 @@ namespace SmartQuant
 {
 	public class Order : DataObject
 	{
+        public int Id { get; private set; }
 	}
 }
-

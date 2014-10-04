@@ -1,3 +1,6 @@
+// Licensed under the Apache License, Version 2.0. 
+// Copyright (c) Alex Lee. All rights reserved.
+
 using System;
 
 namespace SmartQuant
@@ -5,9 +8,7 @@ namespace SmartQuant
     public class Strategy
     {
         protected internal Framework framework;
-
         protected bool raiseEvents;
-
         protected LinkedList<Strategy> strategies;
 
         public byte Id { get; private set; }
@@ -16,7 +17,99 @@ namespace SmartQuant
 
         public StrategyStatus Status { get; private set; }
 
-        public StrategyMode Mode { get; private set; }
+
+        public Portfolio Portfolio { get; private set; }
+
+        public InstrumentList Instruments { get; private set; }
+
+        public BarSeries Bars { get; private set; }
+
+        public TimeSeries Equity { get; private set; }
+
+        public TickSeries Bids { get; private set; }
+
+        public TickSeries Asks { get; private set; }
+
+        public Clock Clock
+        {
+            get
+            {
+                return this.framework.Clock;
+            }
+        }
+
+        public StrategyMode Mode
+        {
+            get
+            { 
+                return this.framework.StrategyManager.Mode;
+            }
+        }
+
+
+        public InstrumentManager InstrumentManager
+        {
+            get
+            {
+                return this.framework.InstrumentManager;
+            }
+        }
+
+        public DataManager DataManager
+        {
+            get
+            {
+                return this.framework.DataManager;
+            }
+        }
+
+        public ProviderManager ProviderManager
+        {
+            get
+            {
+                return this.framework.ProviderManager;
+            }
+        }
+
+        public OrderManager OrderManager
+        {
+            get
+            {
+                return this.framework.OrderManager;
+            }
+        }
+
+        public BarFactory BarFactory
+        {
+            get
+            {
+                return this.framework.EventManager.BarFactory;
+            }
+        }
+
+        public EventManager EventManager
+        {
+            get
+            {
+                return this.framework.EventManager;
+            }
+        }
+
+        public GroupManager GroupManager
+        {
+            get
+            {
+                return this.framework.GroupManager;
+            }
+        }
+
+        public Global Global
+        {
+            get
+            {
+                return this.framework.StrategyManager.Global;
+            }
+        }
 
         public Strategy(Framework framework, string name)
         {
@@ -51,6 +144,44 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
+        public bool HasPosition(Instrument instrument)
+        {
+            return this.Portfolio.HasPosition(instrument);
+        }
+
+        public bool HasPosition(Instrument instrument, PositionSide side, double qty)
+        {
+            return this.Portfolio.HasPosition(instrument, side, qty);
+        }
+
+        public bool HasLongPosition(Instrument instrument)
+        {
+            return this.Portfolio.HasLongPosition(instrument);
+        }
+
+        public bool HasLongPosition(Instrument instrument, double qty)
+        {
+            return this.Portfolio.HasLongPosition(instrument, qty);
+        }
+
+        public bool HasShortPosition(Instrument instrument)
+        {
+            return this.Portfolio.HasShortPosition(instrument);
+        }
+
+        public bool HasShortPosition(Instrument instrument, double qty)
+        {
+            return this.Portfolio.HasShortPosition(instrument, qty);
+        }
+
+        public void AddStrategy(Strategy strategy)
+        {
+        }
+
+        public void AddStrategy(Strategy strategy, bool callOnStrategyStart)
+        {
+        }
+
         public virtual void Init()
         {
         }
@@ -58,6 +189,224 @@ namespace SmartQuant
         public virtual double Objective()
         {
             throw new NotImplementedException();
+        }
+
+        public void Log(DataObject data, Group group)
+        {
+            this.framework.EventServer.OnLog(new GroupEvent(data, group));
+        }
+
+        public void Log(DataObject data, int groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Log(DateTime dateTime, double value, Group group)
+        {
+            this.framework.EventServer.OnLog(new GroupEvent(new TimeSeriesItem(dateTime, value), group));
+        }
+
+        public void Log(DateTime dateTime, double value, int groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Log(DateTime dateTime, string text, Group group)
+        {
+            this.framework.EventServer.OnLog(new GroupEvent(new TextInfo(dateTime, text), group));
+        }
+
+        public void Log(DateTime dateTime, string text, int groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Log(double value, Group group)
+        {
+            this.framework.EventServer.OnLog(new GroupEvent(new TimeSeriesItem(this.framework.Clock.DateTime, value), group));
+        }
+
+        public void Log(double value, int groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Log(string text, Group group)
+        {
+            this.framework.EventServer.OnLog(new GroupEvent(new TextInfo(this.framework.Clock.DateTime, text), group));
+        }
+
+        public void Log(string text, int groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected internal virtual void OnStrategyInit()
+        {
+        }
+
+        protected internal virtual void OnStrategyStart()
+        {
+        }
+
+        protected internal virtual void OnStrategyStop()
+        {
+        }
+
+        protected internal virtual void OnStrategyEvent(object data)
+        {
+        }
+
+        protected internal virtual void OnReminder(DateTime dateTime, object data)
+        {
+        }
+
+        protected internal virtual void OnProviderConnected(Provider provider)
+        {
+        }
+
+        protected internal virtual void OnProviderDisconnected(Provider provider)
+        {
+        }
+
+        protected internal virtual void OnBid(Instrument instrument, Bid bid)
+        {
+        }
+
+        protected internal virtual void OnAsk(Instrument instrument, Ask ask)
+        {
+        }
+
+        protected internal virtual void OnTrade(Instrument instrument, Trade trade)
+        {
+        }
+
+        protected internal virtual void OnLevel2(Instrument instrument, Level2Snapshot snapshot)
+        {
+        }
+
+        protected internal virtual void OnLevel2(Instrument instrument, Level2Update update)
+        {
+        }
+
+        protected internal virtual void OnBarOpen(Instrument instrument, Bar bar)
+        {
+        }
+
+        protected internal virtual void OnBar(Instrument instrument, Bar bar)
+        {
+        }
+
+        protected internal virtual void OnBarSlice(BarSlice slice)
+        {
+        }
+
+        protected internal virtual void OnNews(Instrument instrument, News news)
+        {
+        }
+
+        protected internal virtual void OnFundamental(Instrument instrument, Fundamental fundamental)
+        {
+        }
+
+        protected internal virtual void OnExecutionReport(ExecutionReport report)
+        {
+        }
+
+        protected internal virtual void OnSendOrder(Order order)
+        {
+        }
+
+        protected internal virtual void OnPendingNewOrder(Order order)
+        {
+        }
+
+        protected internal virtual void OnNewOrder(Order order)
+        {
+        }
+
+        protected internal virtual void OnOrderStatusChanged(Order order)
+        {
+        }
+
+        protected internal virtual void OnOrderFilled(Order order)
+        {
+        }
+
+        protected internal virtual void OnOrderPartiallyFilled(Order order)
+        {
+        }
+
+        protected internal virtual void OnOrderCancelled(Order order)
+        {
+        }
+
+        protected internal virtual void OnOrderReplaced(Order order)
+        {
+        }
+
+        protected internal virtual void OnOrderDone(Order order)
+        {
+        }
+
+        protected internal virtual void OnFill(Fill fill)
+        {
+        }
+
+        protected internal virtual void OnTransaction(Transaction transaction)
+        {
+        }
+
+        protected internal virtual void OnPositionOpened(Position position)
+        {
+        }
+
+        protected internal virtual void OnPositionClosed(Position position)
+        {
+        }
+
+        protected internal virtual void OnPositionChanged(Position position)
+        {
+        }
+
+        protected internal virtual void OnStopExecuted(Stop stop)
+        {
+        }
+
+        protected internal virtual void OnStopCancelled(Stop stop)
+        {
+        }
+
+        protected internal virtual void OnStopStatusChanged(Stop stop)
+        {
+        }
+
+        protected internal virtual void OnUserCommand(string command)
+        {
+        }
+
+        public void SendStrategyEvent(object data)
+        {
+            this.framework.EventServer.OnEvent(new OnStrategyEvent(data));
+        }
+
+        public void Send(Order order)
+        {
+            this.framework.OrderManager.Send(order);
+        }
+
+        public void Cancel(Order order)
+        {
+            this.framework.OrderManager.Cancel(order);
+        }
+
+        public void Reject(Order order)
+        {
+            this.framework.OrderManager.Reject(order);
+        }
+
+        public void Replace(Order order, double price)
+        {
         }
 
         public string GetStatusAsString()

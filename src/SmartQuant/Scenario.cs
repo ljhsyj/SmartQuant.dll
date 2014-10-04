@@ -12,6 +12,32 @@ namespace SmartQuant
 
         protected Strategy strategy;
 
+        public Clock Clock { get { return this.framework.Clock; } }
+
+        public InstrumentManager InstrumentManager { get { return this.framework.InstrumentManager; } }
+
+        public DataManager DataManager { get { return this.framework.DataManager; } }
+
+        public ProviderManager ProviderManager { get { return this.framework.ProviderManager; } }
+
+        public OrderManager OrderManager { get { return this.framework.OrderManager; } }
+
+        public IDataSimulator DataSimulator { get { return this.framework.ProviderManager.DataSimulator; } }
+
+        public IExecutionSimulator ExecutionSimulator  { get { return this.framework.ProviderManager.ExecutionSimulator; } }
+
+        public BarFactory BarFactory { get { return this.framework.EventManager.BarFactory; } }
+
+        public EventManager EventManager { get { return this.framework.EventManager; } }
+
+        public StrategyManager StrategyManager { get { return this.framework.StrategyManager; } }
+
+        public StatisticsManager StatisticsManager { get { return this.framework.StatisticsManager; } }
+
+        public GroupManager GroupManager { get { return this.framework.GroupManager; } }
+
+        public DataFileManager DataFileManager { get { return this.framework.DataFileManager; } }
+
         public Scenario(Framework framework)
         {
             this.framework = framework;

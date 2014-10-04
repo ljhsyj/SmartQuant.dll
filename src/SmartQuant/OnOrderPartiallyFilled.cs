@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnOrderPartiallyFilled(Order order)
         {
-            this.Order = order;
+            Order = order;
         }
     }
 }

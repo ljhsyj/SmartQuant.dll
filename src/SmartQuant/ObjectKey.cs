@@ -21,6 +21,7 @@ namespace SmartQuant
 
         public ObjectKey(DataFile file, string name = null, object obj = null)
         {
+            this.file = file;
             this.name = name;
             this.obj = obj;
         }
@@ -34,12 +35,10 @@ namespace SmartQuant
         {
         }
 
-        #region IComparable implementation
         public int CompareTo(ObjectKey other)
         {
             throw new NotImplementedException();
         }
-        #endregion
 	}
 }
 

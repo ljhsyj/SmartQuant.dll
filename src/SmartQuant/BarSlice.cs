@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public BarSlice(long size)
         {
-            this.Size = size;
+            Size = size;
         }
     }
 }
