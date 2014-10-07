@@ -11,19 +11,18 @@ namespace SmartQuant
 
         public AccountPosition(byte currencyId, double value)
         {
-            this.CurrencyId = currencyId;
-            this.Value = value;
+            CurrencyId = currencyId;
+            Value = value;
         }
 
         public AccountPosition(AccountTransaction transaction)
+            : this(transaction.CurrencyId, transaction.Value)
         {
-            this.CurrencyId = transaction.CurrencyId;
-            this.Value = transaction.Value;
         }
 
         public void Add(AccountTransaction transaction)
         {
-            this.Value += transaction.Value;
+            Value += transaction.Value;
         }
     }
 }

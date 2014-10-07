@@ -29,6 +29,8 @@ namespace SmartQuant
 
         bool SubscribeAll { set; }
 
+        BarFilter BarFilter { get; }
+
         DataProcessor Processor { get; set; }
 
         List<IDataSeries> Series { get; set; }

@@ -8,14 +8,14 @@ namespace SmartQuant
 {
 	public class AccountDataFieldList : ICollection
 	{
-        public void CopyTo(System.Array array, int index)
+        public void CopyTo(Array array, int index)
         {
             throw new NotImplementedException();
         }
 
         public int Count
         {
-            get { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
         }
 
         public bool IsSynchronized

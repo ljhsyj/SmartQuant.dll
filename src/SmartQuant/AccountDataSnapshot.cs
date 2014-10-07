@@ -9,7 +9,7 @@ namespace SmartQuant
 
         public AccountDataSnapshot(AccountDataEntry[] entries)
         {
-            this.Entries = entries;
+            Entries = entries;
         }
     }
 }

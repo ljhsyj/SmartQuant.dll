@@ -7,7 +7,9 @@ using System.Xml.Serialization;
 namespace SmartQuant
 {
     public class ExecutionSimulator : Provider, IExecutionSimulator
-	{
+    {
+        public BarFilter BarFilter { get; private set; }
+
         public ICommissionProvider CommissionProvider { get; set; }
 
         public ISlippageProvider SlippageProvider { get; set; }
@@ -36,8 +38,10 @@ namespace SmartQuant
 
         public bool Queued { get; set; }
 
-        public ExecutionSimulator(Framework framework) : base(framework)
+        public ExecutionSimulator(Framework framework)
+            : base(framework)
         {
+            this.BarFilter = new BarFilter();
             this.CommissionProvider = new CommissionProvider();
             this.SlippageProvider = new SlippageProvider();
         }

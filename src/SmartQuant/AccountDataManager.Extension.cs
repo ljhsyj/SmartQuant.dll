@@ -2,14 +2,16 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+
 namespace SmartQuant
 {
     public partial class AccountDataManager
-	{
+    {
         private Framework framework;
-        public AccountDataManager(Framework framework)
-		{
+
+        internal AccountDataManager(Framework framework)
+        {
             this.framework = framework;
-		}
-	}
+        }
+    }
 }

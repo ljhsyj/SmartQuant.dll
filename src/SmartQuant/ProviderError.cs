@@ -25,7 +25,8 @@ namespace SmartQuant
 
         public string Text { get; set; }
 
-        public ProviderError(DateTime dateTime, ProviderErrorType type, byte providerId, int id, int code, string text) : base(dateTime)
+        public ProviderError(DateTime dateTime, ProviderErrorType type, byte providerId, int id, int code, string text)
+            : base(dateTime)
         {
             this.Type = type;
             this.ProviderId = providerId;
@@ -34,7 +35,8 @@ namespace SmartQuant
             this.Text = text;
         }
 
-        public ProviderError(DateTime dateTime, ProviderErrorType type, byte providerId, string text) : this(dateTime, type, providerId, -1, -1, text)
+        public ProviderError(DateTime dateTime, ProviderErrorType type, byte providerId, string text)
+            : this(dateTime, type, providerId, -1, -1, text)
         {
         }
 

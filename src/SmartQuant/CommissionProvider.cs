@@ -8,7 +8,9 @@ namespace SmartQuant
     public class CommissionProvider : ICommissionProvider
     {
         public double Commission { get; set; }
+
         public CommissionType Type { get; set; }
+
         public double MinCommission { get; set; }
 
         public virtual double GetCommission(ExecutionReport report)

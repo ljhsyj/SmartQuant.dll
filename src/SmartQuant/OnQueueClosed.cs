@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnQueueClosed()
         {
-            this.DateTime = DateTime.MinValue;
+            DateTime = DateTime.MinValue;
         }
 
         public override string ToString()

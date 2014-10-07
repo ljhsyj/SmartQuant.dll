@@ -4,6 +4,18 @@ namespace SmartQuant
 {
     public class News : DataObject
     {
+        internal int ProviderId { get; set; }
+
+        internal int InstrumentId { get; set; }
+
+        internal byte Urgency { get; set; }
+
+        internal string Url { get; set; }
+
+        internal  string Headline { get; set; }
+
+        internal  string Text { get; set; }
+
         public override byte TypeId
         {
             get
@@ -17,8 +29,14 @@ namespace SmartQuant
         }
 
         public News(DateTime dateTime, int providerId, int instrumentId, byte urgency, string url, string headline, string text)
+            : base(dateTime)
         {
+            ProviderId = providerId;
+            InstrumentId = instrumentId;
+            Urgency = urgency;
+            Url = url;
+            Headline = headline;
+            Text = text;
         }
     }
 }
-

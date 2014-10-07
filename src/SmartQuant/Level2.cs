@@ -23,9 +23,9 @@ namespace SmartQuant
 
         public Level2(DateTime dateTime, byte providerId, int instrumentId, double price, int size, Level2Side side, Level2UpdateAction action, int position) : base(dateTime, providerId, instrumentId, price, size)
         {
-            this.Side = side;
-            this.Action = action;
-            this.Position = position;
+            Side = side;
+            Action = action;
+            Position = position;
         }
 
         public Level2()

@@ -30,12 +30,13 @@ namespace SmartQuant
 
         public AccountDataField(string name, string currency, object value)
         {
-            this.Name = name;
-            this.Currency = currency;
-            this.Value = value;
+            Name = name;
+            Currency = currency;
+            Value = value;
         }
 
-        public AccountDataField(string name, object value) : this(name, string.Empty, value)
+        public AccountDataField(string name, object value)
+            : this(name, string.Empty, value)
         {
         }
     }

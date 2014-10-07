@@ -7,11 +7,11 @@ using System.Collections;
 
 namespace SmartQuant
 {
-	public class InstrumentList : IEnumerable<Instrument>
-	{
-		private List<Instrument> instruments = new List<Instrument>();
+    public class InstrumentList : IEnumerable<Instrument>
+    {
+        private List<Instrument> instruments = new List<Instrument>();
 
-        public Instrument this[string symbol] 
+        public Instrument this [string symbol]
         { 
             get
             {
@@ -30,7 +30,7 @@ namespace SmartQuant
 
         }
 
-        public bool Contains(SmartQuant.Instrument instrument)
+        public bool Contains(Instrument instrument)
         {
             throw new NotImplementedException();
 
@@ -52,18 +52,18 @@ namespace SmartQuant
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            instruments.Clear();
         }
 
-		public IEnumerator<Instrument> GetEnumerator()
-		{
-			return this.instruments.GetEnumerator();
-		}
+        public IEnumerator<Instrument> GetEnumerator()
+        {
+            return this.instruments.GetEnumerator();
+        }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return this.instruments.GetEnumerator();
-		}
-	}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.instruments.GetEnumerator();
+        }
+    }
 }
 

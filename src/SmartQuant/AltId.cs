@@ -17,9 +17,9 @@ namespace SmartQuant
 
         public AltId(byte providerId, string symbol, string exchange)
         {
-            this.ProviderId = providerId;
-            this.Symbol = symbol;
-            this.Exchange = exchange;
+            ProviderId = providerId;
+            Symbol = symbol;
+            Exchange = exchange;
         }
 
         public override string ToString()

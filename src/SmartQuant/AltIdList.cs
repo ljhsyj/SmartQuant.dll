@@ -9,10 +9,6 @@ namespace SmartQuant
 {
     public class AltIdList : IEnumerable<AltId>
     {
-        public AltIdList()
-        {
-        }
-
         public int Count
         {
             get
@@ -29,6 +25,10 @@ namespace SmartQuant
             }
         }
 
+        public AltIdList()
+        {
+        }
+            
         public void Clear()
         {
         }

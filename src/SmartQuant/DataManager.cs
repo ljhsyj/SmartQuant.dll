@@ -7,8 +7,8 @@ using System.Collections.Generic;
 
 namespace SmartQuant
 {
-	public class DataManager
-	{
+    public class DataManager
+    {
         private Framework framework;
 
         public DataServer Server { get; private set; }
@@ -50,13 +50,13 @@ namespace SmartQuant
         public DataSeries GetDataSeries(string symbol, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
             return null;
-          //  return this.Server.GetDataSeries(this.framework.InstrumentManager.Get(symbol), type, barType, barSize);
+            //  return this.Server.GetDataSeries(this.framework.InstrumentManager.Get(symbol), type, barType, barSize);
         }
 
         public DataSeries GetDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
             return null;
-       //     return this.Server.GetDataSeries(instrument, type, barType, barSize);
+            //     return this.Server.GetDataSeries(instrument, type, barType, barSize);
         }
 
         public DataSeries GetDataSeries(string name)
@@ -86,6 +86,41 @@ namespace SmartQuant
             this.Server.DeleteDataSeries(name);
         }
 
+        public void Save(Tick tick, SaveMode option = SaveMode.Add)
+        {
+            this.Save(tick.InstrumentId, tick, option);
+        }
+
+        public void Save(Bar bar, SaveMode option = SaveMode.Add)
+        {
+            this.Save(bar.InstrumentId, bar, option);
+        }
+
+        public void Save(Level2 level2, SaveMode option = SaveMode.Add)
+        {
+            this.Save(level2.InstrumentId, (DataObject) level2, option);
+        }
+
+        public void Save(Level2Snapshot level2, SaveMode option = SaveMode.Add)
+        {
+            this.Save(level2.InstrumentId, (DataObject) level2, option);
+        }
+
+        public void Save(Level2Update level2, SaveMode option = SaveMode.Add)
+        {
+            this.Save(level2.InstrumentId, (DataObject) level2, option);
+        }
+
+        public void Save(Fundamental fundamental, SaveMode option = SaveMode.Add)
+        {
+            this.Save(fundamental.InstrumentId, fundamental, option);
+        }
+
+        public void Save(News news, SaveMode option = SaveMode.Add)
+        {
+            this.Save(news.InstrumentId, news, option);
+        }
+
         public void Save(Instrument instrument, DataObject obj, SaveMode option = SaveMode.Add)
         {
 //            return null;
@@ -94,15 +129,15 @@ namespace SmartQuant
 
         public void Save(int instrumentId, DataObject obj, SaveMode option = SaveMode.Add)
         {
-         }
+        }
 
         public void Save(string symbol, DataObject obj, SaveMode option = SaveMode.Add)
         {
-             }
+        }
 
         public void Save(Instrument instrument, IDataSeries series, SaveMode option = SaveMode.Add)
         {
-         }
+        }
 
         public Bid GetBid(Instrument instrument)
         {
@@ -208,7 +243,7 @@ namespace SmartQuant
 //            if (historicalDataProvider != null)
 //                return this.GetHistoricalTrades(historicalDataProvider, instrument, dateTime1, dateTime2);
 //            Console.WriteLine("DataManager::GetHistoricalTrades Error. Provider does not exist : " + provider);
-            return (TickSeries) null;
+            return (TickSeries)null;
         }
 
         public TickSeries GetHistoricalTrades(string provider, string symbol, DateTime dateTime1, DateTime dateTime2)
@@ -262,5 +297,5 @@ namespace SmartQuant
         {
             return null;
         }
-	}
+    }
 }

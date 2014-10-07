@@ -9,7 +9,7 @@ namespace SmartQuant
 
         public Signal(double value)
         {
-            this.Value = value;
+            Value = value;
         }
     }
 }

@@ -5,7 +5,18 @@ using System;
 
 namespace SmartQuant
 {
-	public class Pricer
-	{
-	}
+    public class Pricer
+    {
+        private Framework framework;
+
+        public Pricer(Framework framework)
+        {
+            this.framework = framework;
+        }
+
+        public virtual double GetPrice(Position position)
+        {
+            return 0.0;
+        }
+    }
 }

@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnPortfolioAdded(Portfolio portfolio)
         {
-            this.Portfolio = portfolio;
+            Portfolio = portfolio;
         }
     }
 }

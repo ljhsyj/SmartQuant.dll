@@ -10,6 +10,9 @@ namespace SmartQuant
         protected ISeries input;
         protected bool calculate;
 
+
+        public bool AutoUpdate { get; set; }
+
         public override int Count
         {
             get
@@ -135,7 +138,7 @@ namespace SmartQuant
                 this.Calculate(i);
         }
 
-        protected internal virtual void Calculate(int index)
+        public virtual void Calculate(int index)
         {
         }
     }

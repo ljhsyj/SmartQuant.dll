@@ -5,8 +5,8 @@ using System;
 
 namespace SmartQuant
 {
-	public class PortfolioManager
-	{
+    public class PortfolioManager
+    {
         private Framework framework;
 
         public Pricer Pricer { get; set; }
@@ -16,15 +16,39 @@ namespace SmartQuant
         public PortfolioManager(Framework framework)
         {
             this.framework = framework;
-            this.Pricer = new Pricer();
+            this.Pricer = new Pricer(framework);
             this.Portfolios = new PortfolioList();
+        }
+
+        public void Add(Portfolio portfolio)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(Portfolio portfolio)
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public Portfolio GetById(int id)
+        {
             throw new NotImplementedException();
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            Portfolios.Clear();
         }
-	}
-
+    }
 }

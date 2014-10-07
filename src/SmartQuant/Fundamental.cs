@@ -9,8 +9,10 @@ namespace SmartQuant
     public class Fundamental : DataObject
     {
         private static Dictionary<string, byte> mapping;
-        private int providerId;
-        private int instrumentId;
+
+        internal int ProviderId { get; set; }
+
+        internal int InstrumentId { get; set; }
 
         public override byte TypeId
         {
@@ -61,8 +63,8 @@ namespace SmartQuant
         public Fundamental(DateTime dateTime, int providerId, int instrumentId)
             : base(dateTime)
         {
-            this.providerId = providerId;
-            this.instrumentId = instrumentId;
+            ProviderId = providerId;
+            InstrumentId = instrumentId;
         }
 
         public static void AddField(string name, byte index)

@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnProviderRemoved(Provider provider)
         {
-            this.Provider = provider;
+            Provider = provider;
         }
     }
 }

@@ -19,15 +19,16 @@ namespace SmartQuant
 
         public object Data { set; get; }
 
-        public Reminder(ReminderCallback callback, DateTime dateTime, object data) : base(dateTime)
+        public Reminder(ReminderCallback callback, DateTime dateTime, object data)
+            : base(dateTime)
         {
-            this.Callback = callback;
-            this.Data = data;
+            Callback = callback;
+            Data = data;
         }
 
         public void Execute()
         {
-            this.Callback(this.DateTime, this.Data);
+            Callback(this.DateTime, this.Data);
         }
 
         public override string ToString()

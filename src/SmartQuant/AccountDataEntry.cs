@@ -15,10 +15,10 @@ namespace SmartQuant
 
         internal AccountDataEntry(string account, AccountData values, AccountData[] positions, AccountData[] orders)
         {
-            this.Account = account;
-            this.Values = values;
-            this.Positions = positions;
-            this.Orders = orders;
+            Account = account;
+            Values = values;
+            Positions = positions;
+            Orders = orders;
         }
     }
 }

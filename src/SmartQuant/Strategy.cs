@@ -17,7 +17,6 @@ namespace SmartQuant
 
         public StrategyStatus Status { get; private set; }
 
-
         public Portfolio Portfolio { get; private set; }
 
         public InstrumentList Instruments { get; private set; }
@@ -29,6 +28,30 @@ namespace SmartQuant
         public TickSeries Bids { get; private set; }
 
         public TickSeries Asks { get; private set; }
+
+        public virtual IDataProvider DataProvider
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public virtual IExecutionProvider ExecutionProvider
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public Clock Clock
         {
@@ -79,19 +102,19 @@ namespace SmartQuant
             }
         }
 
-        public BarFactory BarFactory
-        {
-            get
-            {
-                return this.framework.EventManager.BarFactory;
-            }
-        }
-
         public EventManager EventManager
         {
             get
             {
                 return this.framework.EventManager;
+            }
+        }
+
+        public BarFactory BarFactory
+        {
+            get
+            {
+                return this.EventManager.BarFactory;
             }
         }
 

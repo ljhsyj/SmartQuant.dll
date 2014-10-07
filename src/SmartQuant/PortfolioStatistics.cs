@@ -5,7 +5,25 @@ using System;
 
 namespace SmartQuant
 {
-	public class PortfolioStatistics
-	{
-	}
+    public class PortfolioStatistics
+    {
+        private Portfolio portfolio;
+
+        public PortfolioStatisticsItemList Items { get; private set; }
+
+        internal PortfolioStatistics(Portfolio portfolio)
+        {
+            this.portfolio = portfolio;
+            this.Items = new PortfolioStatisticsItemList();
+        }
+
+        public void Add(PortfolioStatisticsItem item)
+        {
+        }
+
+        public PortfolioStatisticsItem Get(int type)
+        {
+            return Items.GetByType(type);
+        }
+    }
 }

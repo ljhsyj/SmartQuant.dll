@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnPortfolioDeleted(Portfolio portfolio)
         {
-            this.Portfolio = portfolio;
+            Portfolio = portfolio;
         }
     }
 }

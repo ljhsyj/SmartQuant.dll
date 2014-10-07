@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public AccountDataEventArgs(AccountData data)
         {
-            this.Data = data;
+            Data = data;
         }
     }
 }

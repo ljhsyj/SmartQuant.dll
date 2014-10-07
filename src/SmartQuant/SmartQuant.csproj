@@ -373,6 +373,14 @@
     <Compile Include="AlphaComponent.cs" />
     <Compile Include="OnStrategyEvent.cs" />
     <Compile Include="Fundamental.cs" />
+    <Compile Include="BarFilterItem.cs" />
+    <Compile Include="BarFilter.cs" />
+    <Compile Include="TradeDetector.cs" />
+    <Compile Include="SellSideStrategy.cs" />
+    <Compile Include="SellSideInstrumentStrategy.cs" />
+    <Compile Include="PerformanceStrategy.cs" />
+    <Compile Include="ExecutionComponent.cs" />
+    <Compile Include="PortfolioPerformance.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

@@ -9,12 +9,12 @@ namespace SmartQuant
 	{
         protected internal BarFactory factory;
         protected internal Instrument instrument;
-        protected BarType barType;
+        protected internal BarType barType;
         protected internal long barSize;
         protected internal BarInput barInput;
         protected Bar bar;
 
-        protected BarFactoryItem(Instrument instrument, BarType barType, long barSize, BarInput barInput = 0)
+        protected BarFactoryItem(Instrument instrument, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
         {
         }
 
@@ -45,6 +45,11 @@ namespace SmartQuant
         protected void EmitBar()
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} {3}", this.instrument.Symbol, this.barType,  this.barSize, this.barInput);
         }
 	}
 }

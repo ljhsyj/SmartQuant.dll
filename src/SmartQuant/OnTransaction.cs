@@ -19,8 +19,8 @@ namespace SmartQuant
 
         public OnTransaction(Portfolio portfolio, Transaction transaction)
         {
-            this.Portfolio = portfolio;
-            this.Transaction = transaction;
+            Portfolio = portfolio;
+            Transaction = transaction;
         }
 
         public override string ToString()

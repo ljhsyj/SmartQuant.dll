@@ -18,8 +18,8 @@ namespace SmartQuant
 
         public OnPositionChanged(Portfolio portfolio, Position position)
         {
-            this.Portfolio = portfolio;
-            this.Position = position;
+            Portfolio = portfolio;
+            Position = position;
         }
 
         public override string ToString()

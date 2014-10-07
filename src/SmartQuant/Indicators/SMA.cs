@@ -58,7 +58,7 @@ namespace SmartQuant.Indicators
             this.calculate = true;
         }
 
-        protected internal override void Calculate(int index)
+        public override void Calculate(int index)
         {
             if (this.calculate)
             {

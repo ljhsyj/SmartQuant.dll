@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnProviderStatusChanged(Provider provider)
         {
-            this.Provider = provider;
+            Provider = provider;
         }
     }
 }

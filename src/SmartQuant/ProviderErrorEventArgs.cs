@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public ProviderErrorEventArgs(ProviderError error)
         {
-            this.Error = error;
+            Error = error;
         }
     }
 }

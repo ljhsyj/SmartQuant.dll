@@ -16,8 +16,8 @@ namespace SmartQuant
 
         public ProviderPlugin(string typeName, bool x64 = false)
         {
-            this.TypeName = typeName;
-            this.X64 = x64;
+            TypeName = typeName;
+            X64 = x64;
         }
 
         public override string ToString()

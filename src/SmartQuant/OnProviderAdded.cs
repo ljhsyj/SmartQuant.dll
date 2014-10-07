@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnProviderAdded(IProvider provider)
         {
-            this.Provider = provider;
+            Provider = provider;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public ProviderEventArgs(IProvider provider)
         {
-            this.Provider = provider;
+            Provider = provider;
         }
     }
 }

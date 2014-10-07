@@ -20,6 +20,12 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
+        public void Add(string symbol, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
+        {
+            var instrument = this.framework.InstrumentManager.Get(symbol);
+            this.Add(instrument, barType, barSize, barInput);
+        }
+
         public void Add(Instrument instrument, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
         {
             throw new NotImplementedException();
@@ -34,7 +40,10 @@ namespace SmartQuant
         public void Add(string[] symbols, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
         {
             foreach (string symbol in symbols)
-                this.Add(this.framework.InstrumentManager.Get(symbol), barType, barSize, barInput);
+            {
+                var instrument = this.framework.InstrumentManager.Get(symbol);
+                this.Add(instrument, barType, barSize, barInput);
+            }
         }
     }
 }

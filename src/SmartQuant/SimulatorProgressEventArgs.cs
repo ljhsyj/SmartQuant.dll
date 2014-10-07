@@ -12,8 +12,8 @@ namespace SmartQuant
 
         public SimulatorProgressEventArgs(long count, int percent)
         {
-            this.Count = count;
-            this.Percent = percent;
+            Count = count;
+            Percent = percent;
         }
     }
 }

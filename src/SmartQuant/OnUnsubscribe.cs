@@ -19,12 +19,12 @@ namespace SmartQuant
 
         public OnUnsubscribe(InstrumentList instruments)
         {
-            this.Instruments = instruments;
+            Instruments = instruments;
         }
 
         public OnUnsubscribe(Instrument instrument)
         {
-            this.Instrument = instrument;
+            Instrument = instrument;
         }
     }
 }

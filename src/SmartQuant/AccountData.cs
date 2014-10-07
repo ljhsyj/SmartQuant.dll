@@ -27,11 +27,11 @@ namespace SmartQuant
 
         public AccountData(DateTime datetime, AccountDataType type, string account, byte providerId, byte route) : base(datetime)
         {
-            this.Type = type;
-            this.Account = account;
-            this.ProviderId = providerId;
-            this.Route = route;
-            this.Fields = new AccountDataFieldList();
+            Type = type;
+            Account = account;
+            ProviderId = providerId;
+            Route = route;
+            Fields = new AccountDataFieldList();
         }
     }
 }

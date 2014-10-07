@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnProviderDisconnected(Provider provider)
         {
-            this.Provider = provider;
+            Provider = provider;
         }
     }
 }

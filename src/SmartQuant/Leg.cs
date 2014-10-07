@@ -10,8 +10,8 @@ namespace SmartQuant
 
         public Leg(Instrument instrument, double weight = 1.0)
         {
-            this.Instrument = instrument;
-            this.Weight = weight;
+            Instrument = instrument;
+            Weight = weight;
         }
     }
 }

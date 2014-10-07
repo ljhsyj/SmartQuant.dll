@@ -40,6 +40,8 @@ namespace SmartQuant
             }
         }
 
+        public BarFilter BarFilter { get; private set; }
+
         public DataProcessor Processor { get; set; }
 
         public List<IDataSeries> Series { get; set; }
@@ -53,11 +55,16 @@ namespace SmartQuant
             this.DateTime1 = DateTime.MinValue;
             this.DateTime2 = DateTime.MaxValue;
             this.Series = new List<IDataSeries>();
+            this.Processor = new DataProcessor();
+            this.BarFilter = new BarFilter();
         }
 
         public void Clear()
         {
+            this.DateTime1 = DateTime.MinValue;
+            this.DateTime2 = DateTime.MaxValue;
             this.Series.Clear();
+            this.BarFilter.Clear();
         }
 	}
 }

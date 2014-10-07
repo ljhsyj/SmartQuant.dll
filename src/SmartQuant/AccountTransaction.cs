@@ -17,18 +17,15 @@ namespace SmartQuant
 
         public AccountTransaction(DateTime dateTime, double value, byte currencyId, string text)
         {
-            this.DateTime = dateTime;
-            this.Value = value;
-            this.CurrencyId = currencyId;
-            this.Text = text;
+            DateTime = dateTime;
+            Value = value;
+            CurrencyId = currencyId;
+            Text = text;
         }
 
         public AccountTransaction(Fill fill)
+            : this(fill.DateTime, fill.CashFlow, fill.CurrencyId, fill.Text)
         {
-            this.DateTime = fill.DateTime;
-            this.Value = fill.CashFlow;
-            this.CurrencyId = fill.CurrencyId;
-            this.Text = fill.Text;
         }
     }
 }
