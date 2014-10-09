@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnInstrumentDefinition(InstrumentDefinition definition)
         {
-            this.Definition = definition;
+            Definition = definition;
         }
     }
 }

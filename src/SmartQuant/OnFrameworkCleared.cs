@@ -5,7 +5,7 @@ namespace SmartQuant
 {
     public class OnFrameworkCleared : Event
     {
-        internal Framework framework;
+        internal Framework Framework { get; private set; }
 
         public override byte TypeId
         {
@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnFrameworkCleared(Framework framework)
         {
-            this.framework = framework;
+            Framework = framework;
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿//
-// Author: Alex Lee <lu.lee05@gmail.com>
-//
+﻿// Licensed under the Apache License, Version 2.0. 
+// Copyright (c) Alex Lee. All rights reserved.
 
 using System;
 
@@ -8,8 +7,8 @@ namespace SmartQuant
 {
     public class OnSimulatorProgress : DataObject
     {
-        internal long count;
-        internal int percent;
+        internal long Count { get; private set; }
+        internal int Percent { get; private set; }
 
         public override byte TypeId
         {
@@ -21,13 +20,13 @@ namespace SmartQuant
 
         public OnSimulatorProgress()
         {
-            this.DateTime = DateTime.MinValue;
+            DateTime = DateTime.MinValue;
         }
 
-        public OnSimulatorProgress(long count, int percent)
+        public OnSimulatorProgress(long count, int percent) : this()
         {
-            this.count = count;
-            this.percent = percent;
+            Count = count;
+            Percent = percent;
         }
 
         public override string ToString()
