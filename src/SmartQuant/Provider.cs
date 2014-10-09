@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace SmartQuant
 {
@@ -22,6 +23,7 @@ namespace SmartQuant
         public Provider(Framework framework)
         {
             this.framework = framework;
+            Status = ProviderStatus.Disconnected;
         }
 
         public ProviderStatus Status { get; protected set; }
@@ -36,15 +38,17 @@ namespace SmartQuant
 
         public void Connect()
         {
-            throw new NotImplementedException();
+            Status = ProviderStatus.Connecting;
+            Status = ProviderStatus.Connected;
         }
 
         public void Disconnect()
         {
-            throw new NotImplementedException();
+            Status = ProviderStatus.Disconnecting;
+            Status = ProviderStatus.Disconnected;
         }
 
-        public void Subscribe(Instrument instrument)
+        public virtual void Subscribe(Instrument instrument)
         {
             throw new NotImplementedException();
         }
@@ -55,7 +59,7 @@ namespace SmartQuant
                 this.Subscribe(instrument);
         }
 
-        public void Unsubscribe(Instrument instrument)
+        public virtual void Unsubscribe(Instrument instrument)
         {
             throw new System.NotImplementedException();
         }
@@ -64,11 +68,6 @@ namespace SmartQuant
         {
             foreach (Instrument instrument in instruments)
                 this.Unsubscribe(instrument);
-        }
-
-        public void Send(ExecutionCommand command)
-        {
-            throw new NotImplementedException();
         }
 
         public virtual void Process(Event e)
@@ -82,6 +81,11 @@ namespace SmartQuant
         }
 
         protected virtual void OnDisconnected()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void Send(ExecutionCommand command)
         {
             throw new NotImplementedException();
         }
@@ -104,6 +108,7 @@ namespace SmartQuant
 
         protected internal void EmitProviderError(ProviderError error)
         {
+            this.framework.EventServer.OnProviderError(error);
         }
 
         protected internal void EmitError(int id, int code, string text)
@@ -168,11 +173,37 @@ namespace SmartQuant
 
         protected internal virtual ProviderPropertyList GetProperties()
         {
-            return null;
+            var props = new ProviderPropertyList();
+            foreach (var info in GetType().GetProperties())
+            {
+                if (info.CanRead && info.CanWrite && !(info.DeclaringType == typeof(Provider)))
+                {
+                    var converter = TypeDescriptor.GetConverter(info.PropertyType);
+                    if (converter != null && converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
+                    {
+                        object obj = info.GetValue(this, null);
+                        props.SetValue(info.Name, converter.ConvertToInvariantString(obj));
+                    }
+                }
+            }
+            return props; 
         }
 
         protected internal virtual void SetProperties(ProviderPropertyList properties)
         {
+            foreach (var info in GetType().GetProperties())
+            {
+                if (info.CanRead && info.CanWrite)
+                {
+                    var converter = TypeDescriptor.GetConverter(info.PropertyType);
+                    if (converter != null && converter.CanConvertFrom(typeof(string)))
+                    {
+                        string val = properties.GetStringValue(info.Name, null);
+                        if (val != null && converter.IsValid(val))
+                            info.SetValue(this, converter.ConvertFromInvariantString(val), null);
+                    }
+                }
+            }
         }
 
         public override string ToString()

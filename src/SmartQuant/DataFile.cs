@@ -7,7 +7,7 @@ using System.IO;
 
 namespace SmartQuant
 {
-    public class DataFile
+    public partial class DataFile
     {
         private Dictionary<string, ObjectKey> keys = new Dictionary<string, ObjectKey>();
         private StreamerManager streamerManager;
@@ -19,7 +19,6 @@ namespace SmartQuant
         public byte CompressionLevel { set; get; }
 
         public Dictionary<string, ObjectKey> Keys { get; private set; }
-
 
         public DataFile(string name, StreamerManager streamerManager)
         {

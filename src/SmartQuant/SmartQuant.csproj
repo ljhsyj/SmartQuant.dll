@@ -30,6 +30,7 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -381,6 +382,40 @@
     <Compile Include="PerformanceStrategy.cs" />
     <Compile Include="ExecutionComponent.cs" />
     <Compile Include="PortfolioPerformance.cs" />
+    <Compile Include="StringStreamer.cs" />
+    <Compile Include="Int16Streamer.cs" />
+    <Compile Include="Int32Streamer.cs" />
+    <Compile Include="Int64Streamer.cs" />
+    <Compile Include="DoubleStreamer.cs" />
+    <Compile Include="ByteStreamer.cs" />
+    <Compile Include="CharSteamer.cs" />
+    <Compile Include="BooleanStreamer.cs" />
+    <Compile Include="DataFile.Internal.cs" />
+    <Compile Include="ColorStreamer.cs" />
+    <Compile Include="DateTimeStreamer.cs" />
+    <Compile Include="TradeStreamer.cs" />
+    <Compile Include="TimeSeriesItemStreamer.cs" />
+    <Compile Include="TickStreamer.cs" />
+    <Compile Include="TextInfoStreamer.cs" />
+    <Compile Include="QuoteStreamer.cs" />
+    <Compile Include="ProviderErrorStreamer.cs" />
+    <Compile Include="PositionStreamer.cs" />
+    <Compile Include="PortfolioStreamer.cs" />
+    <Compile Include="NewsStreamer.cs" />
+    <Compile Include="Level2Streamer.cs" />
+    <Compile Include="Level2SnapshotStreamer.cs" />
+    <Compile Include="GroupUpdateStreamer.cs" />
+    <Compile Include="GroupStreamer.cs" />
+    <Compile Include="GroupEventStreamer.cs" />
+    <Compile Include="FundamentalStreamer.cs" />
+    <Compile Include="LegStreamer.cs" />
+    <Compile Include="FillStreamer.cs" />
+    <Compile Include="AltIdStreamer.cs" />
+    <Compile Include="AskStreamer.cs" />
+    <Compile Include="BarStreamer.cs" />
+    <Compile Include="BidStreamer.cs" />
+    <Compile Include="DataSeriesStreamer.cs" />
+    <Compile Include="FieldListStreamer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

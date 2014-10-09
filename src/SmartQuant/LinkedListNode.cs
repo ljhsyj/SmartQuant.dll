@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public LinkedListNode(T data)
         {
-            this.Data = data;
+            Data = data;
         }
     }
 }

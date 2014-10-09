@@ -26,7 +26,7 @@ namespace SmartQuant
 
         public IExecutionSimulator ExecutionSimulator  { get { return this.framework.ProviderManager.ExecutionSimulator; } }
 
-        public BarFactory BarFactory { get { return this.framework.EventManager.BarFactory; } }
+        public BarFactory BarFactory { get { return this.EventManager.BarFactory; } }
 
         public EventManager EventManager { get { return this.framework.EventManager; } }
 

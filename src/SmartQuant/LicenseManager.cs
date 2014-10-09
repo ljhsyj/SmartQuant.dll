@@ -14,7 +14,6 @@ namespace SmartQuant
 
         public string GetHardwareID()
         {
-            // return whatever you wants
             return "AAAA-1111-BBBB-2222-CCCC";
         }
 

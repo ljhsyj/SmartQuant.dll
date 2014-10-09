@@ -15,11 +15,13 @@ namespace SmartQuant
             }
         }
 
-        public Trade(DateTime dateTime, byte providerId, int instrumentId, double price, int size) : base(dateTime, providerId, instrumentId, price, size)
+        public Trade(DateTime dateTime, byte providerId, int instrumentId, double price, int size)
+            : base(dateTime, providerId, instrumentId, price, size)
         {
         }
 
-        public Trade(DateTime dateTime, DateTime exchangeDateTime, byte providerId, int instrumentId, double price, int size) : base(dateTime, providerId, instrumentId, price, size)
+        public Trade(DateTime dateTime, DateTime exchangeDateTime, byte providerId, int instrumentId, double price, int size)
+            : base(dateTime, providerId, instrumentId, price, size)
         {
         }
 
@@ -27,7 +29,8 @@ namespace SmartQuant
         {
         }
 
-        public Trade(Trade trade) : base(trade)
+        public Trade(Trade trade)
+            : base(trade)
         {
         }
 

@@ -58,12 +58,27 @@ namespace SmartQuant
 
         public IExecutionProvider ExecutionProvider { get; private set; }
 
+        private Instrument()
+        {
+            Exchange = "";
+            PriceFormat = "F2";
+            AltId = new AltIdList();
+            Legs = new List<Leg>();
+            Fields = new ObjectTable();
+        }
+
         public Instrument(Instrument instrument)
+            : this()
         {
         }
 
         public Instrument(InstrumentType type, string symbol, string description = "", byte currencyId = global::SmartQuant.CurrencyId.USD)
+            : this()
         {
+            Type = type;
+            Symbol = symbol;
+            Description = description;
+            CurrencyId = currencyId;
         }
 
         public override string ToString()
@@ -80,4 +95,3 @@ namespace SmartQuant
         }
     }
 }
-

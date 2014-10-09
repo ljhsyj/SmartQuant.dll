@@ -18,7 +18,7 @@ namespace SmartQuant
             this.framework = framework;
             this.Statistics = new PortfolioStatisticsItemList();
 
-            foreach (FieldInfo info in typeof(PortfolioStatisticsType).GetFields(BindingFlags.Static | BindingFlags.Public))
+            foreach (var info in typeof(PortfolioStatisticsType).GetFields(BindingFlags.Static | BindingFlags.Public))
             {
                 if (info.FieldType == typeof(int))
                 {
@@ -34,22 +34,22 @@ namespace SmartQuant
 
         public void Add(PortfolioStatisticsItem item)
         {
-            this.Statistics.Add(item);
+            Statistics.Add(item);
         }
 
         public bool Contains(int type)
         {
-            return this.Statistics.Contains(type);
+            return Statistics.Contains(type);
         }
 
         public void Remove(int type)
         {
-            this.Statistics.Remove(type);
+            Statistics.Remove(type);
         }
 
         public PortfolioStatisticsItem Get(int type)
         {
-            return this.Statistics.GetByType(type);
+            return Statistics.GetByType(type);
         }
 
         public PortfolioStatisticsItem Clone(int type)

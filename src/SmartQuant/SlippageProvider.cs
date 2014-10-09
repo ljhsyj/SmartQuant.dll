@@ -13,10 +13,10 @@ namespace SmartQuant
             switch (report.Side)
             {
                 case OrderSide.Buy:
-                    avgPx += avgPx * this.Slippage;
+                    avgPx += avgPx * Slippage;
                     break;
                 case OrderSide.Sell:
-                    avgPx -= avgPx * this.Slippage;
+                    avgPx -= avgPx * Slippage;
                     break;
             }
             return avgPx;

@@ -28,11 +28,11 @@ namespace SmartQuant
         public ProviderError(DateTime dateTime, ProviderErrorType type, byte providerId, int id, int code, string text)
             : base(dateTime)
         {
-            this.Type = type;
-            this.ProviderId = providerId;
-            this.Id = id;
-            this.Code = code;
-            this.Text = text;
+            Type = type;
+            ProviderId = providerId;
+            Id = id;
+            Code = code;
+            Text = text;
         }
 
         public ProviderError(DateTime dateTime, ProviderErrorType type, byte providerId, string text)
@@ -46,7 +46,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return string.Format("id={0} type={1} code={2} text={3}", this.Id, this.Type, this.Code, this.Text);
+            return string.Format("id={0} type={1} code={2} text={3}", Id, Type, Code, Text);
         }
     }
 }
