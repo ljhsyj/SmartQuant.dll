@@ -45,6 +45,10 @@ namespace SmartQuant
         [ReadOnly(true)]
         public string Text { get; set; }
 
+        public string Account { get; set; }
+
+        public string ClientID { get; set; }
+
         [Browsable(false)]
         public bool IsNotSent
         {

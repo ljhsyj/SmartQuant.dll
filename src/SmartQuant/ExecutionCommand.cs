@@ -38,6 +38,10 @@ namespace SmartQuant
 
         public ExecutionCommandType Type { get; private set; }
 
+        public string Account { get; private set; }
+
+        public string ClientID { get; private set; }
+
         public ExecutionCommand()
         {
             Text = "";
@@ -55,7 +59,8 @@ namespace SmartQuant
         public ExecutionCommand(ExecutionCommand command)
             : this()
         {
-            throw new NotImplementedException();
+            this.Account = command.Account;
+            this.ClientID = command.ClientID;
         }
     }
 }

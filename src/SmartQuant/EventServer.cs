@@ -8,12 +8,17 @@ namespace SmartQuant
     public class EventServer
     {
         private Framework framework;
-        private EventBus bus;
+        private EventBus bus;  // Not yet used
 
         public EventServer(Framework framework, EventBus bus)
         {
             this.framework = framework;
             this.bus = bus;
+        }
+
+        public void OnEvent(Event e)
+        {
+            this.framework.EventManager.OnEvent(e);
         }
 
         public void OnFrameworkCleared(Framework framework)
@@ -22,11 +27,6 @@ namespace SmartQuant
         }
 
         public void OnLog(Event e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnEvent(Event e)
         {
             throw new NotImplementedException();
         }
@@ -78,8 +78,11 @@ namespace SmartQuant
 
         public void OnProviderStatusChanged(Provider provider)
         {
-            throw new NotImplementedException();
-
+            if (provider.Status == ProviderStatus.Connected)
+                this.OnProviderConnected(provider);
+            if (provider.Status == ProviderStatus.Disconnected)
+                this.OnProviderDisconnected(provider);
+            this.OnEvent(new OnProviderStatusChanged(provider));
         }
 
         public void OnProviderError(ProviderError error)
@@ -89,12 +92,12 @@ namespace SmartQuant
 
         public void OnProviderConnected(Provider provider)
         {
-            throw new NotImplementedException();
+            this.OnEvent(new OnProviderConnected(provider));
         }
 
         public void OnProviderDisconnected(Provider provider)
         {
-            throw new NotImplementedException();
+            this.OnEvent(new OnProviderDisconnected(provider));
         }
 
         public void OnPortfolioAdded(Portfolio portfolio)
@@ -115,7 +118,6 @@ namespace SmartQuant
         public void EmitQueued()
         {
             throw new NotImplementedException();
-
         }
     }
 }

@@ -2,12 +2,15 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.Threading;
 
 namespace SmartQuant
 {
     public class Clock
     {
         private Framework framework;
+        private ClockType type;
+        private bool isStandalone;
 
         public DateTime DateTime
         {
@@ -19,14 +22,23 @@ namespace SmartQuant
 
         public ClockResolution Resolution { get; set; }
 
-        public long Ticks { get {  throw new System.NotImplementedException(); } }
+        public long Ticks { get { throw new System.NotImplementedException(); } }
 
-        public Clock(Framework framework, ClockMode mode = ClockMode.Simulation, bool isStandalone = false) 
+        public Clock(Framework framework, ClockType type = ClockType.Local, ClockMode mode = ClockMode.Simulation, bool isStandalone = false)
         {
             this.framework = framework;
             this.Mode = mode;
+            this.type = type;
+            this.isStandalone = isStandalone;
+            if (isStandalone)
+            {
+                Thread thread = new Thread(new ThreadStart(this.Run));
+                thread.Name = "Clock Thread";
+                thread.IsBackground = true;
+                thread.Start();
+            }
         }
-            
+
         public void AddReminder(ReminderCallback callback, DateTime dateTime, object data = null)
         {
             this.AddReminder(new Reminder(callback, dateTime, data));
@@ -58,6 +70,12 @@ namespace SmartQuant
                     return "Undefined";
             }
         }
-    }
 
+        private void Run()
+        {
+            Console.WriteLine(string.Format("{0} Clock thread started", DateTime.Now));
+            while (true)
+                Thread.Sleep(1);
+        }
+    }
 }

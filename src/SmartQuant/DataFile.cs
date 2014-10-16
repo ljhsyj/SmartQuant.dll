@@ -9,10 +9,9 @@ namespace SmartQuant
 {
     public partial class DataFile
     {
-        private Dictionary<string, ObjectKey> keys = new Dictionary<string, ObjectKey>();
-        private StreamerManager streamerManager;
-
         private string name;
+        private StreamerManager streamerManager;
+        private Stream stream;
 
         public byte CompressionMethod { set; get; }
 
@@ -31,6 +30,7 @@ namespace SmartQuant
 
         ~DataFile()
         {
+            Dispose(false);
         }
 
         public virtual void Open(FileMode mode = FileMode.OpenOrCreate)
@@ -39,11 +39,13 @@ namespace SmartQuant
 
         protected virtual bool OpenFileStream(string name, FileMode mode)
         {
-            return false;
+            this.stream = new FileStream(name, mode);
+            return this.stream.Length != 0;
         }
 
         protected virtual void CloseFileStream()
         {
+            this.stream.Close();
         }
 
         public virtual void Close()
@@ -88,6 +90,12 @@ namespace SmartQuant
         }
 
         public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
         {
         }
     }

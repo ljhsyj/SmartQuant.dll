@@ -16,30 +16,6 @@ namespace SmartQuant
         {
         }
 
-        public int Count
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public Event this[int index]
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public void Add(Event e)
-        {
-        }
-
-        public void Clear()
-        {
-        }
-
         public IEnumerator GetEnumerator()
         {
             throw new NotImplementedException();

@@ -47,15 +47,24 @@ namespace SmartQuant
 
         public void LoadSettings(IProvider provider)
         {
+            throw new NotImplementedException();
         }
 
         public void SaveSettings(IProvider provider)
         {
+            throw new NotImplementedException();
         }
 
         public void AddProvider(IProvider provider)
         {
-            throw new System.NotImplementedException();
+            if (provider.Id > 100)
+            {
+                Console.WriteLine("ProviderManager::AddProvider Error. Provider Id must be smaller than 100. You are trying to add provider with Id = {0}", provider.Id);
+                return;
+            }
+            Providers.Add(provider);
+            this.LoadSettings(provider);
+            this.framework.EventServer.OnProviderAdded(provider);
         }
 
         public IProvider GetProvider(string name)
@@ -70,52 +79,52 @@ namespace SmartQuant
 
         public IDataProvider GetDataProvider(string name)
         {
-            throw new NotImplementedException();
+            return Providers.GetByName(name) as IDataProvider;
         }
 
         public IDataProvider GetDataProvider(int id)
         {
-            throw new System.NotImplementedException();
+            return Providers.GetById(id) as IDataProvider;
         }
 
         public IExecutionProvider GetExecutionProvider(string name)
         {
-            throw new NotImplementedException();
+            return Providers.GetByName(name) as IExecutionProvider;
         }
 
         public IExecutionProvider GetExecutionProvider(int id)
         {
-            throw new NotImplementedException();
+            return Providers.GetById(id) as IExecutionProvider;
         }
 
         public IHistoricalDataProvider GetHistoricalDataProvider(string name)
         {
-            throw new NotImplementedException();
+            return Providers.GetByName(name) as IHistoricalDataProvider;
         }
 
         public IHistoricalDataProvider GetHistoricalDataProvider(int id)
         {
-            throw new NotImplementedException();
+            return Providers.GetById(id) as IHistoricalDataProvider;
         }
 
         public IInstrumentProvider GetInstrumentProvider(string name)
         {
-            throw new NotImplementedException();
+            return Providers.GetByName(name) as IInstrumentProvider;
         }
 
         public IInstrumentProvider GetInstrumentProvider(int id)
         {
-            throw new NotImplementedException();
+            return Providers.GetById(id) as IInstrumentProvider;
         }
 
         public INewsProvider GetNewsProvider(string name)
         {
-            throw new NotImplementedException();
+            return Providers.GetByName(name) as INewsProvider;
         }
 
         public INewsProvider GetNewsProvider(int id)
         {
-            throw new NotImplementedException();
+            return Providers.GetById(id) as INewsProvider;
         }
 
         public void DisconnectAll()
@@ -126,7 +135,7 @@ namespace SmartQuant
 
         public void Clear()
         {
-            throw new System.NotImplementedException();
+            Providers.Clear();
         }
     }
 }

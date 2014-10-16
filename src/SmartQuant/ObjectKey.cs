@@ -5,7 +5,7 @@ using System;
 
 namespace SmartQuant
 {
-    public class ObjectKey : IComparable<ObjectKey>
+    public partial class ObjectKey : IComparable<ObjectKey>
 	{
         protected internal bool changed;
 

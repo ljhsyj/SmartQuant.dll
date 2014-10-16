@@ -2,6 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
@@ -9,7 +10,7 @@ namespace SmartQuant
     {
         protected internal Framework framework;
         protected bool raiseEvents;
-        protected LinkedList<Strategy> strategies;
+        private LinkedList<Strategy> strategies;
 
         public byte Id { get; private set; }
 
@@ -28,6 +29,36 @@ namespace SmartQuant
         public TickSeries Bids { get; private set; }
 
         public TickSeries Asks { get; private set; }
+
+        public IDataSimulator DataSimulator
+        {
+            get
+            {
+                return this.ProviderManager.DataSimulator;
+            }
+        }
+
+        public IExecutionSimulator ExecutionSimulator
+        { 
+            get
+            {
+                return this.ProviderManager.ExecutionSimulator;
+            }
+        }
+
+        public bool Enabled { get; set; }
+
+        public Strategy Parent { get; private set; }
+
+        public LinkedList<Strategy> Strategies { get; private set; }
+
+        public StrategyManager StrategyManager
+        { 
+            get
+            {
+                return this.framework.StrategyManager;
+            }
+        }
 
         public virtual IDataProvider DataProvider
         {
@@ -138,6 +169,24 @@ namespace SmartQuant
         {
             this.framework = framework;
             this.Name = name;
+            this.Enabled = true;
+            this.Strategies = new LinkedList<Strategy>();
+        }
+
+        public void AddReminder(DateTime dateTime, object data = null)
+        {
+            this.framework.Clock.AddReminder((dt, obj) =>
+                {
+                    this.OnReminder(dt, obj);
+                }, dateTime, data);
+        }
+
+        public void AddExchangeReminder(DateTime dateTime, object data = null)
+        {
+            this.framework.ExchangeClock.AddReminder((dt, obj) =>
+                {
+                    this.OnExchangeReminder(dt, obj);
+                }, dateTime, data);
         }
 
         public void AddInstruments(string[] symbols)
@@ -162,7 +211,12 @@ namespace SmartQuant
             this.AddInstrument(this.framework.InstrumentManager.GetById(id));
         }
 
-        public void AddInstrument(Instrument instrument)
+        public virtual void AddInstrument(Instrument instrument)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void RemoveInstrument(Instrument instrument)
         {
             throw new NotImplementedException();
         }
@@ -281,6 +335,10 @@ namespace SmartQuant
         }
 
         protected internal virtual void OnReminder(DateTime dateTime, object data)
+        {
+        }
+
+        protected internal virtual void OnExchangeReminder(DateTime dateTime, object data)
         {
         }
 
@@ -421,6 +479,16 @@ namespace SmartQuant
         public void Cancel(Order order)
         {
             this.framework.OrderManager.Cancel(order);
+        }
+
+        public void CancelAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CancelAll(Instrument instrument)
+        {
+            throw new NotImplementedException();
         }
 
         public void Reject(Order order)

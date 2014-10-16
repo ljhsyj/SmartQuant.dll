@@ -10,13 +10,31 @@ namespace SmartQuant
     {
         private bool disposed;
 
+        private bool isDisposable;
+
         private FrameworkMode mode;
 
-        public Clock Clock {   get { throw new NotImplementedException();} }
+        public Clock Clock { get; private set; }
+
+        public Clock ExchangeClock { get; private set; }
 
         public static Framework Current { get; private set; }
 
         public string Name { get; private set; }
+
+        public bool IsExternalDataQueue { get; set; }
+
+        public bool IsDisposable
+        {
+            get
+            {
+                return isDisposable;
+            }
+            set
+            {
+                isDisposable = true;
+            }
+        }
 
         public Configuration Configuration { get; private set; }
 
@@ -83,9 +101,13 @@ namespace SmartQuant
 
         private void Init(string name, bool createServers, EventBus externalBus, InstrumentServer instrumentServer, DataServer dataServer)
         {
+            this.isDisposable = true;
             this.Name = name;
+            this.IsExternalDataQueue = true;
             this.LoadConfiguration();
 //            this.Mode = FrameworkMode.Simulation;
+            this.Clock = new Clock(this, ClockType.Local, ClockMode.Simulation, false);
+            this.ExchangeClock = new Clock(this, ClockType.Exchange, ClockMode.Simulation, false);
             this.EventBus = new EventBus(this, EventBusMode.Simulation);
             if (externalBus != null)
                 externalBus.Attach(this.EventBus);

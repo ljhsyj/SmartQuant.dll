@@ -31,6 +31,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -185,7 +186,6 @@
     <Compile Include="ISlippageProvider.cs" />
     <Compile Include="Level2.cs" />
     <Compile Include="Level2UpdateAction.cs" />
-    <Compile Include="LinkedListNode.cs" />
     <Compile Include="NewsUrgency.cs" />
     <Compile Include="OrderEventHandler.cs" />
     <Compile Include="DataFilter.cs" />
@@ -321,7 +321,6 @@
     <Compile Include="PortfolioStatisticsItemList.cs" />
     <Compile Include="BarSliceFactory.cs" />
     <Compile Include="BarFactory.cs" />
-    <Compile Include="LinkedList.cs" />
     <Compile Include="StrategyComponent.cs" />
     <Compile Include="Scenario.cs" />
     <Compile Include="DataFileServer.cs" />
@@ -416,11 +415,31 @@
     <Compile Include="BidStreamer.cs" />
     <Compile Include="DataSeriesStreamer.cs" />
     <Compile Include="FieldListStreamer.cs" />
+    <Compile Include="ObjectKey.Internal.cs" />
+    <Compile Include="ClockType.cs" />
+    <Compile Include="ExchangeBarFactoryItem.cs" />
+    <Compile Include="LinkedList`T.cs" />
+    <Compile Include="LinkedListNode`T.cs" />
+    <Compile Include="DriverFile\CsvDataView.cs" />
+    <Compile Include="DriverFile\IDataView.cs" />
+    <Compile Include="DriverFile\DataViewType.cs" />
+    <Compile Include="DriverFile\Header.cs" />
+    <Compile Include="DriverFile\Key.cs" />
+    <Compile Include="DriverFile\OdbcDataView.cs" />
+    <Compile Include="DriverFile\RangeType.cs" />
+    <Compile Include="Quant\Enums.cs" />
+    <Compile Include="Quant\FinMath.cs" />
+    <Compile Include="Quant\Matrix.cs" />
+    <Compile Include="Quant\MatrixDiag.cs" />
+    <Compile Include="Quant\Random.cs" />
+    <Compile Include="Quant\Vector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />
     <Folder Include="Optimization\" />
     <Folder Include="Indicators\" />
     <Folder Include="Statistics\" />
+    <Folder Include="DriverFile\" />
+    <Folder Include="Quant\" />
   </ItemGroup>
 </Project>

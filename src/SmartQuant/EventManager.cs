@@ -32,7 +32,8 @@ namespace SmartQuant
         {
             this.framework = framework;
             this.bus = bus;
-            Thread thread  = new Thread(new ThreadStart(this.Run));
+
+            Thread thread = new Thread(new ThreadStart(this.Run));
             thread.Name = "Event Manager Thread";
             thread.IsBackground = true;
             thread.Start();
@@ -40,34 +41,55 @@ namespace SmartQuant
 
         public void Start()
         {
-            throw new NotImplementedException();
+            if (Status == EventManagerStatus.Running)
+                return;
+            Console.WriteLine(string.Format("{0} Event manager started at ", DateTime.Now, this.framework.Clock.DateTime));
+            Status = EventManagerStatus.Running;
+            OnEvent(new OnEventManagerStarted());
         }
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            if (Status == EventManagerStatus.Stopped)
+                return;
+            Console.WriteLine(string.Format("{0} Event manager stopping at ", DateTime.Now, this.framework.Clock.DateTime));
+            Status = EventManagerStatus.Stopping;
+            if (this.framework.Mode == FrameworkMode.Simulation)
+                OnEvent(new OnSimulatorStop());
+            Status = EventManagerStatus.Stopped;
+            this.framework.EventBus.Clear();
+            OnEvent(new OnEventManagerStopped());
+            Console.WriteLine(string.Format("{0} Event manager stopped at ", DateTime.Now, this.framework.Clock.DateTime));
         }
 
         public void Pause()
         {
-            throw new NotImplementedException();
+            if (Status == EventManagerStatus.Paused)
+                return;
+            Console.WriteLine(string.Format("{0} Event manager paused at ", DateTime.Now, this.framework.Clock.DateTime));
+            Status = EventManagerStatus.Paused;
+            OnEvent(new OnEventManagerPaused());
         }
 
         public void Pause(DateTime dateTime)
         {
-            throw new NotImplementedException();
+            this.framework.Clock.AddReminder((dt, obj) => Pause(), dateTime, null);
         }
 
         public void Resume()
         {
-            throw new NotImplementedException();
+            if (Status == EventManagerStatus.Running)
+                return;
+            Console.WriteLine(string.Format("{0} Event manager resumed at ", DateTime.Now, this.framework.Clock.DateTime));
+            Status = EventManagerStatus.Running;
+            OnEvent(new OnEventManagerResumed());
         }
 
         public void Step(byte typeId = 0)
         {
-            throw new NotImplementedException();
+            OnEvent(new OnEventManagerStep());
         }
-            
+
         public void OnEvent(Event e)
         {
             throw new NotImplementedException();
@@ -79,10 +101,10 @@ namespace SmartQuant
 
         private void Run()
         {
-            this.Status = EventManagerStatus.Running;
+            Status = EventManagerStatus.Running;
             while (true)
             {
-                if (this.Status != EventManagerStatus.Running && (this.Status != EventManagerStatus.Paused || !this.stepping))
+                if (Status != EventManagerStatus.Running && (this.Status != EventManagerStatus.Paused || !this.stepping))
                     Thread.Sleep(1);
                 else
                     this.OnEvent(this.bus.Dequeue());

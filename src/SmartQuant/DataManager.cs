@@ -4,6 +4,7 @@
 using System;
 using System.Threading;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SmartQuant
 {
@@ -50,13 +51,11 @@ namespace SmartQuant
         public DataSeries GetDataSeries(string symbol, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
             return null;
-            //  return this.Server.GetDataSeries(this.framework.InstrumentManager.Get(symbol), type, barType, barSize);
         }
 
         public DataSeries GetDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
             return null;
-            //     return this.Server.GetDataSeries(instrument, type, barType, barSize);
         }
 
         public DataSeries GetDataSeries(string name)
@@ -71,19 +70,25 @@ namespace SmartQuant
 
         public void DeleteDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
-//            return null;
-//            this.Server.DeleteDataSeries(instrument, type, barType, barSize);
         }
 
         public void DeleteDataSeries(string symbol, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
-//            return null;
-//            this.Server.DeleteDataSeries(this.framework.InstrumentManager.Get(symbol), type, barType, barSize);
         }
 
         public void DeleteDataSeries(string name)
         {
             this.Server.DeleteDataSeries(name);
+        }
+
+        public void Save(BarSeries series, SaveMode option = SaveMode.Add)
+        {
+            Parallel.For(0, series.Count - 1, i => this.Save((Bar)series[i], option));
+        }
+
+        public void Save(TickSeries series, SaveMode option = SaveMode.Add)
+        {
+            Parallel.ForEach(series, s => this.Save(s, option));
         }
 
         public void Save(Tick tick, SaveMode option = SaveMode.Add)
@@ -98,17 +103,17 @@ namespace SmartQuant
 
         public void Save(Level2 level2, SaveMode option = SaveMode.Add)
         {
-            this.Save(level2.InstrumentId, (DataObject) level2, option);
+            this.Save(level2.InstrumentId, level2, option);
         }
 
         public void Save(Level2Snapshot level2, SaveMode option = SaveMode.Add)
         {
-            this.Save(level2.InstrumentId, (DataObject) level2, option);
+            this.Save(level2.InstrumentId, level2, option);
         }
 
         public void Save(Level2Update level2, SaveMode option = SaveMode.Add)
         {
-            this.Save(level2.InstrumentId, (DataObject) level2, option);
+            this.Save(level2.InstrumentId, level2, option);
         }
 
         public void Save(Fundamental fundamental, SaveMode option = SaveMode.Add)
@@ -123,8 +128,6 @@ namespace SmartQuant
 
         public void Save(Instrument instrument, DataObject obj, SaveMode option = SaveMode.Add)
         {
-//            return null;
-//            this.Server.Save(instrument, obj, option);
         }
 
         public void Save(int instrumentId, DataObject obj, SaveMode option = SaveMode.Add)
@@ -142,7 +145,6 @@ namespace SmartQuant
         public Bid GetBid(Instrument instrument)
         {
             return null;
-
         }
 
         public Bid GetBid(int instrumentId)
@@ -153,13 +155,11 @@ namespace SmartQuant
         public Ask GetAsk(Instrument instrument)
         {   
             throw new NotImplementedException();
-
         }
 
         public Ask GetAsk(int instrumentId)
         {
             throw new NotImplementedException();
-
         }
 
         public Trade GetTrade(Instrument instrument)
@@ -170,8 +170,6 @@ namespace SmartQuant
         public Trade GetTrade(int instrumentId)
         {
             return null;
-
-//            return this.idArray_2[instrumentId];
         }
 
         public Bar GetBar(Instrument instrument)
@@ -197,9 +195,6 @@ namespace SmartQuant
         public TickSeries GetHistoricalTicks(TickType type, string symbol, DateTime dateTime1, DateTime dateTime2)
         {
             return null;
-         
-//            Instrument instrument = this.framework_0.instrumentManager_0.Instruments[symbol];
-//            return this.GetHistoricalTicks(type, instrument, dateTime1, dateTime2);
         }
 
         public TickSeries GetHistoricalBids(string symbol, DateTime dateTime1, DateTime dateTime2)
@@ -239,11 +234,7 @@ namespace SmartQuant
 
         public TickSeries GetHistoricalTrades(string provider, Instrument instrument, DateTime dateTime1, DateTime dateTime2)
         {
-//            IHistoricalDataProvider historicalDataProvider = this.framework_0.providerManager_0.GetHistoricalDataProvider(provider);
-//            if (historicalDataProvider != null)
-//                return this.GetHistoricalTrades(historicalDataProvider, instrument, dateTime1, dateTime2);
-//            Console.WriteLine("DataManager::GetHistoricalTrades Error. Provider does not exist : " + provider);
-            return (TickSeries)null;
+            return null;
         }
 
         public TickSeries GetHistoricalTrades(string provider, string symbol, DateTime dateTime1, DateTime dateTime2)
@@ -284,13 +275,11 @@ namespace SmartQuant
         public BarSeries GetHistoricalBars(string provider, Instrument instrument, DateTime dateTime1, DateTime dateTime2, BarType barType, long barSize)
         {
             return null;
-
         }
 
         public BarSeries GetHistoricalBars(string provider, string symbol, DateTime dateTime1, DateTime dateTime2, BarType barType, long barSize)
         {
             return null;
-
         }
 
         public BarSeries GetHistoricalBars(IHistoricalDataProvider provider, Instrument instrument, DateTime dateTime1, DateTime dateTime2, BarType barType, long barSize)

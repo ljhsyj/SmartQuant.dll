@@ -3,12 +3,11 @@
 
 namespace SmartQuant
 {
-    public enum BarType : byte
+    public enum EventManagerStatus
     {
-        Time = 1,
-        Tick,
-        Volume,
-        Range,
-        Exchange
+        Running,
+        Paused,
+        Stopping,
+        Stopped
     }
 }

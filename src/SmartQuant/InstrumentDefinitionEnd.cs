@@ -8,5 +8,12 @@ namespace SmartQuant
         public string RequestId { get; set; }
         public RequestResult Result { get; set; }
         public string Text { get; set; }
+
+        internal InstrumentDefinitionEnd(string requestId,RequestResult result, string text)
+        {
+            RequestId = requestId;
+            Result = result;
+            Text = text;
+        }
     }
 }

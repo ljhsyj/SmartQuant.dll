@@ -19,5 +19,12 @@ namespace SmartQuant
         public RequestResult Result { get; set; }
 
         public string Text { get; set; }
+
+        internal HistoricalDataEnd(string requestId, RequestResult result, string text)
+        {
+            RequestId = requestId;
+            Result = result;
+            Text = text;
+        }
     }
 }
