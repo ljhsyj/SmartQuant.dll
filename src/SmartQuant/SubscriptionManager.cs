@@ -24,8 +24,7 @@ namespace SmartQuant
 
         public void Subscribe(int providerId, int instrumentId)
         {
-            Instrument byId = this.framework.InstrumentManager.GetById(instrumentId);
-            this.Subscribe(providerId, byId);
+            this.Subscribe(providerId, this.framework.InstrumentManager.GetById(instrumentId));
         }
 
         public void Subscribe(string provider, Instrument instrument)
@@ -69,7 +68,6 @@ namespace SmartQuant
 
         public void Subscribe(IDataProvider provider, InstrumentList instruments)
         {
-
         }
 
         public void Unsubscribe(IDataProvider provider, InstrumentList instruments)

@@ -2,6 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.Threading.Tasks;
 
 namespace SmartQuant
 {
@@ -9,7 +10,7 @@ namespace SmartQuant
     {
         private T[] array;
         private int size;
-        private int reserved;
+        private readonly int reserved;
 
         public int Size
         {
@@ -40,13 +41,11 @@ namespace SmartQuant
             this.size = size;
             this.reserved = size;
             this.array = new T[size];
-            this.Clear();
         }
 
         public void Clear()
         {
-            for (int i = 0; i < this.size; ++i)
-                this.array[i] = default(T);
+            Parallel.ForEach(this.array, elem => elem = default(T));
         }
 
         public void Add(int id, T value)
@@ -65,22 +64,15 @@ namespace SmartQuant
 
         private void Resize(int id)
         {
-            Console.WriteLine("IdArray::Resize index = " + id);
-            int length = id + this.reserved;
-            T[] newArray = new T[length];
-            for (int i = 0; i < this.size; ++i)
-                newArray[i] = this.array[i];
-            for (int i = this.size; i < length; ++i)
-                newArray[i] = default(T);
-            this.array = newArray;
+            Console.WriteLine("IdArray::Resize index = {0}", id);
+            var length = id + this.reserved;
+            Array.Resize(ref this.array, length);
             this.size = length;
         }
 
-        public void CopyTo(IdArray<object> array)
+        public void CopyTo(IdArray<T> array)
         {
-            array.Clear();
-            for (int i = 0; i < this.size; ++i)
-                array[i] = this[i];
+            Parallel.For(0, array.Size, i => array[i] = i > this.Size - 1 ? default(T) : this.array[i]);
         }
     }
 }

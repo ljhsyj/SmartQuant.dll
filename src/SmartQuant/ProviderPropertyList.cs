@@ -19,5 +19,15 @@ namespace SmartQuant
             string s;
             return this.properties.TryGetValue(name, out s) ? s : defaultValue;
         }
+
+        public ProviderPropertyList()
+        {
+        }
+
+        internal ProviderPropertyList(IEnumerable<XmlProviderProperty> properties)
+        {
+            foreach (var p in properties)
+                SetValue(p.Name, p.Value);
+        }
     }
 }

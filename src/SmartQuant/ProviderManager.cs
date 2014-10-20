@@ -2,12 +2,16 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.IO;
+using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
     public class ProviderManager
     {
         private Framework framework;
+        //        private XmlProviderManagerSettings settings;
 
         public ProviderList Providers { get; private set; }
 
@@ -47,12 +51,54 @@ namespace SmartQuant
 
         public void LoadSettings(IProvider provider)
         {
-            throw new NotImplementedException();
+            var path = this.framework.Configuration.ProviderManagerFileName;
+            if (!File.Exists(path))
+                return;
+
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                var settings = (XmlProviderManagerSettings)new XmlSerializer(typeof(XmlProviderManagerSettings)).Deserialize(fs);
+                foreach (var p in settings.Providers)
+                {
+                    if (p.ProviderId == provider.Id)
+                    {
+                        ((Provider)provider).SetProperties(new ProviderPropertyList(p.Properties));
+                        break;
+                    }
+                }
+            }
         }
 
         public void SaveSettings(IProvider provider)
         {
-            throw new NotImplementedException();
+//            var path = this.framework.Configuration.ProviderManagerFileName;
+//            if (!File.Exists(path))
+//                return;
+//
+//            var props = ((Provider)provider).GetProperties();
+//            XmlProvider xp = new XmlProvider();
+//            xp.ProviderId = provider.Id;
+//            xp.InstanceId = new Random().Next();
+//            xp.Properties = (List<XmlProviderProperty>)props;
+//            XmlProviderManagerSettings settings;
+//            using (FileStream fs = new FileStream(path, FileMode.Open))
+//            {
+//                settings = (XmlProviderManagerSettings)new XmlSerializer(typeof(XmlProviderManagerSettings)).Deserialize(fs);
+//                foreach (var p in settings.Providers)
+//                {
+//                    if (p.ProviderId == provider.Id)
+//                        p = xp;
+////                    {
+////                        ((Provider)provider).SetProperties(new ProviderPropertyList(p.Properties));
+////                        break;
+////                    }
+//                }
+//            }
+//
+//
+//            using (FileStream fs = new FileStream(path, FileMode.Create))
+//                new XmlSerializer(typeof(XmlProviderManagerSettings)).Serialize(fs, settings);
+
         }
 
         public void AddProvider(IProvider provider)

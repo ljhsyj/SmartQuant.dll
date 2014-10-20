@@ -104,6 +104,7 @@ namespace SmartQuant
             configuration.DefaultDataProvider = "QuantRouter";
             configuration.DefaultExecutionProvider = "QuantRouter";
             configuration.ProviderManagerFileName = Path.Combine(Installation.ConfigDir.FullName, "providermanager.xml");
+
             configuration.Streamers = new List<StreamerPlugin>();
             configuration.AddDefaultStreamers();
             configuration.Providers = new List<ProviderPlugin>();

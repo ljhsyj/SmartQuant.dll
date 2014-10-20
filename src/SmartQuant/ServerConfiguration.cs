@@ -9,4 +9,3 @@ namespace SmartQuant
         public string ConnectionString;
     }
 }
-

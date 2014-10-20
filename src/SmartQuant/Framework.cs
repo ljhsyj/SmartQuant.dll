@@ -72,6 +72,8 @@ namespace SmartQuant
 
         public DataFileManager DataFileManager { get; private set; }
 
+        public SubscriptionManager SubscriptionManager { get; private set; }
+
         public FrameworkMode Mode
         {
             get
@@ -128,7 +130,8 @@ namespace SmartQuant
             this.GroupManager = new GroupManager(this);
             this.CurrencyConverter = new CurrencyConverter(this);
             this.DataFileManager = new DataFileManager(Installation.DataDir.FullName);
-            Framework.Current = Framework.Current == null ? this : Framework.Current;
+            this.SubscriptionManager = new SubscriptionManager(this);
+            Framework.Current = Framework.Current ?? this;
         }
 
         ~Framework()

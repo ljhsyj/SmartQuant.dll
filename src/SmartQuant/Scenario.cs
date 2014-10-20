@@ -9,7 +9,6 @@ namespace SmartQuant
     public class Scenario
     {
         protected Framework framework;
-
         protected Strategy strategy;
 
         public Clock Clock { get { return this.framework.Clock; } }
@@ -60,14 +59,14 @@ namespace SmartQuant
 
         private void StartStrategy(Strategy strategy, StrategyMode mode)
         {
-            Console.WriteLine(string.Format("{0} Scenario::StartStrategy {1}", DateTime.Now, mode));
+            Console.WriteLine("{0} Scenario::StartStrategy {1}", DateTime.Now, mode);
             this.framework.StrategyManager.StartStrategy(strategy, mode);
 
             // Wait for it
-            while (this.strategy.Status != StrategyStatus.Stopped)
+            while (strategy.Status != StrategyStatus.Stopped)
                 Thread.Sleep(10);
 
-            Console.WriteLine(string.Format("{0} Scenario::StartStrategy Done", DateTime.Now));
+            Console.WriteLine("{0} Scenario::StartStrategy Done", DateTime.Now);
         }
 
         public void StartBacktest()

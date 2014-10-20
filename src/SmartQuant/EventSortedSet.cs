@@ -3,11 +3,14 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
     public class EventSortedSet : IEnumerable
     {
+        private List<Event> events;
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -20,30 +23,41 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return this.events.Count;
             }
         }
 
-        public Event this[int index]
+        public Event this [int index]
         {
             get
             {
-                throw new NotImplementedException();
+                return this.events[index];
             }
         }
 
         public void Add(Event e)
         {
+            // Don't care what finding algorithm it uses at the moment.
+            var i = this.events.FindIndex(new Predicate<Event>(evt => evt.DateTime > e.DateTime));
+            if (i == -1)
+                this.events.Add(e);
+            else
+                this.events.Insert(i, e);
         }
 
         public void Clear()
         {
+            this.events.Clear();
+        }
+
+        internal void Pop()
+        {
+            this.events.RemoveAt(0);
         }
 
         public IEnumerator GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.events.GetEnumerator();
         }
     }
 }
-

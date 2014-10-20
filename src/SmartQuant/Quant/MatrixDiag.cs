@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace SmartQuant.Quant
 {
@@ -6,18 +7,18 @@ namespace SmartQuant.Quant
     {
         private Matrix matrix;
 
-        public double this[int i]
+        public double this [int i]
         {
             get
             {
-                if (i >= 0 && i < this.NDiag)
+                if (0 <= i && i < this.NDiag)
                     return this.matrix.Elements[i, i];
                 this.Error("this[]", "Out of boundry");
                 return 0.0;
             }
             set
             {
-                if (i >= 0 && i < this.NDiag)
+                if (0 <= i && i < this.NDiag)
                     this.matrix.Elements[i, i] = value;
                 else
                     this.Error("this[]", "Out of boundry");
@@ -31,7 +32,7 @@ namespace SmartQuant.Quant
                 return Math.Min(this.matrix.N, this.matrix.M);
             }
         }
-            
+
         public MatrixDiag(Matrix matrix)
         {
             this.matrix = matrix;
@@ -41,8 +42,7 @@ namespace SmartQuant.Quant
         {
             if (!Matrix.AreComparable(this.matrix, matrixDiag.matrix))
                 return;
-            for (int index = 0; index < this.NDiag; ++index)
-                this[index] = matrixDiag[index];
+            Parallel.For(0, NDiag, i => this[i] = matrixDiag[i]);
         }
 
         protected void Error(string Where, string What)
@@ -51,7 +51,7 @@ namespace SmartQuant.Quant
 
         public override bool Equals(object matrixDiag)
         {
-            return this.matrix.Equals((object) ((MatrixDiag) matrixDiag).matrix);
+            return this.matrix.Equals(((MatrixDiag)matrixDiag).matrix);
         }
 
         public override int GetHashCode()

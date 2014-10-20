@@ -16,12 +16,12 @@ namespace SmartQuant
 
 		public StreamerPlugin(string typeName)
 		{
-			this.TypeName = typeName;
+			TypeName = typeName;
 		}
 
 		public override string ToString()
 		{
-			return this.TypeName;
+			return TypeName;
 		}
 	}
 }

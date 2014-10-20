@@ -21,8 +21,6 @@ namespace SmartQuant
             }
             set
             {
-                if (this.mode == value)
-                    return;
                 this.mode = value;
                 this.framework.Mode = this.mode == StrategyMode.Backtest ? FrameworkMode.Simulation : FrameworkMode.Realtime;
             }
@@ -51,6 +49,8 @@ namespace SmartQuant
 
         public void StartStrategy(Strategy strategy, StrategyMode mode)
         {
+            this.strategy = strategy;
+            this.Mode = mode;
         }
 
         public void Stop()
@@ -59,6 +59,7 @@ namespace SmartQuant
 
         public void RegisterMarketDataRequest(IDataProvider dataProvider, InstrumentList instrumentList)
         {
+            this.framework.SubscriptionManager.Subscribe(dataProvider, instrumentList);
         }
 
         public void Clear()

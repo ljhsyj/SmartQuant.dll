@@ -41,7 +41,7 @@ namespace SmartQuant.Quant
             if (!Vector.AreCompatible(v1, v2))
                 throw new ApplicationException("Vectors are not compatible");
             double result = 0;
-            Parallel.For(0, v1.NRows - 1, i => result += v1[i] * v2[i]);
+            Parallel.For(0, v1.NRows, i => result += v1[i] * v2[i]);
             return result;
         }
 
@@ -50,7 +50,7 @@ namespace SmartQuant.Quant
             if (!vector.IsValid())
                 throw new ApplicationException("Vector is not initialized");
             Vector v = new Vector(vector.NRows);
-            Parallel.For(0, v.NRows - 1, i => v[i] = vector[i] * val);
+            Parallel.For(0, v.NRows, i => v[i] = vector[i] * val);
             return v;
         }
 
@@ -59,7 +59,7 @@ namespace SmartQuant.Quant
             if (!vector.IsValid())
                 throw new ApplicationException("Vector is not initialized");
             Vector v = new Vector(vector.NRows);
-            Parallel.For(0, v.NRows - 1, i => v[i] = vector[i] + val);
+            Parallel.For(0, v.NRows, i => v[i] = vector[i] + val);
             return v;
         }
 
@@ -68,7 +68,7 @@ namespace SmartQuant.Quant
             if (!vector.IsValid())
                 throw new ApplicationException("Vector is not initialized");
             Vector v = new Vector(vector.NRows);
-            Parallel.For(0, v.NRows - 1, i => v[i] = vector[i] - val);
+            Parallel.For(0, v.NRows, i => v[i] = vector[i] - val);
             return v;
         }
 
@@ -81,7 +81,7 @@ namespace SmartQuant.Quant
             if (!Vector.AreCompatible(target, source))
                 throw new ApplicationException("Vectors are not compatible");
             Vector v = new Vector(target.NRows);
-            Parallel.For(0, v.NRows - 1, i => v[i] = target[i] + source[i]);
+            Parallel.For(0, v.NRows, i => v[i] = target[i] + source[i]);
             return v;
         }
 
@@ -94,7 +94,7 @@ namespace SmartQuant.Quant
             if (!Vector.AreCompatible(target, source))
                 throw new ApplicationException("Vectors are not compatible");
             Vector v = new Vector(target.NRows);
-            Parallel.For(0, v.NRows - 1, i => v[i] = target[i] - source[i]);
+            Parallel.For(0, v.NRows, i => v[i] = target[i] - source[i]);
             return v;
         }
 
@@ -114,7 +114,7 @@ namespace SmartQuant.Quant
 
         public void Zero()
         {
-            Parallel.For(0, Elements.Length - 1, i => Elements[i] = 0);
+            Parallel.For(0, Elements.Length, i => Elements[i] = 0);
         }
 
         public void ResizeTo(int newNRows)
@@ -123,7 +123,7 @@ namespace SmartQuant.Quant
                 throw new ArgumentException("Number of rows has to be positive");
             double[] newArray = new double[newNRows];
             int num = Math.Min(this.NRows, newNRows);
-            Parallel.For(0, Math.Min(this.NRows, newNRows) - 1, i => newArray[i] = Elements[i]);
+            Parallel.For(0, Math.Min(this.NRows, newNRows), i => newArray[i] = Elements[i]);
             NRows = newNRows;
             Elements = newArray;
         }
@@ -154,7 +154,7 @@ namespace SmartQuant.Quant
             if (!this.IsValid())
                 throw new ApplicationException("Vector is not initialized");
             Vector v = new Vector(this.NRows);
-            Parallel.For(0, this.NRows - 1, i => v[i] = Math.Abs(this.Elements[i]));
+            Parallel.For(0, this.NRows, i => v[i] = Math.Abs(this.Elements[i]));
             return v;
         }
 
@@ -163,7 +163,7 @@ namespace SmartQuant.Quant
             if (!this.IsValid())
                 throw new ApplicationException("Vector is not initialized");
             Vector v = new Vector(this.NRows);
-            Parallel.For(0, this.NRows - 1, i => v[i] = this.Elements[i] * this.Elements[i]);
+            Parallel.For(0, this.NRows, i => v[i] = this.Elements[i] * this.Elements[i]);
             return v;
         }
 
@@ -172,7 +172,7 @@ namespace SmartQuant.Quant
             if (!this.IsValid())
                 throw new ApplicationException("Vector is not initialized");
             Vector v = new Vector(this.NRows);
-            Parallel.For(0, this.NRows - 1, i => v[i] = Math.Sqrt(this.Elements[i]));
+            Parallel.For(0, this.NRows, i => v[i] = Math.Sqrt(this.Elements[i]));
             return v;
         }
 
@@ -185,7 +185,7 @@ namespace SmartQuant.Quant
             if (!Vector.AreCompatible(target, source))
                 throw new ApplicationException("Vectors are not compatible");
             Vector v = new Vector(target.NRows);
-            Parallel.For(0, this.NRows - 1, i => v[i] = target[i] * source[i]);
+            Parallel.For(0, this.NRows, i => v[i] = target[i] * source[i]);
             return v;
         }
 
@@ -198,7 +198,7 @@ namespace SmartQuant.Quant
             if (!Vector.AreCompatible(target, source))
                 throw new ApplicationException("Vectors are not compatible");
             Vector v = new Vector(target.NRows);
-            Parallel.For(0, this.NRows - 1, i => v[i] =  target[i] / source[i]);
+            Parallel.For(0, this.NRows, i => v[i] = target[i] / source[i]);
             return v;
         }
 

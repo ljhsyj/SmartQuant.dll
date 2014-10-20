@@ -22,12 +22,19 @@ namespace SmartQuant
 
         private Framework framework;
 
-        public Provider(Framework framework)
-        {
-            this.framework = framework;
-            Status = ProviderStatus.Disconnected;
-        }
+        [Category("Information")]
+        public byte Id { get { return id; } }
 
+        [Category("Information")]
+        public string Name { get { return name; } }
+
+        [Category("Information")]
+        public string Description { get { return this.description; } }
+
+        [Category("Information")]
+        public string Url { get { return this.url; } }
+
+        [Category("Status")]
         public ProviderStatus Status
         { 
             get
@@ -49,21 +56,42 @@ namespace SmartQuant
             }
         }
 
-        public byte Id { get { return id; } }
+        [Category("Status")]
+        public bool IsConnected
+        {
+            get
+            {
+                return Status == ProviderStatus.Connected;
+            }
+        }
 
-        public string Name { get { return name; } }
+        [Category("Status")]
+        public bool IsDisconnected
+        {
+            get
+            {
+                return Status == ProviderStatus.Disconnected;
+            }
+        }
 
-        public string Description { get { return this.description; } }
-
-        public string Url { get { return this.url; } }
-
-        public void Connect()
+        public Provider(Framework framework)
+        {
+            this.framework = framework;
+            Status = ProviderStatus.Disconnected;
+        }
+            
+        public virtual void Connect()
         {
             Status = ProviderStatus.Connecting;
             Status = ProviderStatus.Connected;
         }
 
-        public void Disconnect()
+        public bool Connect(int timeout)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void Disconnect()
         {
             Status = ProviderStatus.Disconnecting;
             Status = ProviderStatus.Disconnected;

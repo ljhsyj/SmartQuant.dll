@@ -43,7 +43,7 @@ namespace SmartQuant
         {
             if (Status == EventManagerStatus.Running)
                 return;
-            Console.WriteLine(string.Format("{0} Event manager started at ", DateTime.Now, this.framework.Clock.DateTime));
+            Console.WriteLine("{0} Event manager started at ", DateTime.Now, this.framework.Clock.DateTime);
             Status = EventManagerStatus.Running;
             OnEvent(new OnEventManagerStarted());
         }
@@ -52,21 +52,21 @@ namespace SmartQuant
         {
             if (Status == EventManagerStatus.Stopped)
                 return;
-            Console.WriteLine(string.Format("{0} Event manager stopping at ", DateTime.Now, this.framework.Clock.DateTime));
+            Console.WriteLine("{0} Event manager stopping at ", DateTime.Now, this.framework.Clock.DateTime);
             Status = EventManagerStatus.Stopping;
             if (this.framework.Mode == FrameworkMode.Simulation)
                 OnEvent(new OnSimulatorStop());
             Status = EventManagerStatus.Stopped;
             this.framework.EventBus.Clear();
             OnEvent(new OnEventManagerStopped());
-            Console.WriteLine(string.Format("{0} Event manager stopped at ", DateTime.Now, this.framework.Clock.DateTime));
+            Console.WriteLine("{0} Event manager stopped at ", DateTime.Now, this.framework.Clock.DateTime);
         }
 
         public void Pause()
         {
             if (Status == EventManagerStatus.Paused)
                 return;
-            Console.WriteLine(string.Format("{0} Event manager paused at ", DateTime.Now, this.framework.Clock.DateTime));
+            Console.WriteLine("{0} Event manager paused at ", DateTime.Now, this.framework.Clock.DateTime);
             Status = EventManagerStatus.Paused;
             OnEvent(new OnEventManagerPaused());
         }
@@ -80,7 +80,7 @@ namespace SmartQuant
         {
             if (Status == EventManagerStatus.Running)
                 return;
-            Console.WriteLine(string.Format("{0} Event manager resumed at ", DateTime.Now, this.framework.Clock.DateTime));
+            Console.WriteLine("{0} Event manager resumed at ", DateTime.Now, this.framework.Clock.DateTime);
             Status = EventManagerStatus.Running;
             OnEvent(new OnEventManagerResumed());
         }

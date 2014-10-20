@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace SmartQuant.Quant
 {
     public class Matrix
     {
-        private double[,] elements;
+        private double[,] elms;
         private int m;
         private int n;
         private MatrixDiag diagonal;
@@ -53,7 +54,7 @@ namespace SmartQuant.Quant
         {
             get
             {
-                return this.elements;
+                return this.elms;
             }
         }
 
@@ -61,12 +62,12 @@ namespace SmartQuant.Quant
         {
             get
             {
-                return 0 <= row && row < this.M && 0 <= col && col < this.N ? this.elements[row, col] : 0;
+                return 0 <= row && row < this.M && 0 <= col && col < this.N ? this.elms[row, col] : 0;
             }
             set
             {
                 if (0 <= row && row < this.M && 0 <= col && col < this.N)
-                    this.elements[row, col] = value;
+                    this.elms[row, col] = value;
             }
         }
 
@@ -94,7 +95,7 @@ namespace SmartQuant.Quant
                     return false;
                 for (int i = 0; i < this.m; ++i)
                     for (int j = 0; j < i; ++j)
-                        if (this.elements[i, j] != this.elements[j, i])
+                        if (this.elms[i, j] != this.elms[j, i])
                             return false;
                 return true;
             }
@@ -109,14 +110,14 @@ namespace SmartQuant.Quant
         {
             for (int i = 0; i < this.M; ++i)
                 for (int j = 0; j < this.N; ++j)
-                    this.elements[i, j] = matrix.elements[i, j];
+                    this.elms[i, j] = matrix.elms[i, j];
         }
 
         public Matrix(int m, int n)
         {
             this.m = m;
             this.n = n;
-            this.elements = new double[m, n];
+            this.elms = new double[m, n];
             this.diagonal = new MatrixDiag(this);
         }
 
@@ -130,14 +131,14 @@ namespace SmartQuant.Quant
         {
             for (int i = 0; i < m; ++i)
                 for (int j = 0; j < n; ++j)
-                    this.elements[i, j] = val;
+                    this.elms[i, j] = val;
         }
 
         public Matrix(double[] values)
             : this(1, values.Length)
         {
             for (int i = 0; i < this.N; ++i)
-                this.elements[0, i] = values[i];
+                this.elms[0, i] = values[i];
         }
 
         public Matrix(double[,] values)
@@ -145,7 +146,7 @@ namespace SmartQuant.Quant
         {
             for (int i = 0; i < this.m; ++i)
                 for (int j = 0; j < this.n; ++j)
-                    this.elements[i, j] = values[i, j];
+                    this.elms[i, j] = values[i, j];
         }
 
         public static Matrix operator +(Matrix m1, Matrix m2)
@@ -215,13 +216,13 @@ namespace SmartQuant.Quant
 
         public static Matrix operator *(Matrix matrix, double Scalar)
         {
-            Matrix matrix1 = new Matrix(matrix.M, matrix.N);
-            for (int index1 = 0; index1 < matrix.M; ++index1)
+            Matrix m1 = new Matrix(matrix.M, matrix.N);
+            for (int i = 0; i < matrix.M; ++i)
             {
-                for (int index2 = 0; index2 < matrix.N; ++index2)
-                    matrix1[index1, index2] = matrix[index1, index2] * Scalar;
+                for (int j = 0; j < matrix.N; ++j)
+                    m1[i, j] = matrix[i, j] * Scalar;
             }
-            return matrix1;
+            return m1;
         }
 
         public static Matrix operator /(Matrix matrix, double Scalar)
@@ -229,15 +230,15 @@ namespace SmartQuant.Quant
             return matrix * (1.0 / Scalar);
         }
 
-        public static bool operator ==(Matrix Matrix1, Matrix Matrix2)
+        public static bool operator ==(Matrix m1, Matrix m2)
         {
-            if (!Matrix.AreComparable(Matrix1, Matrix2))
+            if (!Matrix.AreComparable(m1, m2))
                 return false;
-            for (int index1 = 0; index1 < Matrix1.m; ++index1)
+            for (int i = 0; i < m1.m; ++i)
             {
-                for (int index2 = 0; index2 < Matrix1.n; ++index2)
+                for (int j = 0; j < m1.n; ++j)
                 {
-                    if (Matrix1.elements[index1, index2] != Matrix2.elements[index1, index2])
+                    if (m1.elms[i, j] != m2.elms[i, j])
                         return false;
                 }
             }
@@ -250,7 +251,7 @@ namespace SmartQuant.Quant
                 return false;
             for (int i = 0; i < m1.m; ++i)
                 for (int j = 0; j < m1.n; ++j)
-                    if (m1.elements[i, j] == m2.elements[i, j])
+                    if (m1.elms[i, j] == m2.elms[i, j])
                         return false;
             return true;
         }
@@ -259,7 +260,7 @@ namespace SmartQuant.Quant
         {
             for (int i = 0; i < matrix.m; ++i)
                 for (int j = 0; j < matrix.n; ++j)
-                    if (matrix.elements[i, j] != scalar)
+                    if (matrix.elms[i, j] != scalar)
                         return false;
             return true;
         }
@@ -268,7 +269,7 @@ namespace SmartQuant.Quant
         {
             for (int i = 0; i < matrix.m; ++i)
                 for (int j = 0; j < matrix.n; ++j)
-                    if (matrix.elements[i, j] == scalar)
+                    if (matrix.elms[i, j] == scalar)
                         return false;
             return true;
         }
@@ -277,7 +278,7 @@ namespace SmartQuant.Quant
         {
             for (int i = 0; i < matrix.m; ++i)
                 for (int j = 0; j < matrix.n; ++j)
-                    if (matrix.elements[i, j] >= scalar)
+                    if (matrix.elms[i, j] >= scalar)
                         return false;
             return true;
         }
@@ -286,7 +287,7 @@ namespace SmartQuant.Quant
         {
             for (int i = 0; i < matrix.m; ++i)
                 for (int j = 0; j < matrix.n; ++j)
-                    if (matrix.elements[i, j] > scalar)
+                    if (matrix.elms[i, j] > scalar)
                         return false;
             return true;
         }
@@ -295,7 +296,7 @@ namespace SmartQuant.Quant
         {
             for (int i = 0; i < matrix.m; ++i)
                 for (int j = 0; j < matrix.n; ++j)
-                    if (matrix.elements[i, j] <= scalar)
+                    if (matrix.elms[i, j] <= scalar)
                         return false;
             return true;
         }
@@ -306,7 +307,7 @@ namespace SmartQuant.Quant
             {
                 for (int index2 = 0; index2 < matrix.n; ++index2)
                 {
-                    if (matrix.elements[index1, index2] < Scalar)
+                    if (matrix.elms[index1, index2] < Scalar)
                         return false;
                 }
             }
@@ -549,48 +550,32 @@ namespace SmartQuant.Quant
                 a.Elements[index / this.M, index % this.N] = numArray1[index];
         }
 
-        public static bool AreComparable(Matrix Matrix1, Matrix Matrix2)
+        public static bool AreComparable(Matrix m1, Matrix m2)
         {
-            return Matrix1.m == Matrix2.m && Matrix1.n == Matrix2.n;
+            return m1.m == m2.m && m1.n == m2.n;
         }
 
         public Matrix Abs()
         {
-            for (int index1 = 0; index1 < this.m; ++index1)
-            {
-                for (int index2 = 0; index2 < this.n; ++index2)
-                    this.elements[index1, index2] = Math.Abs(this.elements[index1, index2]);
-            }
+            Parallel.For(0, this.m, i => Parallel.For(0, this.n, j => this.elms[i, j] = Math.Abs(this.elms[i, j])));
             return this;
         }
 
         public Matrix Sqr()
         {
-            for (int index1 = 0; index1 < this.m; ++index1)
-            {
-                for (int index2 = 0; index2 < this.n; ++index2)
-                    this.elements[index1, index2] = Math.Pow(this.elements[index1, index2], 2.0);
-            }
+            Parallel.For(0, this.m, i => Parallel.For(0, this.n, j => this.elms[i, j] = Math.Pow(this.elms[i, j], 2)));
             return this;
         }
 
         public Matrix Sqrt()
         {
-            for (int index1 = 0; index1 < this.m; ++index1)
-            {
-                for (int index2 = 0; index2 < this.n; ++index2)
-                    this.elements[index1, index2] = Math.Sqrt(this.elements[index1, index2]);
-            }
+            Parallel.For(0, this.m, i => Parallel.For(0, this.n, j => this.elms[i, j] = Math.Sqrt(this.elms[i, j])));
             return this;
         }
 
-        public Matrix Apply(Matrix.TElementPosAction Action)
+        public Matrix Apply(TElementPosAction Action)
         {
-            for (int index1 = 0; index1 < this.m; ++index1)
-            {
-                for (int index2 = 0; index2 < this.n; ++index2)
-                    this.elements[index1, index2] = Action.Operation(this.elements[index1, index2]);
-            }
+            Parallel.For(0, this.m, i => Parallel.For(0, this.n, j => this.elms[i, j] = Action.Operation(this.elms[i, j])));
             return this;
         }
 
@@ -601,7 +586,7 @@ namespace SmartQuant.Quant
             {
                 double val1 = 0.0;
                 for (int index2 = 0; index2 < this.n; ++index2)
-                    val1 += Math.Abs(this.elements[index1, index2]);
+                    val1 += Math.Abs(this.elms[index1, index2]);
                 val2 = Math.Max(val1, val2);
             }
             return val2;
@@ -614,7 +599,7 @@ namespace SmartQuant.Quant
             {
                 double val1 = 0.0;
                 for (int index2 = 0; index2 < this.m; ++index2)
-                    val1 += Math.Abs(this.elements[index2, index1]);
+                    val1 += Math.Abs(this.elms[index2, index1]);
                 val2 = Math.Max(val1, val2);
             }
             return val2;
@@ -626,7 +611,7 @@ namespace SmartQuant.Quant
             for (int index1 = 0; index1 < this.m; ++index1)
             {
                 for (int index2 = 0; index2 < this.n; ++index2)
-                    num += Math.Pow(this.elements[index1, index2], 2.0);
+                    num += Math.Pow(this.elms[index1, index2], 2.0);
             }
             return num;
         }
@@ -637,7 +622,7 @@ namespace SmartQuant.Quant
             for (int index1 = 0; index1 < this.m; ++index1)
             {
                 for (int index2 = 0; index2 < this.n; ++index2)
-                    num += Math.Pow(Matrix1.elements[index1, index2] - Matrix2.elements[index1, index2], 2.0);
+                    num += Math.Pow(Matrix1.elms[index1, index2] - Matrix2.elms[index1, index2], 2.0);
             }
             return num;
         }
@@ -675,9 +660,9 @@ namespace SmartQuant.Quant
             for (int i = 0; i < this.m; ++i)
             {
                 for (int j = 0; j < this.n; ++j)
-                    numArray[j, i] = this.elements[i, j];
+                    numArray[j, i] = this.elms[i, j];
             }
-            this.elements = numArray;
+            this.elms = numArray;
             int num = this.n;
             this.n = this.m;
             this.m = num;
@@ -761,46 +746,37 @@ namespace SmartQuant.Quant
                 return this;
             }
 
-            for (int i = 0; i < this.m; ++i)
-            {
-                for (int j = 0; j < this.n; ++j)
-                {
-                    this.elements[i, j] = (this.elements[i, j] + this.elements[j, i]) / 2.0;
-                    this.elements[j, i] = this.elements[i, j];
-                }
-            }
+            Parallel.For(0, this.m, i => Parallel.For(0, this.n, j =>
+                    {
+                        this.elms[i, j] = (this.elms[i, j] + this.elms[j, i]) / 2;
+                        this.elms[j, i] = this.elms[i, j];
+                    }));
             return this;
         }
 
         public Matrix UnitMatrix()
         {
-            for (int i = 0; i < this.m; ++i)
-            {
-                for (int j = 0; j < this.n; ++j)
-                    this.elements[i, j] = i != j ? 0 : 1;
-            }
+            Parallel.For(0, this.m, i => Parallel.For(0, this.n, j => this.elms[i, j] = i != j ? 0 : 1));
             return this;
         }
 
         public Matrix HilbertMatrix()
         {
-            for (int i = 0; i < this.m; ++i)
-            {
-                for (int j = 0; j < this.n; ++j)
-                    if (i == j)
-                        this.elements[i, j] = 1.0 / (i + j + 1.0);
-            }
+            Parallel.For(0, this.m, i => Parallel.For(0, this.n, j =>
+                    {
+                        if (i == j)
+                            this.elms[i, j] = 1.0 / (i + j + 1);
+                    }));
             return this;
         }
 
         public Matrix HilbertMatrix2()
         {
-            for (int i = 0; i < this.m; ++i)
-            {
-                for (int j = 0; j < this.n; ++j)
-                    if (i == j)
-                        this.elements[i, j] = 1.0 / (i + j + 1.0);
-            }
+            Parallel.For(0, this.m, i => Parallel.For(0, this.n, j =>
+                    {
+                        if (i == j)
+                            this.elms[i, j] = 1.0 / (i + j + 1);
+                    }));
             return this;
         }
 

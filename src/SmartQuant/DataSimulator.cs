@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace SmartQuant
 {
     class DataSimulator : Provider, IDataSimulator
-	{
+    {
         public DateTime DateTime1 { get; set; }
 
         public DateTime DateTime2 { get; set; }
@@ -46,25 +46,47 @@ namespace SmartQuant
 
         public List<IDataSeries> Series { get; set; }
 
-        public DataSimulator(Framework framework) : base(framework)
+        public DataSimulator(Framework framework)
+            : base(framework)
         {
             this.id = ProviderId.DataSimulator;
             this.name = "DataSimulator";
             this.description = "Default data simulator";
             this.url = "www.smartquant.com";
-            this.DateTime1 = DateTime.MinValue;
-            this.DateTime2 = DateTime.MaxValue;
-            this.Series = new List<IDataSeries>();
-            this.Processor = new DataProcessor();
-            this.BarFilter = new BarFilter();
+            DateTime1 = DateTime.MinValue;
+            DateTime2 = DateTime.MaxValue;
+            SubscribeAll = true;
+            Processor = new DataProcessor();
+            BarFilter = new BarFilter();
+            Series = new List<IDataSeries>();
+        }
+
+        public override void Connect()
+        {
+            if (IsDisconnected)
+                Status = ProviderStatus.Connected;
+        }
+
+        public override void Disconnect()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void OnConnected()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void OnDisconnected()
+        {
         }
 
         public void Clear()
         {
-            this.DateTime1 = DateTime.MinValue;
-            this.DateTime2 = DateTime.MaxValue;
-            this.Series.Clear();
-            this.BarFilter.Clear();
+            DateTime1 = DateTime.MinValue;
+            DateTime2 = DateTime.MaxValue;
+            Series.Clear();
+            BarFilter.Clear();
         }
-	}
+    }
 }

@@ -110,7 +110,6 @@
     <Compile Include="IEventQueue.cs" />
     <Compile Include="CurrencyConverter.cs" />
     <Compile Include="BarSlice.cs" />
-    <Compile Include="IdArray.cs" />
     <Compile Include="EventFilter.cs" />
     <Compile Include="ReminderCallback.cs" />
     <Compile Include="RequestResult.cs" />
@@ -433,6 +432,9 @@
     <Compile Include="Quant\MatrixDiag.cs" />
     <Compile Include="Quant\Random.cs" />
     <Compile Include="Quant\Vector.cs" />
+    <Compile Include="IdArray`T.cs" />
+    <Compile Include="SubscriptionList.cs" />
+    <Compile Include="GetByList`T.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />
