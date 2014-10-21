@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public GroupUpdateEventAgrs(GroupUpdate groupUpdate)
         {
-            this.GroupUpdate = groupUpdate;
+            GroupUpdate = groupUpdate;
         }
     }
 }

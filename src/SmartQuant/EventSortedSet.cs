@@ -9,7 +9,7 @@ namespace SmartQuant
 {
     public class EventSortedSet : IEnumerable
     {
-        private List<Event> events;
+        private List<Event> events = new List<Event>();
 
         public string Name { get; set; }
 

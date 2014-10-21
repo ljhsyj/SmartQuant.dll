@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnOrderDone(Order order)
         {
-            this.Order = order;
+            Order = order;
         }
     }
 }

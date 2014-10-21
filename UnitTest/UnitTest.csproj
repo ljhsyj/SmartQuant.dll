@@ -35,6 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetByListTest.cs" />
+    <Compile Include="EventSortedSetTest.cs" />
+    <Compile Include="IdArrayTest.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

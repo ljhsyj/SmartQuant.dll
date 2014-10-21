@@ -27,12 +27,12 @@ namespace SmartQuant
 
         public GroupUpdate(int groupId, string fieldName, byte fieldType, object value, object oldValue, GroupUpdateType updateType)
         {
-            this.GroupId = groupId;
-            this.FieldName = fieldName;
-            this.FieldType = fieldType;
-            this.Value = value;
-            this.OldValue = oldValue;
-            this.UpdateType = updateType;
+            GroupId = groupId;
+            FieldName = fieldName;
+            FieldType = fieldType;
+            Value = value;
+            OldValue = oldValue;
+            UpdateType = updateType;
         }
     }
 }

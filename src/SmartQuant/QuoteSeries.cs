@@ -10,17 +10,19 @@ namespace SmartQuant
     public class QuoteSeries : IEnumerable<Quote>
     {
         private string name;
+        private List<Quote> quotes;
 
         public QuoteSeries(string name = "")
         {
             this.name = name;
+            this.quotes = new List<Quote>();
         }
 
         public int Count
         {
             get
             {
-                throw new NotImplementedException();
+                return this.quotes.Count;
             }
         }
 
@@ -28,7 +30,8 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                EnsureNotEmpty();
+                return this.quotes[0].DateTime;
 
             }
         }
@@ -37,27 +40,28 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                EnsureNotEmpty();
+                return this.quotes[this.Count - 1].DateTime;
 
             }
         }
 
-        public Quote this [int index]
+        public Quote this[int index]
         {
             get
             {
-                throw new NotImplementedException();
+                return this.quotes[index];
             }
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            this.quotes.Clear();
         }
 
         public void Add(Quote quote)
         {
-            throw new NotImplementedException();
+            this.quotes.Add(quote);
         }
 
         public int GetIndex(DateTime datetime, IndexOption option)
@@ -67,12 +71,18 @@ namespace SmartQuant
 
         public IEnumerator<Quote> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return  this.quotes.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.quotes.GetEnumerator();
+        }
+
+        private void EnsureNotEmpty()
+        {
+            if (this.Count <= 0)
+                throw new ApplicationException("Array has no elements");
         }
     }
 }

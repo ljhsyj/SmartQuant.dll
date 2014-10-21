@@ -259,6 +259,26 @@ namespace SmartQuant
         {
         }
 
+        public void Deposit(DateTime dateTime, double value, byte currencyId = global::SmartQuant.CurrencyId.USD, string text = null, bool updateParent = true)
+        {
+            Portfolio.Account.Deposit(dateTime, value, currencyId, text, updateParent);
+        }
+
+        public void Withdraw(DateTime dateTime, double value, byte currencyId = global::SmartQuant.CurrencyId.USD, string text = null, bool updateParent = true)
+        {
+            Portfolio.Account.Withdraw(dateTime, value, currencyId, text, updateParent);
+        }
+
+        public void Deposit(double value, byte currencyId = global::SmartQuant.CurrencyId.USD, string text = null, bool updateParent = true)
+        {
+            Portfolio.Account.Deposit(value, currencyId, text, updateParent);
+        }
+
+        public void Withdraw(double value, byte currencyId = global::SmartQuant.CurrencyId.USD, string text = null, bool updateParent = true)
+        {
+            Portfolio.Account.Withdraw(value, currencyId, text, updateParent);
+        }
+
         public virtual void Init()
         {
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-
 using System.Threading.Tasks;
 
 namespace SmartQuant.Quant
@@ -40,9 +39,7 @@ namespace SmartQuant.Quant
         {
             if (!Vector.AreCompatible(v1, v2))
                 throw new ApplicationException("Vectors are not compatible");
-            double result = 0;
-            Parallel.For(0, v1.NRows, i => result += v1[i] * v2[i]);
-            return result;
+            return Enumerable.Range(0, v1.NRows).Sum(i => v1[i] * v2[i]);
         }
 
         public static Vector operator *(Vector vector, double val)
@@ -207,10 +204,7 @@ namespace SmartQuant.Quant
             Vector that = (Vector)vector;
             if (this.NRows != that.NRows)
                 return false;
-            for (int i = 0; i < that.NRows; ++i)
-                if (this[i] != that[i])
-                    return false;
-            return true;
+            return Enumerable.Range(0, this.NRows).All(i => this[i] == that[i]);
         }
 
         public override int GetHashCode()

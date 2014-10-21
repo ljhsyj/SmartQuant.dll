@@ -21,9 +21,9 @@ namespace SmartQuant
 
         public Quote(Bid bid, Ask ask)
         {
-            this.Bid = bid;
-            this.Ask = ask;
-            this.DateTime = bid.DateTime > ask.DateTime ? bid.DateTime : ask.DateTime;
+            Bid = bid;
+            Ask = ask;
+            DateTime = bid.DateTime > ask.DateTime ? bid.DateTime : ask.DateTime;
         }
 
         public Quote(DateTime dateTime, byte providerId, int instrumentId, double bidPrice, int bidSize, double askPrice, int askSize)

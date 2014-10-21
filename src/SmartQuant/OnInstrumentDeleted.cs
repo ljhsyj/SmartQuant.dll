@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public OnInstrumentDeleted(Instrument instrument)
         {
-            this.Instrument = instrument;
+            Instrument = instrument;
         }
     }
 }

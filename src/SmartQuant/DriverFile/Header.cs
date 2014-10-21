@@ -8,6 +8,7 @@ namespace SmartQuant.DriverFile
 {
     public sealed class Header
     {
+        public const string BYTE = "Byte";
         public const string INT32 = "Int32";
         public const string DOUBLE = "Double";
         public const string STRING = "String";

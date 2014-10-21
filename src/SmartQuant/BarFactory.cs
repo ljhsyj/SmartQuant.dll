@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SmartQuant
 {
@@ -20,30 +21,25 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        public void Add(string symbol, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
+        public void Add(string symbol, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
         {
             var instrument = this.framework.InstrumentManager.Get(symbol);
             this.Add(instrument, barType, barSize, barInput);
         }
 
-        public void Add(Instrument instrument, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
+        public void Add(Instrument instrument, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
         {
             throw new NotImplementedException();
         }
 
-        public void Add(InstrumentList instruments, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
+            public void Add(InstrumentList instruments, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
         {
-            foreach (Instrument instrument in instruments)
-                this.Add(instrument, barType, barSize, barInput);
+            Parallel.ForEach(instruments, instrument => this.Add(instrument, barType, barSize, barInput));
         }
 
-        public void Add(string[] symbols, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
+        public void Add(string[] symbols, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
         {
-            foreach (string symbol in symbols)
-            {
-                var instrument = this.framework.InstrumentManager.Get(symbol);
-                this.Add(instrument, barType, barSize, barInput);
-            }
+            Parallel.ForEach(symbols, symbol => this.Add(this.framework.InstrumentManager.Get(symbol), barType, barSize, barInput));
         }
     }
 }

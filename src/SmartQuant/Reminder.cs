@@ -17,6 +17,8 @@ namespace SmartQuant
 
         public ReminderCallback Callback { get; private set; }
 
+        public Clock Clock { get; private set; }
+
         public object Data { set; get; }
 
         public Reminder(ReminderCallback callback, DateTime dateTime, object data)
@@ -33,7 +35,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", this.GetType().Name, this.DateTime);
+            return string.Format("{0} {1}", GetType().Name, DateTime);
         }
     }
 }

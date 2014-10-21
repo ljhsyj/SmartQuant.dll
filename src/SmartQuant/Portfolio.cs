@@ -2,6 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.ComponentModel;
 
 namespace SmartQuant
 {
@@ -12,6 +13,9 @@ namespace SmartQuant
         public string Name { get; private set; }
 
         public Pricer Pricer { get; set; }
+
+        [Browsable(false)]
+        public Account Account { get; private set; }
 
         public Portfolio(Framework framework, string name = "")
         {

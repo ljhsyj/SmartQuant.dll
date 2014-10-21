@@ -416,7 +416,6 @@
     <Compile Include="FieldListStreamer.cs" />
     <Compile Include="ObjectKey.Internal.cs" />
     <Compile Include="ClockType.cs" />
-    <Compile Include="ExchangeBarFactoryItem.cs" />
     <Compile Include="LinkedList`T.cs" />
     <Compile Include="LinkedListNode`T.cs" />
     <Compile Include="DriverFile\CsvDataView.cs" />
@@ -435,6 +434,8 @@
     <Compile Include="IdArray`T.cs" />
     <Compile Include="SubscriptionList.cs" />
     <Compile Include="GetByList`T.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GroupList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

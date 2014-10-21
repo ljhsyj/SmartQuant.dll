@@ -7,9 +7,18 @@ namespace SmartQuant
 {
     public class TimeBarFactoryItem : BarFactoryItem
     {
-        public TimeBarFactoryItem(Instrument instrument, long barSize, BarInput barInput = BarInput.Trade)
+        private ClockType type;
+
+        public TimeBarFactoryItem(Instrument instrument, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
             : base(instrument, BarType.Time, barSize, barInput)
         {
+            this.type = type;
+        }
+
+        public TimeBarFactoryItem(Instrument instrument, long barSize, ClockType type = ClockType.Local)
+            : base(instrument, BarType.Time, barSize)
+        {
+            this.type = type;
         }
 
         protected internal override void OnData(DataObject obj)

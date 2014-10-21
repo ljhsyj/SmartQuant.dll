@@ -37,7 +37,12 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        protected void AddReminder(DateTime datetime)
+        protected virtual DateTime GetDataObjectDateTime(DataObject obj, ClockType type)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected void AddReminder(DateTime datetime, ClockType type)
         {
             throw new NotImplementedException();
         }

@@ -8,7 +8,6 @@ namespace SmartQuant
         Time = 1,
         Tick,
         Volume,
-        Range,
-        Exchange
+        Range
     }
 }
