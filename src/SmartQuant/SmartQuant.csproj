@@ -257,7 +257,6 @@
     <Compile Include="Transaction.cs" />
     <Compile Include="Level2Snapshot.cs" />
     <Compile Include="Level2Update.cs" />
-    <Compile Include="PermanentQueue.cs" />
     <Compile Include="AccountDataEntry.cs" />
     <Compile Include="FillEventHandler.cs" />
     <Compile Include="PerformanceProvider.cs" />
@@ -436,6 +435,8 @@
     <Compile Include="GetByList`T.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GroupList.cs" />
+    <Compile Include="PermanentQueue`T.cs" />
+    <Compile Include="NetDataSeries.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

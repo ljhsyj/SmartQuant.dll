@@ -159,6 +159,17 @@ namespace SmartQuant
             }
         }
 
+        public bool FillAtStopPrice {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public bool FillAtLimitPrice
         {
             get

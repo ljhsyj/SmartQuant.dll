@@ -13,7 +13,7 @@ namespace SmartQuant
             get { throw new NotImplementedException(); }
         }
 
-        public string Name { get; private set; }
+        public string Name { get; internal set; }
 
         public DateTime DateTime1
         {
@@ -41,32 +41,32 @@ namespace SmartQuant
         {
         }
 
-        public long GetIndex(DateTime dateTime, SearchOption option = SearchOption.Prev)
+        public virtual long GetIndex(DateTime dateTime, SearchOption option = SearchOption.Prev)
         {
             throw new NotImplementedException();
         }
             
-        public void Add(DataObject obj)
+        public virtual void Add(DataObject obj)
         {
             throw new NotImplementedException();
         }
 
-        public DataObject Get(long index)
+        public virtual DataObject Get(long index)
         {
             throw new NotImplementedException();
         }
 
-        public DataObject Get(DateTime dateTime)
+        public virtual DataObject Get(DateTime dateTime)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(long index, DataObject obj)
+        public virtual void Update(long index, DataObject obj)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(long index)
+        public virtual void Remove(long index)
         {
             throw new NotImplementedException();
         }

@@ -2,6 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.IO;
 
 namespace SmartQuant
 {
@@ -19,12 +20,12 @@ namespace SmartQuant
             this.type = typeof(object);
         }
 
-        public virtual object Read(System.IO.BinaryReader reader)
+        public virtual object Read(BinaryReader reader)
         {
             throw new NotImplementedException();
         }
 
-        public virtual void Write(System.IO.BinaryWriter writer, object obj)
+        public virtual void Write(BinaryWriter writer, object obj)
         {
             throw new NotImplementedException();
         }

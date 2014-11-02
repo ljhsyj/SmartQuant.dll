@@ -9,17 +9,7 @@ namespace SmartQuant
 
         public virtual double GetPrice(ExecutionReport report)
         {
-            double avgPx = report.AvgPx;
-            switch (report.Side)
-            {
-                case OrderSide.Buy:
-                    avgPx += avgPx * Slippage;
-                    break;
-                case OrderSide.Sell:
-                    avgPx -= avgPx * Slippage;
-                    break;
-            }
-            return avgPx;
+            return report.AvgPx + report.AvgPx * Slippage * (report.Side == OrderSide.Buy ? 1 : -1);
         }
     }
 }

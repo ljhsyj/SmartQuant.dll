@@ -1,9 +1,6 @@
-﻿// Licensed under the Apache License, Version 2.0. 
-// Copyright (c) Alex Lee. All rights reserved.
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
@@ -23,9 +20,9 @@ namespace SmartQuant
         {
             this.name = name;
             this.streamerManager = streamerManager;
-            this.Keys = new Dictionary<string, ObjectKey>();
-            this.CompressionLevel = 1;
-            this.CompressionMethod = 1;
+            Keys = new Dictionary<string, ObjectKey>();
+            CompressionLevel = 1;
+            CompressionMethod = 1;
         }
 
         ~DataFile()
@@ -52,16 +49,16 @@ namespace SmartQuant
         {
         }
 
-        public virtual object Get(string name)
+        public object Get(string name)
         {
             throw new NotImplementedException();
         }
 
-        public virtual void Write(string name, object obj)
+        public void Write(string name, object obj)
         {
         }
 
-        public virtual void Delete(string name)
+        public void Delete(string name)
         {
         }
 

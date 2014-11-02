@@ -277,5 +277,15 @@ namespace SmartQuant
         {
             return string.Format("provider id = {0} ({1} {2} {3})", this.Id, this.Name, this.Description, this.Url);
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+        }
     }
 }

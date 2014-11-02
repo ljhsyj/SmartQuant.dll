@@ -7,10 +7,26 @@ namespace SmartQuant
 {
     public class SortedEventQueue : IEventQueue
     {
-        public SortedEventQueue()
+        private EventSortedSet events;
+
+        public byte Id { get; private set; }
+
+        public byte Type { get; private set; }
+
+        public bool IsSynched { get; set; }
+
+        public string Name { get; private set; }
+
+        public byte Priority { get; private set; }
+
+        public SortedEventQueue(byte id, byte type = EventQueueType.Master, byte priority = EventQueuePriority.Normal)
         {
+            Id = id;
+            Type = type;
+            Priority = priority;
+            this.events = new EventSortedSet();
         }
-            
+
         public Event Peek()
         {
             throw new NotImplementedException();
@@ -43,17 +59,17 @@ namespace SmartQuant
 
         public bool IsEmpty()
         {
-            throw new NotImplementedException();
+            return this.events.Count == 0;
         }
 
         public bool IsFull()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            this.events.Clear();
         }
 
         public void ResetCounts()
@@ -61,49 +77,7 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        public byte Id
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
 
-        public byte Type
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public bool IsSynched
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public byte Priority
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
 
         public long Count
         {

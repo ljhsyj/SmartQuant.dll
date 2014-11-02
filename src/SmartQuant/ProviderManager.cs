@@ -183,5 +183,21 @@ namespace SmartQuant
         {
             Providers.Clear();
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                DisconnectAll();
+                foreach (Provider provider in this.Providers)
+                    provider.Dispose();
+            }
+        }
     }
 }

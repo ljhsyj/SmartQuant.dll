@@ -21,6 +21,10 @@ namespace SmartQuant
         {
         }
 
+        public void Serialize(BinaryWriter writer, DataObject obj)
+        {
+        }
+
         public object Deserialize(BinaryReader reader)
         {
             return null;

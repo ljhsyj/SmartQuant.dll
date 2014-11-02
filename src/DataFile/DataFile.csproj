@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4BB9671C-7372-4542-87D0-A89512F42F9C}</ProjectGuid>
+    <ProjectGuid>{BE73BE93-4319-436C-85CF-D1697A221998}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>UnitTest</RootNamespace>
-    <AssemblyName>UnitTest</AssemblyName>
+    <RootNamespace>SmartQuant</RootNamespace>
+    <AssemblyName>DataFile</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,25 +29,39 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetByListTest.cs" />
-    <Compile Include="EventSortedSetTest.cs" />
-    <Compile Include="IdArrayTest.cs" />
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="PermanentQueueTest.cs" />
+    <Compile Include="DataFile.cs" />
+    <Compile Include="..\SmartQuant\ObjectKey.cs">
+      <Link>ObjectKey.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\StreamerManager.cs">
+      <Link>StreamerManager.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\ObjectStreamer.cs">
+      <Link>ObjectStreamer.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\DataObjectType.cs">
+      <Link>DataObjectType.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\DataSeries.cs">
+      <Link>DataSeries.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\IDataSeries.cs">
+      <Link>IDataSeries.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\DataObject.cs">
+      <Link>DataObject.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\Event.cs">
+      <Link>Event.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\SearchOption.cs">
+      <Link>SearchOption.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\EventType.cs">
+      <Link>EventType.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\src\SmartQuant\SmartQuant.csproj">
-      <Project>{4A09B376-7AFA-40CE-AFBD-448984BC4514}</Project>
-      <Name>SmartQuant</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

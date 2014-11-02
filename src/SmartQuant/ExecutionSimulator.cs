@@ -32,6 +32,8 @@ namespace SmartQuant
 
         public bool FillStopLimitOnNext { get; set; }
 
+        public bool FillAtStopPrice { get; set; }
+
         public bool FillAtLimitPrice { get; set; }
 
         public bool PartialFills { get; set; }

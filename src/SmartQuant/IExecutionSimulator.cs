@@ -21,6 +21,8 @@ namespace SmartQuant
 
         bool FillStopOnNext { get; set; }
 
+        bool FillAtStopPrice { get; set; }
+
         bool FillStopLimitOnNext { get; set; }
 
         bool FillAtLimitPrice { get; set; }

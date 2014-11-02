@@ -109,7 +109,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}", Side, Qty, Instrument.Symbol, Price);
+            return string.Format("{0} {1} {2} {4}", Side, Qty, Instrument.Symbol, Price);
         }
     }
 }

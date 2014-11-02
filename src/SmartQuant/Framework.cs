@@ -68,6 +68,8 @@ namespace SmartQuant
 
         public GroupManager GroupManager { get; private set; }
 
+        public GroupDispatcher GroupDispatcher { get; set; }
+
         public StreamerManager StreamerManager { get; private set; }
 
         public DataFileManager DataFileManager { get; private set; }
