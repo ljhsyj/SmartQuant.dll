@@ -32,7 +32,7 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-            public void Add(InstrumentList instruments, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
+        public void Add(InstrumentList instruments, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
         {
             Parallel.ForEach(instruments, instrument => this.Add(instrument, barType, barSize, barInput));
         }
@@ -40,6 +40,11 @@ namespace SmartQuant
         public void Add(string[] symbols, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
         {
             Parallel.ForEach(symbols, symbol => this.Add(this.framework.InstrumentManager.Get(symbol), barType, barSize, barInput));
+        }
+
+        internal void Clear()
+        {
+            throw new NotImplementedException();
         }
     }
 }

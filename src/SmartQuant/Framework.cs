@@ -80,11 +80,28 @@ namespace SmartQuant
         {
             get
             {
-                return mode;
+                return this.mode;
             }
             set
             {
-                throw new NotImplementedException();
+                if (this.mode == value)
+                    return;
+                ProviderManager.DisconnectAll();
+                this.mode = value;
+                if (this.mode == FrameworkMode.Simulation)
+                {
+                    Clock.Mode = ClockMode.Simulation;
+                    EventBus.Mode = EventBusMode.Simulation;
+                }
+                else if (this.mode == FrameworkMode.Realtime)
+                {
+                    Clock.Mode = ClockMode.Realtime;
+                    EventBus.Mode = EventBusMode.Realtime;
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
             }
         }
 
@@ -138,9 +155,33 @@ namespace SmartQuant
 
         ~Framework()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+                
+            if (disposing)
+            {
+                this.SaveConfiguration();
+
+                // EventManager has its inner thread running,
+                // this let it exit gracefully
+                if (EventManager != null)
+                    EventManager.Close();
+            }
+                
+            disposed = true;
+        }
+            
         private void LoadConfiguration()
         {
             string path = Path.Combine(Installation.ConfigDir.FullName, "configuration.xml");
@@ -160,23 +201,8 @@ namespace SmartQuant
             this.StrategyManager.Clear();
         }
 
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
 
-        private void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    this.SaveConfiguration();
-                }
-                this.disposed = true;
-            }
-        }
+
 
         private void LoadProviderPlugins()
         {

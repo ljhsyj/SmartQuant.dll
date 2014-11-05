@@ -21,6 +21,8 @@ namespace SmartQuant
             }
             set
             {
+                if (this.mode == value)
+                    return;
                 this.mode = value;
                 this.framework.Mode = this.mode == StrategyMode.Backtest ? FrameworkMode.Simulation : FrameworkMode.Realtime;
             }

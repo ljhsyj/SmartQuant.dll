@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>UnitTest</RootNamespace>
     <AssemblyName>UnitTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,17 +37,61 @@
     <Compile Include="GetByListTest.cs" />
     <Compile Include="EventSortedSetTest.cs" />
     <Compile Include="IdArrayTest.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="PermanentQueueTest.cs" />
+    <Compile Include="EventManagerTest.cs" />
+    <Compile Include="StrategyManagerTest.cs" />
+    <Compile Include="EventQueueTest.cs" />
+    <Compile Include="AccountDataFieldListTest.cs" />
+    <Compile Include="AltIdListTest.cs" />
+    <Compile Include="BarTest.cs" />
+    <Compile Include="BarFactoryTest.cs" />
+    <Compile Include="BarFactoryItemTest.cs" />
+    <Compile Include="BarSeriesTest.cs" />
+    <Compile Include="ClockTest.cs" />
+    <Compile Include="ConfigurationTest.cs" />
+    <Compile Include="DataFileManagerTest.cs" />
+    <Compile Include="DataManagerTest.cs" />
+    <Compile Include="DataProcessorTest.cs" />
+    <Compile Include="DataSeriesTest.cs" />
+    <Compile Include="DataSeriesIteratorTest.cs" />
+    <Compile Include="DataServerTest.cs" />
+    <Compile Include="DataSimulatorTest.cs" />
+    <Compile Include="EventDispatcherTest.cs" />
+    <Compile Include="EventPipeTest.cs" />
+    <Compile Include="EventServerTest.cs" />
+    <Compile Include="ExecutionSimulatorTest.cs" />
+    <Compile Include="FileDataServerTest.cs" />
+    <Compile Include="FileInstrumentServerTest.cs" />
+    <Compile Include="FileManagerTest.cs" />
+    <Compile Include="FillSeriesTest.cs" />
+    <Compile Include="FrameworkTest.cs" />
+    <Compile Include="FrameworkServerTest.cs" />
+    <Compile Include="GlobalTest.cs" />
+    <Compile Include="GroupManagerTest.cs" />
+    <Compile Include="InstrumentTest.cs" />
+    <Compile Include="InstrumentListTest.cs" />
+    <Compile Include="InstrumentManagerTest.cs" />
+    <Compile Include="MatchingEngineTest.cs" />
+    <Compile Include="NetDataFileTest.cs" />
+    <Compile Include="NetDataSeriesTest.cs" />
+    <Compile Include="ObjectTableTest.cs" />
+    <Compile Include="PortfolioTest.cs" />
+    <Compile Include="PortfolioManagerTest.cs" />
+    <Compile Include="PositionTest.cs" />
+    <Compile Include="ProviderTest.cs" />
+    <Compile Include="ProviderListTest.cs" />
+    <Compile Include="ProviderManagerTest.cs" />
+    <Compile Include="QuoteSeriesTest.cs" />
+    <Compile Include="ReminderTest.cs" />
+    <Compile Include="ScenarioTest.cs" />
+    <Compile Include="StrategyTest.cs" />
+    <Compile Include="StreamerManagerTest.cs" />
+    <Compile Include="TickSeriesTest.cs" />
+    <Compile Include="TimeSeriesTest.cs" />
+    <Compile Include="TransactionTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\src\SmartQuant\SmartQuant.csproj">
-      <Project>{4A09B376-7AFA-40CE-AFBD-448984BC4514}</Project>
-      <Name>SmartQuant</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -33,6 +33,12 @@ namespace SmartQuant
             Dispose(false);
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         public virtual void Open(FileMode mode = FileMode.OpenOrCreate)
         {
         }
@@ -88,15 +94,11 @@ namespace SmartQuant
         public void Dump()
         {
         }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
+            
         private void Dispose(bool disposing)
         {
+            if (!disposing)
+                return;
         }
     }
 }

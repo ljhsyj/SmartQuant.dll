@@ -19,13 +19,13 @@ namespace SmartQuant
             switch (this.Type)
             {
                 case CommissionType.PerShare:
-                    val = this.Commission * report.CumQty;
+                    val = Commission * report.CumQty;
                     break;
                 case CommissionType.Percent:
-                    val = this.Commission * report.CumQty * report.AvgPx;
+                    val = Commission * report.CumQty * report.AvgPx;
                     break;
                 case CommissionType.Absolute:
-                    val = this.Commission;
+                    val = Commission;
                     break;
                 default:
                     throw new NotSupportedException(string.Format("Unknown commission type {0}", this.Type));

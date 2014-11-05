@@ -26,7 +26,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.DateTime;
+                return DateTime;
             }
         }
 
@@ -36,7 +36,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.CloseDateTime - this.OpenDateTime;
+                return CloseDateTime - OpenDateTime;
             }
         }
 
@@ -68,7 +68,7 @@ namespace SmartQuant
         {
             get
             {
-                return Math.Sqrt(this.Variance);
+                return Math.Sqrt(Variance);
             }
         }
 
@@ -76,7 +76,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.High - this.Low;
+                return High - Low;
             }
         }
 
@@ -84,7 +84,7 @@ namespace SmartQuant
         {
             get
             {
-                return (this.High + this.Low) / 2.0;
+                return (High + Low) / 2;
             }
         }
 
@@ -92,7 +92,7 @@ namespace SmartQuant
         {
             get
             {
-                return (this.High + this.Low + this.Close) / 3.0;
+                return (High + Low + Close) / 3;
             }
         }
 
@@ -100,7 +100,7 @@ namespace SmartQuant
         {
             get
             {
-                return (this.High + this.Low + 2.0 * this.Close) / 4.0;
+                return (High + Low + 2 * Close) / 4;
             }
         }
 
@@ -108,11 +108,11 @@ namespace SmartQuant
         {
             get
             {
-                return (this.Open + this.High + this.Low + this.Close) / 4.0;
+                return (Open + High + Low + Close) / 4;
             }
         }
 
-        public double this[byte index]
+        public double this [byte index]
         {
             get
             {
@@ -126,7 +126,7 @@ namespace SmartQuant
             }
         }
 
-        public double this[string name]
+        public double this [string name]
         {
             get
             {
@@ -148,40 +148,42 @@ namespace SmartQuant
             }  
         }
 
-        public Bar(DateTime openDateTime, DateTime closeDateTime, int instrumentId, BarType type, long size, double open = 0.0, double high = 0.0, double low = 0.0, double close = 0.0, long volume = 0, long openInt = 0) : base(closeDateTime)
+        public Bar(DateTime openDateTime, DateTime closeDateTime, int instrumentId, BarType type, long size, double open = 0, double high = 0, double low = 0, double close = 0, long volume = 0, long openInt = 0)
+            : base(closeDateTime)
         {
-            this.OpenDateTime = openDateTime;
-            this.InstrumentId = instrumentId;
-            this.Type = type;
-            this.Size = size;
-            this.Open = open;
-            this.High = high;
-            this.Low = low;
-            this.Close = close;
-            this.Volume = volume;
-            this.OpenInt = openInt;
-            this.Status = openDateTime == closeDateTime ? BarStatus.Open : BarStatus.Close;
+            OpenDateTime = openDateTime;
+            InstrumentId = instrumentId;
+            Type = type;
+            Size = size;
+            Open = open;
+            High = high;
+            Low = low;
+            Close = close;
+            Volume = volume;
+            OpenInt = openInt;
+            Status = openDateTime == closeDateTime ? BarStatus.Open : BarStatus.Close;
         }
 
         public Bar()
         {
-            this.Type = BarType.Time;
-            this.OpenDateTime = DateTime.MinValue;
-            this.Close = double.NaN;
+            Type = BarType.Time;
+            OpenDateTime = DateTime.MinValue;
+            Close = double.NaN;
         }
 
-        public Bar(Bar bar) : base(bar)
+        public Bar(Bar bar)
+            : base(bar)
         {
-            this.InstrumentId = bar.InstrumentId;
-            this.Type = bar.Type;
-            this.Size = bar.Size;
-            this.OpenDateTime = bar.OpenDateTime;
-            this.Open = bar.Open;
-            this.High = bar.High;
-            this.Low = bar.Low;
-            this.Close = bar.Close;
-            this.Volume = bar.Volume;
-            this.OpenInt = bar.OpenInt;
+            InstrumentId = bar.InstrumentId;
+            Type = bar.Type;
+            Size = bar.Size;
+            OpenDateTime = bar.OpenDateTime;
+            Open = bar.Open;
+            High = bar.High;
+            Low = bar.Low;
+            Close = bar.Close;
+            Volume = bar.Volume;
+            OpenInt = bar.OpenInt;
         }
 
         public static void AddField(string name, byte index)

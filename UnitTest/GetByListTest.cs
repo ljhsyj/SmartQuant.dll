@@ -13,7 +13,7 @@ namespace UnitTest
         [Test()]
         public void TestCase()
         {
-            var list = new GetByList<Me>();
+          //  var list = new GetByList<Me>();
         }
     }
 }

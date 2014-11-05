@@ -13,12 +13,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{06EE67C6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{4BB9671C-7372-4542-87D0-A89512F42F9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BollingerBands", "Tests\BollingerBands\BollingerBands.csproj", "{479D933B-2ABB-4F16-A2DD-13870C5F4F18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLogic", "Tests\TestLogic\TestLogic.csproj", "{14E20325-820F-4E70-BD66-B6381CB2E2F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14E20325-820F-4E70-BD66-B6381CB2E2F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14E20325-820F-4E70-BD66-B6381CB2E2F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14E20325-820F-4E70-BD66-B6381CB2E2F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14E20325-820F-4E70-BD66-B6381CB2E2F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{479D933B-2ABB-4F16-A2DD-13870C5F4F18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{479D933B-2ABB-4F16-A2DD-13870C5F4F18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{479D933B-2ABB-4F16-A2DD-13870C5F4F18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{479D933B-2ABB-4F16-A2DD-13870C5F4F18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A09B376-7AFA-40CE-AFBD-448984BC4514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A09B376-7AFA-40CE-AFBD-448984BC4514}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A09B376-7AFA-40CE-AFBD-448984BC4514}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +53,8 @@ Global
 		{5ED6C2A5-C095-4B11-90D1-CEBDA7FE1792} = {AF01D77B-CE6E-4CA3-9CCC-A2D3656E604D}
 		{BE73BE93-4319-436C-85CF-D1697A221998} = {AF01D77B-CE6E-4CA3-9CCC-A2D3656E604D}
 		{4BB9671C-7372-4542-87D0-A89512F42F9C} = {06EE67C6-B437-4F90-BE5E-8A4757AA26D4}
+		{479D933B-2ABB-4F16-A2DD-13870C5F4F18} = {06EE67C6-B437-4F90-BE5E-8A4757AA26D4}
+		{14E20325-820F-4E70-BD66-B6381CB2E2F8} = {06EE67C6-B437-4F90-BE5E-8A4757AA26D4}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = src\SmartQuant\SmartQuant.csproj

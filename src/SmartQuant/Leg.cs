@@ -8,7 +8,7 @@ namespace SmartQuant
 
         public double Weight { get; set; }
 
-        public Leg(Instrument instrument, double weight = 1.0)
+        public Leg(Instrument instrument, double weight = 1)
         {
             Instrument = instrument;
             Weight = weight;

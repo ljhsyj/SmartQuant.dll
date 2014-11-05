@@ -22,11 +22,11 @@ namespace SmartQuant
         public EventBus(Framework framework, EventBusMode mode = EventBusMode.Simulation)
         {
             this.framework = framework;
-            this.Mode = mode;
-            this.DataPipe = new EventPipe(framework);
-            this.ExecutionPipe = new EventPipe(framework);
-            this.HistoricalPipe = new EventPipe(framework);
-            this.ServicePipe = new EventPipe(framework);
+            Mode = mode;
+            DataPipe = new EventPipe(framework);
+            ExecutionPipe = new EventPipe(framework);
+            HistoricalPipe = new EventPipe(framework);
+            ServicePipe = new EventPipe(framework);
         }
 
         public void Attach(EventBus bus)

@@ -11,14 +11,44 @@ namespace SmartQuant
         private Framework framework;
         private ClockType type;
         private bool isStandalone;
+        private ClockMode mode;
+        private DateTime dateTime;
+        private long ticks;
 
         public DateTime DateTime
         {
-            get;
-            private set;
+            get
+            {
+//                if (this.type == ClockType.Exchange || this.mode == ClockMode.Simulation)
+//                    return this.dateTime;
+//                if (Resolution == ClockResolution.Normal)
+//                    return DateTime.Now;
+//                else
+//                    return new DateTime(this.ticks + (long) ((double) this.stopwatch_0.ElapsedTicks / (double) Stopwatch.Frequency * 10000000.0));
+//
+                return this.dateTime;
+            }
+            private set
+            {
+            }
         }
 
-        public ClockMode Mode { get; set; }
+        public ClockMode Mode
+        { 
+            get
+            {
+                return this.mode;
+            } 
+            set
+            {
+                if (this.mode != value)
+                {
+                    this.mode = value;
+                    if (this.mode == ClockMode.Simulation)
+                        this.dateTime = DateTime.MinValue;
+                }
+            }
+        }
 
         public ClockResolution Resolution { get; set; }
 

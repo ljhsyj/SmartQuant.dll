@@ -10,7 +10,10 @@ namespace SmartQuant
     {
         private Framework framework;
         private EventBus bus;
-        private bool stepping = false;
+        private bool stepping;
+        private byte stepEvent;
+        private volatile bool running;
+        private Thread thread;
 
         public EventManagerStatus Status { get; private set; }
 
@@ -30,13 +33,27 @@ namespace SmartQuant
 
         public EventManager(Framework framework, EventBus bus)
         {
+            if (bus == null)
+                throw new ArgumentNullException();
+
             this.framework = framework;
             this.bus = bus;
+            BarFactory = new BarFactory(this.framework);
+            BarSliceFactory = new BarSliceFactory(this.framework);
+            Dispatcher = new EventDispatcher(this.framework);
+            EventCount = 0;
+            DataEventCount = 0;
+            Status = EventManagerStatus.Stopped;
+            stepping = false;
+            stepEvent = EventType.Bar;
+            running = true;
 
-            Thread thread = new Thread(new ThreadStart(this.Run));
-            thread.Name = "Event Manager Thread";
-            thread.IsBackground = true;
-            thread.Start();
+            this.thread = new Thread(new ThreadStart(this.Run));
+            this.thread.Name = "Event Manager Thread";
+            this.thread.IsBackground = true;
+            this.thread.Start();
+            while (!thread.IsAlive)
+                Thread.Sleep(1);
         }
 
         public void Start()
@@ -62,6 +79,11 @@ namespace SmartQuant
             Console.WriteLine("{0} Event manager stopped at ", DateTime.Now, this.framework.Clock.DateTime);
         }
 
+        public void Pause(DateTime dateTime)
+        {
+            this.framework.Clock.AddReminder((dt, obj) => Pause(), dateTime, null);
+        }
+
         public void Pause()
         {
             if (Status == EventManagerStatus.Paused)
@@ -71,11 +93,7 @@ namespace SmartQuant
             OnEvent(new OnEventManagerPaused());
         }
 
-        public void Pause(DateTime dateTime)
-        {
-            this.framework.Clock.AddReminder((dt, obj) => Pause(), dateTime, null);
-        }
-
+        // very much like Start() method
         public void Resume()
         {
             if (Status == EventManagerStatus.Running)
@@ -87,27 +105,46 @@ namespace SmartQuant
 
         public void Step(byte typeId = 0)
         {
+            this.stepping = true;
+            this.stepEvent = typeId;
             OnEvent(new OnEventManagerStep());
         }
 
         public void OnEvent(Event e)
         {
+            if (Status == EventManagerStatus.Paused && this.stepping && (this.stepEvent == EventType.Event || this.stepEvent == e.TypeId))
+            {
+                Console.WriteLine(string.Format("{0} Event: {1}", DateTime.Now, e));
+                this.stepping = false;
+            }
+            ++EventCount;
+
             throw new NotImplementedException();
         }
 
         public void Clear()
         {
+            EventCount = DataEventCount = 0;
+            BarFactory.Clear();
+            BarSliceFactory.Clear();
+        }
+
+        // Called before it is disposed.
+        internal void Close()
+        {
+            running = false;
+            this.thread.Join();
         }
 
         private void Run()
         {
             Status = EventManagerStatus.Running;
-            while (true)
+            while (running)
             {
-                if (Status != EventManagerStatus.Running && (this.Status != EventManagerStatus.Paused || !this.stepping))
+                if (Status == EventManagerStatus.Running || (Status == EventManagerStatus.Paused && stepping))
+                    OnEvent(this.bus.Dequeue());
+                else 
                     Thread.Sleep(1);
-                else
-                    this.OnEvent(this.bus.Dequeue());
             }
         }
     }

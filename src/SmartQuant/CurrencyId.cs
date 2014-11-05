@@ -172,9 +172,6 @@ namespace SmartQuant
         public const byte ZMW = 162;
         public const byte ZWD = 163;
 
-        // Add RMB for chinese user
-        public const byte RMB = 164;
-
         private static Dictionary<byte, string> mapping;
 
         static CurrencyId()

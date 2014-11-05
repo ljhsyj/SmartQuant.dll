@@ -24,7 +24,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return string.Format("[{0}] {1}@{2}", this.ProviderId, this.Symbol, this.Exchange);
+            return string.Format("[{0}] {1}@{2}", ProviderId, Symbol, Exchange);
         }
     }
 }
