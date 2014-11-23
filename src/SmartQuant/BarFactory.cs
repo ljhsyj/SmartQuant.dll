@@ -24,7 +24,7 @@ namespace SmartQuant
         public void Add(string symbol, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)
         {
             var instrument = this.framework.InstrumentManager.Get(symbol);
-            this.Add(instrument, barType, barSize, barInput);
+            Add(instrument, barType, barSize, barInput);
         }
 
         public void Add(Instrument instrument, BarType barType, long barSize, BarInput barInput = BarInput.Trade, ClockType type = ClockType.Local)

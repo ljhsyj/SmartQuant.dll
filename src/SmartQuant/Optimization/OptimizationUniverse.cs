@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SmartQuant.Optimization
 {
-    public class OptimizationUniverse : IEnumerable<OptimizationParameterSet>, IEnumerable
+    public class OptimizationUniverse : IEnumerable<OptimizationParameterSet>
     {
         private List<OptimizationParameterSet> sets = new List<OptimizationParameterSet>();
 

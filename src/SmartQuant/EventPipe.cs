@@ -6,7 +6,6 @@ using System.Linq;
 using LinkedList = System.Collections.Generic.LinkedList<global::SmartQuant.IEventQueue>;
 using LinkedListNode = System.Collections.Generic.LinkedListNode<global::SmartQuant.IEventQueue>;
 
-
 namespace SmartQuant
 {
 	public class EventPipe
@@ -45,7 +44,66 @@ namespace SmartQuant
 
         public Event Read()
         {
-            throw new NotImplementedException();
+            IEventQueue queue = null;
+            Event e = null;
+            if (unsyncedQueues.Count != 0)
+            {
+                foreach (var q in unsyncedQueues)
+                {
+                    if (!q.IsEmpty())
+                    {
+                        e = q.Dequeue();
+                        queue = q;
+                        break;
+                    }
+                }
+
+                if (e != null)
+                {
+                    if (e.TypeId == EventType.OnQueueClosed)
+                        unsyncedQueues.Remove(queue);
+                    return e;
+                }
+            }
+
+            if (syncedQueues.Count == 0)
+                return null;
+                
+            DateTime dt1 = DateTime.MaxValue;
+            IEventQueue q1 = null;
+            IEventQueue qFrom = null;
+            foreach (var q in syncedQueues)
+            {
+                e = q.Peek();
+
+                if (e.TypeId != EventType.OnQueueClosed)
+                {
+                    DateTime dt2 = e.DateTime;
+                    if (e.DateTime <= dt1)
+                    {
+                        q1 = q;
+                        dt1 = e.DateTime;
+                    }
+                    qFrom = q;
+                }
+                else
+                {
+                }
+            }
+
+            if (qFrom != null)
+            {
+                syncedQueues.Remove(qFrom);
+                if (syncedQueues.Count == 0 && this.framework.Mode == FrameworkMode.Simulation && q1.Name != "Simulator stop queue")
+                {
+                    EventQueue newQueue = new EventQueue(EventQueueId.Data,EventQueueType.Master, EventQueuePriority.Normal, 16);
+                    newQueue.IsSynched = true;
+                    newQueue.Name = "Simulator stop queue";
+                    newQueue.Enqueue(new Event[] { new OnQueueOpened(newQueue), new OnSimulatorStop(), new OnQueueClosed(newQueue)});
+                    Add(newQueue);
+                }
+            }
+            return q1.Read();
         }
 
         public Event Dequeue()

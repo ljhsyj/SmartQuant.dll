@@ -42,7 +42,7 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        protected void AddReminder(DateTime datetime, ClockType type)
+        protected bool AddReminder(DateTime datetime, ClockType type)
         {
             throw new NotImplementedException();
         }

@@ -2,8 +2,8 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
@@ -19,6 +19,9 @@ namespace SmartQuant
         {
             list.AddLast(data);
             First = new SmartQuant.LinkedListNode<T>(list.First.Value);
+
+            // TODO: finish this
+            //First.Next = ???;
             ++Count;
         }
 

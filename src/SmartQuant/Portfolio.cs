@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
@@ -16,6 +17,9 @@ namespace SmartQuant
 
         [Browsable(false)]
         public Account Account { get; private set; }
+
+        [Browsable(false)]
+        public List<Transaction> Transactions{ get; private set; }
 
         public Portfolio(Framework framework, string name = "")
         {

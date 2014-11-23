@@ -11,8 +11,8 @@ namespace SmartQuant.Optimization
 
         public OptimizationParameter(string name, double value)
         {
-            this.Name = name;
-            this.Value = value;
+            Name = name;
+            Value = value;
         }
     }
 }

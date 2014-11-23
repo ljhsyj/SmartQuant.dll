@@ -32,6 +32,12 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetByListTest.cs" />
@@ -89,9 +95,19 @@
     <Compile Include="TickSeriesTest.cs" />
     <Compile Include="TimeSeriesTest.cs" />
     <Compile Include="TransactionTest.cs" />
+    <Compile Include="EventBusTest.cs" />
+    <Compile Include="SortedEventQueueTest.cs" />
+    <Compile Include="MemorySeriesTest.cs" />
+    <Compile Include="DataFileTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\SmartQuant\SmartQuant.csproj">
+      <Project>{4A09B376-7AFA-40CE-AFBD-448984BC4514}</Project>
+      <Name>SmartQuant</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

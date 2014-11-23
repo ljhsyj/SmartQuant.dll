@@ -21,11 +21,17 @@ namespace SmartQuant
 
         public bool IsSynched { get; set; }
 
-        public string Name { get; private set; }
+        public string Name { get; internal set; }
 
         public byte Priority { get; private set; }
 
-        public long Count { get { return EnqueueCount - DequeueCount; } }
+        public long Count
+        { 
+            get
+            {
+                return EnqueueCount - DequeueCount;
+            }
+        }
 
         public long EnqueueCount { get; private set; }
 
@@ -113,6 +119,12 @@ namespace SmartQuant
         public override string ToString()
         {
             return string.Format("Id: {0} Count = {1} Enqueue = {2} Dequeue = {3}", Id, Count, EnqueueCount, DequeueCount);
+        }
+
+        internal void Enqueue(Event[] events)
+        {
+            foreach (var e in events)
+                Enqueue(e);
         }
     }
 }

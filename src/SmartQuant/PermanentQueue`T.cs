@@ -21,12 +21,12 @@ namespace SmartQuant
         {
             lock (this.list)
             {
-                int index = this.readerIndices[reader];
-                if (this.list.Count < index + 1)
+                int i = this.readerIndices[reader];
+                if (i > this.list.Count - 1)
                     return null;
-                var newList = new T[this.list.Count - index];
-                this.list.CopyTo(index, newList, 0, newList.Length);
-                this.readerIndices[reader] = index + newList.Length;
+                var newList = new T[this.list.Count - i];
+                this.list.CopyTo(i, newList, 0, newList.Length);
+                this.readerIndices[reader] = i + newList.Length;
                 return newList;
             }
         }

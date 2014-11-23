@@ -63,7 +63,7 @@ namespace SmartQuant
         {
             get
             {
-                return this[this.Count - 1];
+                return this[Count - 1];
             }
         }
 
@@ -200,14 +200,6 @@ namespace SmartQuant
             }
         }
 
-        public DataObject this [long index]
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public BarSeries(int maxLength)
             : this(null, null, maxLength)
         {
@@ -217,19 +209,31 @@ namespace SmartQuant
         {
             this.name = name;
             this.description = description;
-            this.MaxLength = maxLength;
+            this.maxLength = maxLength;
             this.bars = new List<Bar>();
-            this.Indicators = new List<Indicator>();
+            Indicators = new List<Indicator>();
         }
 
         public int GetIndex(DateTime dateTime, IndexOption option = IndexOption.Null)
-        {
-            throw new NotImplementedException();
+        {    
+            if (dateTime < FirstDateTime)
+                return option == IndexOption.Null || option == IndexOption.Prev ? -1 : 0;
+            if (dateTime > LastDateTime)
+                return option == IndexOption.Null || option == IndexOption.Next ? -1 : Count - 1;
+
+            var i = this.bars.BinarySearch(new Bar() { DateTime = dateTime }, new DataObjectComparer());
+            if (i >= 0)
+                return i;
+            else if (option == IndexOption.Next)
+                return ~i;
+            else if (option == IndexOption.Prev)
+                return ~i - 1;
+            return -1; // option == IndexOption.Null
         }
 
         public DateTime GetDateTime(int index)
         {
-            throw new NotImplementedException();
+            return this.bars[index].DateTime;
         }
 
         public double GetMin(DateTime dateTime1, DateTime dateTime2)
@@ -252,21 +256,52 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        public long GetIndex(DateTime dateTime, SearchOption option = SearchOption.Prev)
+        long IDataSeries.GetIndex(DateTime dateTime, SearchOption option)
         {
-            throw new NotImplementedException();
+            if (option != SearchOption.Next && option != SearchOption.Prev)
+                throw new ApplicationException("Unsupported search option");
+            return option == SearchOption.Next ? GetIndex(dateTime, IndexOption.Next) : GetIndex(dateTime, IndexOption.Prev);
         }
 
         public void Add(Bar bar)
         {
+//            if (this.bar_0 == null)
+//                this.bar_0 = bar;
+//            else if (bar.double_0 < this.bar_0.double_1)
+//                this.bar_0 = bar;
+//            if (this.bar_1 == null)
+//                this.bar_1 = bar;
+//            else if (bar.double_0 > this.bar_1.double_0)
+//                this.bar_1 = bar;
+//            this.list_0.Add(bar);
+//            int int_0 = this.list_0.Count - 1;
+//            for (int index = 0; index < this.list_1.Count; ++index)
+//                this.list_1[index].method_0(int_0);
+//            if (this.int_0 == -1 || this.Count <= this.int_0)
+//                return;
+//            this.method_0();
+        }
+
+        void IDataSeries.Add(DataObject obj)
+        {
+            Add((Bar)obj);
+        }
+
+        public bool Contains(DateTime dateTime)
+        {
+            return GetIndex(dateTime, IndexOption.Null) != -1;
+        }
+
+        void IDataSeries.Remove(long index)
+        {
+            this.bars.RemoveAt((int)index);
         }
 
         public void Clear()
         {
             this.bars.Clear();
             this.min = this.max = null;
-            foreach (var indicator in Indicators)
-                indicator.Clear();
+            Indicators.ForEach(i => i.Clear());
             Indicators.Clear();
         }
 
@@ -328,10 +363,28 @@ namespace SmartQuant
             return HighestHighBar().High;
         }
 
+        public Bar Ago(int n)
+        {
+            int index = this.Count - 1 - n;
+            if (index < 0)
+                throw new ArgumentException(string.Format("BarSeries::Ago Can not return bar {0} bars ago: bar series is too short, count = {1}", n, Count));
+            return this[index];
+        }
+
         private void EnsureNotEmpty()
         {
-            if (this.Count <= 0)
+            if (Count <= 0)
                 throw new ApplicationException("Array has no elements");
+        }
+
+        private void method_0()
+        {
+            this.bars.RemoveAt(0);
+            for (int index = 0; index < this.Indicators.Count; ++index)
+            {
+                if (this.Indicators[index].Count > 0)
+                    this.Indicators[index].Remove(0);
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ namespace SmartQuant
 {
     public class Account
     {
+        FreeKeyList list;
         private Framework framework;
 
         public byte CurrencyId { get; set; }

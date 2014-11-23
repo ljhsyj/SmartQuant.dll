@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace SmartQuant.Quant
 {
@@ -10,37 +11,20 @@ namespace SmartQuant.Quant
 
         static Random()
         {
-            Seed1 = 9876.0;
-            Seed2 = 54321.0;
+            Seed1 = 9876;
+            Seed2 = 54321;
         }
 
         public static double Rndm()
         {
-            int num1 = (int) Seed1 / 53668;
-            Seed1 = 40014.0 * (Seed1 - (double) (num1 * 53668)) - (double) (num1 * 12211);
-            if (Seed1 < 0.0)
-                Seed1 += 2147483563.0;
-            int num2 = (int) Seed2 / 52774;
-            Seed2 = 40692.0 * (Seed2 - (double) (num2 * 52774)) - (double) (num2 * 3791);
-            if (Seed2 < 0.0)
-                Seed2 += 2147483399.0;
-            double num3 = Seed1 - Seed2;
-            if (num3 <= 0.0)
-                num3 += 2147483562.0;
-            return num3 * 4.6566128E-10;
+            return Lecuyer();
         }
 
         public static int Binomial(int ntot, double prob)
         {
-            if (prob < 0.0 || prob > 1.0)
+            if (prob < 0 || prob > 1)
                 return 0;
-            int num = 0;
-            for (int index = 0; index < ntot; ++index)
-            {
-                if (Rndm() <= prob)
-                    ++num;
-            }
-            return num;
+            return Enumerable.Repeat(0, ntot).Count(i => Rndm() <= prob);
         }
 
         public static double Gaus(double mean, double sigma)
@@ -48,35 +32,49 @@ namespace SmartQuant.Quant
             double d;
             do
             {
-                d = Random.Rndm();
-            }
-            while (d == 0.0);
-            double a = Random.Rndm() * 6.283185;
-            return mean + sigma * Math.Sin(a) * Math.Sqrt(-2.0 * Math.Log(d));
+                d = Rndm();
+            } while (d == 0);
+            return mean + sigma * Math.Sin(Rndm() * 6.283185) * Math.Sqrt(-2 * Math.Log(d));
         }
 
         public static double Gaus()
         {
-            return Gaus(0.0, 1.0);
+            return Gaus(0, 1);
         }
 
         public static int Poisson(double mean)
         {
-            if (mean <= 0.0)
+            if (mean <= 0)
                 return 0;
             if (mean > 88.0)
-                return (int) (Gaus(0.0, 1.0) * Math.Sqrt(mean) + mean + 0.5);
-            double num1 = Math.Exp(-mean);
-            double num2 = 1.0;
-            int num3 = -1;
+                return (int)(Gaus(0, 1) * Math.Sqrt(mean) + mean + 0.5);
+            double c = Math.Exp(-mean);
+            double sum = 1;
+            int count = -1;
             do
             {
-                ++num3;
-                num2 *= Rndm();
+                ++count;
+                sum *= Rndm();
             }
-            while (num2 > num1);
-            return num3;
+            while (sum > c);
+            return count;
+        }
+
+        private static double Lecuyer()
+        {
+            int k, z;
+            k = (int)Seed1 / 53668;
+            Seed1 = 40014 * (Seed1 % 53668) - k * 12211;
+            if (Seed1 < 0)
+                Seed1 += 2147483563;
+            k = (int)Seed2 / 52774;
+            Seed2 = 40692 * (Seed2 % 52774) - k * 3791;
+            if (Seed2 < 0)
+                Seed2 += 2147483399;
+            z = (int)(Seed1 - Seed2);
+            if (z < 1)
+                z += 2147483562;
+            return z * 4.6566128E-10;
         }
     }
 }
-

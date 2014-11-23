@@ -46,6 +46,35 @@ namespace SmartQuant
         public void AddInstance(Instrument instrument, InstrumentStrategy strategy)
         {
         }
+
+        public bool HasPosition()
+        {
+            return base.HasPosition(Instrument);
+        }
+
+        public bool HasPosition(PositionSide side, double qty)
+        {
+            return base.HasPosition(Instrument, side, qty);
+        }
+
+        public bool HasLongPosition()
+        {
+            return base.HasLongPosition(Instrument);
+        }
+
+        public bool HasLongPosition(double qty)
+        {
+            return base.HasLongPosition(this.Instrument, qty);
+        }
+
+        public bool HasShortPosition()
+        {
+            return base.HasShortPosition(this.Instrument);
+        }
+
+        public bool HasShortPosition(double qty)
+        {
+            return base.HasShortPosition(Instrument, qty);
+        }
     }
 }
-

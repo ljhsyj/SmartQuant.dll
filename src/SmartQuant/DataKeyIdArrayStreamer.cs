@@ -6,14 +6,6 @@ using System.IO;
 
 namespace SmartQuant
 {
-    class DataKey
-    {
-    }
-
-    class DataKeyIdArray
-    {
-    }
-
     public class DataKeyIdArrayStreamer : ObjectStreamer
     {
         public DataKeyIdArrayStreamer()
@@ -24,12 +16,12 @@ namespace SmartQuant
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            (obj as DataKeyIdArray).Write(writer);
         }
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            return new DataKeyIdArray(reader);
         }
     }
 }

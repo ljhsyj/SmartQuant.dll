@@ -17,7 +17,7 @@ namespace SmartQuant
 
         public ReminderCallback Callback { get; private set; }
 
-        public Clock Clock { get; private set; }
+        public Clock Clock { get; internal set; }
 
         public object Data { set; get; }
 

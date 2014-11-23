@@ -31,7 +31,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataFile.cs" />
     <Compile Include="..\SmartQuant\ObjectKey.cs">
       <Link>ObjectKey.cs</Link>
     </Compile>
@@ -61,6 +60,36 @@
     </Compile>
     <Compile Include="..\SmartQuant\EventType.cs">
       <Link>EventType.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\ObjectKey.Internal.cs">
+      <Link>ObjectKey.Internal.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\FreeKey.cs">
+      <Link>FreeKey.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\FreeKeyList.cs">
+      <Link>FreeKeyList.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\QuickLZ.cs">
+      <Link>QuickLZ.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\ObjectType.cs">
+      <Link>ObjectType.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\DataSeries.Internal.cs">
+      <Link>DataSeries.Internal.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\IdArray`T.cs">
+      <Link>IdArray`T.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\DataFile.cs">
+      <Link>DataFile.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\DataFile.Internal.cs">
+      <Link>DataFile.Internal.cs</Link>
+    </Compile>
+    <Compile Include="..\SmartQuant\DataKey.cs">
+      <Link>DataKey.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

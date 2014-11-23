@@ -3,13 +3,10 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
-    class ObjectKeyList
-    {
-    }
-
     public class ObjectKeyListStreamer : ObjectStreamer
     {
         public ObjectKeyListStreamer()
@@ -20,12 +17,12 @@ namespace SmartQuant
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            (obj as ObjectKeyList).Write(writer);
         }
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            return new ObjectKeyList(reader);
         }
     }
 }

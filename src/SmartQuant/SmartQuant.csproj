@@ -437,6 +437,12 @@
     <Compile Include="GroupList.cs" />
     <Compile Include="PermanentQueue`T.cs" />
     <Compile Include="NetDataSeries.cs" />
+    <Compile Include="DataObjectComparer.cs" />
+    <Compile Include="FreeKey.cs" />
+    <Compile Include="FreeKeyList.cs" />
+    <Compile Include="DataSeries.Internal.cs" />
+    <Compile Include="MemorySeries.cs" />
+    <Compile Include="DataKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

@@ -34,4 +34,12 @@ public class NetDataSeries : DataSeries
     public override void Remove(long index)
     {
     }
+
+    public override void Clear()
+    {
+    }
+
+    public override void Refresh()
+    {
+    }
 }

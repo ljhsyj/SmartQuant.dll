@@ -9,11 +9,14 @@ namespace SmartQuant
 {
     public class TickSeries : IDataSeries, IEnumerable<Tick>
     {
+        // This list should be ordered by tick's DateTime.
         private List<Tick> ticks;
         private Tick min;
         private Tick max;
 
         public string Name { get; private set; }
+
+        public string Description { get; private set; }
 
         public int Count
         {
@@ -29,21 +32,6 @@ namespace SmartQuant
             {
                 return (long)this.ticks.Count;
             }
-        }
-
-        public IEnumerator<Tick> GetEnumerator()
-        {
-            return this.ticks.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.ticks.GetEnumerator();
-        }
-
-        public long GetIndex(DateTime dateTime, SearchOption option = SearchOption.Prev)
-        {
-            throw new NotImplementedException();
         }
 
         public DateTime DateTime1
@@ -119,6 +107,30 @@ namespace SmartQuant
             return this.max;
         }
 
+        public IEnumerator<Tick> GetEnumerator()
+        {
+            return this.ticks.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.ticks.GetEnumerator();
+        }
+
+        public long GetIndex(DateTime dateTime, SearchOption option = SearchOption.Prev)
+        {
+            switch (option)
+            {
+                case SearchOption.Next:
+                    return GetIndex(dateTime, IndexOption.Next);
+                case SearchOption.Prev:
+                    return GetIndex(dateTime, IndexOption.Prev);
+                default:
+                    throw new ApplicationException("Unsupported search option");
+            }
+        }
+
+        // Assumption: dateTime1 <= dateTime2
         public Tick GetMin(DateTime dateTime1, DateTime dateTime2)
         {
             Tick min = null;
@@ -136,7 +148,7 @@ namespace SmartQuant
 
         public Tick GetMax(DateTime dateTime1, DateTime dateTime2)
         {
-            Tick max =  null;
+            Tick max = null;
             for (int i = 0; i < this.ticks.Count; ++i)
             {
                 var tick = this.ticks[i];
@@ -149,75 +161,36 @@ namespace SmartQuant
             return max;
         }
 
-        // TODO: Rewrite it!!!
         public int GetIndex(DateTime datetime, IndexOption option)
         {
-            int index = 0;
-            int num1 = 0;
-            int num2 = this.ticks.Count - 1;
-            bool flag = true;
-            while (flag)
-            {
-                if (num2 < num1)
-                    return -1;
-                index = (num1 + num2) / 2;
-                switch (option)
-                {
-                    case IndexOption.Null:
-                        if (this.ticks[index].DateTime == datetime)
-                        {
-                            flag = false;
-                            continue;
-                        }
-                        else if (this.ticks[index].DateTime > datetime)
-                        {
-                            num2 = index - 1;
-                            continue;
-                        }
-                        else if (this.ticks[index].DateTime < datetime)
-                        {
-                            num1 = index + 1;
-                            continue;
-                        }
-                        else
-                            continue;
-                    case IndexOption.Next:
-                        if (this.ticks[index].DateTime >= datetime && (index == 0 || this.ticks[index - 1].DateTime < datetime))
-                        {
-                            flag = false;
-                            continue;
-                        }
-                        else if (this.ticks[index].DateTime < datetime)
-                        {
-                            num1 = index + 1;
-                            continue;
-                        }
-                        else
-                        {
-                            num2 = index - 1;
-                            continue;
-                        }
-                    case IndexOption.Prev:
-                        if (this.ticks[index].DateTime <= datetime && (index == this.ticks.Count - 1 || this.ticks[index + 1].DateTime > datetime))
-                        {
-                            flag = false;
-                            continue;
-                        }
-                        else if (this.ticks[index].DateTime > datetime)
-                        {
-                            num2 = index - 1;
-                            continue;
-                        }
-                        else
-                        {
-                            num1 = index + 1;
-                            continue;
-                        }
-                    default:
-                        continue;
-                }
-            }
-            return index;
+            if (datetime < FirstDateTime)
+                return option == IndexOption.Null || option == IndexOption.Prev ? -1 : 0;
+            if (datetime > LastDateTime)
+                return option == IndexOption.Null || option == IndexOption.Next ? -1 : Count - 1;
+
+            var i = this.ticks.BinarySearch(new Tick() { DateTime = datetime }, new DataObjectComparer());
+            if (i >= 0)
+                return i;
+            else if (option == IndexOption.Next)
+                return ~i;
+            else if (option == IndexOption.Prev)
+                return ~i - 1;
+            return -1; // option == IndexOption.Null
+        }
+
+        public bool Contains(DateTime dateTime)
+        {
+            return GetIndex(dateTime, IndexOption.Null) != -1;
+        }
+
+        void IDataSeries.Add(DataObject obj)
+        {
+            Add((Tick)obj);
+        }
+
+        void IDataSeries.Remove(long index)
+        {
+            this.ticks.RemoveAt((int)index);
         }
 
         public void Clear()
@@ -228,7 +201,7 @@ namespace SmartQuant
 
         private void EnsureNotEmpty()
         {
-            if (this.Count <= 0)
+            if (Count <= 0)
                 throw new ApplicationException("Array has no elements");
         }
     }

@@ -4,7 +4,7 @@
 namespace SmartQuant
 {
     public class ObjectType
-    { 
+    {
         public const byte DataSeries = 101;
         public const byte ObjectKeyList = 102;
         public const byte FreeKeyList = 103;

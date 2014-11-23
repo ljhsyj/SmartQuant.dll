@@ -10,7 +10,6 @@ namespace SmartQuant
         protected ISeries input;
         protected bool calculate;
 
-
         public bool AutoUpdate { get; set; }
 
         public override int Count
@@ -64,11 +63,6 @@ namespace SmartQuant
             {
                 this.Calculate();
                 return base[index];
-            }
-            set
-            {
-                this.Calculate();
-                base[index] = value;
             }
         }
 

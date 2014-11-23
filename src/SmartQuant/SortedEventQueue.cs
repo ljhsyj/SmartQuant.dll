@@ -7,7 +7,8 @@ namespace SmartQuant
 {
     public class SortedEventQueue : IEventQueue
     {
-        private EventSortedSet events;
+        internal EventSortedSet events;
+        internal DateTime dateTime;
 
         public byte Id { get; private set; }
 
@@ -19,6 +20,30 @@ namespace SmartQuant
 
         public byte Priority { get; private set; }
 
+        public long Count
+        {
+            get
+            {
+                return this.events.Count;
+            }
+        }
+
+        public long EmptyCount
+        {
+            get
+            {
+                throw new NotImplementedException("Not implemented in SortedEventQueue");
+            }
+        }
+
+        public long FullCount
+        {
+            get
+            {
+                throw new NotImplementedException("Not implemented in SortedEventQueue");
+            }
+        }
+
         public SortedEventQueue(byte id, byte type = EventQueueType.Master, byte priority = EventQueuePriority.Normal)
         {
             Id = id;
@@ -29,32 +54,44 @@ namespace SmartQuant
 
         public Event Peek()
         {
-            throw new NotImplementedException();
+            lock (this)
+                return this.events[0];
         }
 
         public DateTime PeekDateTime()
         {
-            throw new NotImplementedException();
+            return this.dateTime;
         }
 
         public Event Read()
         {
-            throw new NotImplementedException();
+            Event e;
+            lock (this)
+            {
+                e = this.events.Pop();
+                if (this.events.Count > 0)
+                    this.dateTime = this.events[0].DateTime;
+            }
+            return e;
         }
 
-        public void Write(Event obj)
+        public void Write(Event e)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Not implemented in SortedEventQueue");
         }
 
         public Event Dequeue()
         {
-            throw new NotImplementedException();
+            return Read();
         }
 
-        public void Enqueue(Event obj)
+        public void Enqueue(Event e)
         {
-            throw new NotImplementedException();
+            lock (this)
+            {
+                this.events.Add(e);
+                this.dateTime = this.events[0].DateTime;
+            }    
         }
 
         public bool IsEmpty()
@@ -74,34 +111,7 @@ namespace SmartQuant
 
         public void ResetCounts()
         {
-            throw new NotImplementedException();
-        }
-
-
-
-        public long Count
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public long FullCount
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public long EmptyCount
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            // no-op
         }
     }
 }
-

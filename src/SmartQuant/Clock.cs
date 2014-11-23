@@ -6,6 +6,33 @@ using System.Threading;
 
 namespace SmartQuant
 {
+    class ReminderEventQueue : SortedEventQueue
+    {
+        public ReminderEventQueue()
+            : base(EventQueueId.Reminder)
+        {
+        }
+
+        public void Remove(ReminderCallback callback, DateTime dateTime)
+        {
+            lock (this)
+            {
+                for (int i = 0; i < this.events.Count; ++i)
+                {
+                    var reminder = (Reminder)this.events[i];
+                    if (reminder.Callback == callback && reminder.DateTime == dateTime)
+                    {
+                        this.events.Pop();
+                        if (i != 0 || this.events.Count == 0)
+                            break;
+                        this.dateTime = this.events[0].DateTime;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public class Clock
     {
         private Framework framework;
@@ -15,21 +42,31 @@ namespace SmartQuant
         private DateTime dateTime;
         private long ticks;
 
+        internal IEventQueue Queue { get; set; }
+
         public DateTime DateTime
         {
             get
             {
-//                if (this.type == ClockType.Exchange || this.mode == ClockMode.Simulation)
-//                    return this.dateTime;
-//                if (Resolution == ClockResolution.Normal)
-//                    return DateTime.Now;
-//                else
-//                    return new DateTime(this.ticks + (long) ((double) this.stopwatch_0.ElapsedTicks / (double) Stopwatch.Frequency * 10000000.0));
-//
-                return this.dateTime;
+                return this.type == ClockType.Exchange || Mode == ClockMode.Simulation ? this.dateTime : DateTime.Now;
             }
             private set
             {
+                if (Mode == ClockMode.Realtime)
+                {
+                    Console.WriteLine("Clock::DateTime Can not set dateTime because Clock is not in the Simulation mode");
+                    return;
+                }
+
+                if (this.type == ClockType.Exchange)
+                {
+                    if (this.dateTime > value)
+                        Console.WriteLine("Clock::DateTime (Exchange) incorrect set order");
+                    else
+                        this.dateTime = value;
+                }
+
+                throw new NotImplementedException();
             }
         }
 
@@ -41,24 +78,32 @@ namespace SmartQuant
             } 
             set
             {
-                if (this.mode != value)
-                {
-                    this.mode = value;
-                    if (this.mode == ClockMode.Simulation)
-                        this.dateTime = DateTime.MinValue;
-                }
+                if (this.mode == value)
+                    return;
+                this.mode = value;
+                if (this.mode == ClockMode.Simulation)
+                    this.dateTime = DateTime.MinValue;
             }
         }
 
         public ClockResolution Resolution { get; set; }
 
-        public long Ticks { get { throw new System.NotImplementedException(); } }
+        public long Ticks
+        {
+            get
+            { 
+                return Mode == ClockMode.Simulation ? this.dateTime.Ticks : DateTime.Now.Ticks;
+           }
+        }
 
         public Clock(Framework framework, ClockType type = ClockType.Local, ClockMode mode = ClockMode.Simulation, bool isStandalone = false)
         {
             this.framework = framework;
-            this.Mode = mode;
             this.type = type;
+            this.dateTime = DateTime.MinValue;
+            this.ticks = DateTime.Now.Ticks;
+            Mode = mode;
+            Queue = new ReminderEventQueue();
             this.isStandalone = isStandalone;
             if (isStandalone)
             {
@@ -69,23 +114,31 @@ namespace SmartQuant
             }
         }
 
-        public void AddReminder(ReminderCallback callback, DateTime dateTime, object data = null)
+        public bool AddReminder(ReminderCallback callback, DateTime dateTime, object data = null)
         {
-            this.AddReminder(new Reminder(callback, dateTime, data));
+            return AddReminder(new Reminder(callback, dateTime, data) { Clock = this });
         }
 
-        public void AddReminder(Reminder reminder)
+        public bool AddReminder(Reminder reminder)
         {
+            if (reminder.DateTime < DateTime)
+            {
+                Console.WriteLine("Clock::AddReminder ({0}) Can not set reminder to the past. Clock datetime = {1} Reminder datetime = {2} Reminder object = {3}", this.type, DateTime.ToString("dd.MM.yyyy HH:mm:ss.ffff"), reminder.DateTime.ToString("dd.MM.yyyy HH:mm:ss.ffff"), reminder.Data);
+                return false;
+            }
+            reminder.Clock = this;
+            Queue.Enqueue(reminder);
+            return true;
         }
 
         public void RemoveReminder(ReminderCallback callback, DateTime dateTime)
         {
-            throw new System.NotImplementedException();
+            ((ReminderEventQueue)Queue).Remove(callback, dateTime);
         }
 
         public void Clear()
         {
-            throw new System.NotImplementedException();
+            this.dateTime = DateTime.MinValue;
         }
 
         public string GetModeAsString()
@@ -103,9 +156,26 @@ namespace SmartQuant
 
         private void Run()
         {
-            Console.WriteLine(string.Format("{0} Clock thread started", DateTime.Now));
+            Console.WriteLine("{0} Clock thread started", DateTime.Now);
+            bool pending = false;
             while (true)
-                Thread.Sleep(1);
+            {
+                while (Mode != ClockMode.Realtime)
+                    Thread.Sleep(10);
+                if (!Queue.IsEmpty())
+                {
+                    var ticks1 = this.Queue.PeekDateTime().Ticks;
+                    var ticks2 = this.framework.Clock.Ticks;
+                    if (ticks1 <= ticks2)
+                        ((Reminder)Queue.Read()).Execute();
+                    else if (ticks1 - ticks2 < 15000)
+                        pending = true;
+                }
+                if (pending)
+                    Thread.SpinWait(1);
+                else
+                    Thread.Sleep(1);
+            }
         }
     }
 }

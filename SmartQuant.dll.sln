@@ -17,12 +17,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BollingerBands", "Tests\Bol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLogic", "Tests\TestLogic\TestLogic.csproj", "{14E20325-820F-4E70-BD66-B6381CB2E2F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEventBus", "Tests\TestEventBus\TestEventBus.csproj", "{128F04D0-0DDF-4F06-9272-9C9E0C33AAEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{128F04D0-0DDF-4F06-9272-9C9E0C33AAEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128F04D0-0DDF-4F06-9272-9C9E0C33AAEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128F04D0-0DDF-4F06-9272-9C9E0C33AAEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128F04D0-0DDF-4F06-9272-9C9E0C33AAEE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{14E20325-820F-4E70-BD66-B6381CB2E2F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14E20325-820F-4E70-BD66-B6381CB2E2F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14E20325-820F-4E70-BD66-B6381CB2E2F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,6 +61,7 @@ Global
 		{4BB9671C-7372-4542-87D0-A89512F42F9C} = {06EE67C6-B437-4F90-BE5E-8A4757AA26D4}
 		{479D933B-2ABB-4F16-A2DD-13870C5F4F18} = {06EE67C6-B437-4F90-BE5E-8A4757AA26D4}
 		{14E20325-820F-4E70-BD66-B6381CB2E2F8} = {06EE67C6-B437-4F90-BE5E-8A4757AA26D4}
+		{128F04D0-0DDF-4F06-9272-9C9E0C33AAEE} = {06EE67C6-B437-4F90-BE5E-8A4757AA26D4}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = src\SmartQuant\SmartQuant.csproj

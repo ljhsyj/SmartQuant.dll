@@ -50,9 +50,11 @@ namespace SmartQuant
             this.events.Clear();
         }
 
-        internal void Pop()
+        internal Event Pop()
         {
+            var e = this[0];
             this.events.RemoveAt(0);
+            return e;
         }
 
         public IEnumerator GetEnumerator()

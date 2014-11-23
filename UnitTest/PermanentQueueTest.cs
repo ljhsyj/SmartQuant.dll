@@ -18,7 +18,7 @@ namespace UnitTest
             var obj1 = new object();
             q.Enqueue(obj1);
             q.Enqueue(new object());
-            var all = q.DequeueAll();
+            var all = q.DequeueAll(reader);
             Assert.AreSame(all[0], obj1);
         }
     }

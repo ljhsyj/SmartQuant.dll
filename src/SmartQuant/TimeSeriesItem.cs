@@ -19,8 +19,8 @@ namespace SmartQuant
 
         public TimeSeriesItem(DateTime dateTime, double value)
         {
-            this.DateTime = dateTime;
-            this.Value = value;
+            DateTime = dateTime;
+            Value = value;
         }
 
         public TimeSeriesItem(TimeSeriesItem item) : this(item.DateTime, item.Value)

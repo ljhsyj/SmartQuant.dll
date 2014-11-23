@@ -13,6 +13,7 @@ namespace SmartQuant
         protected string name;
         protected string description;
 
+        private IDataSeries dataSeries;
         private List<TimeSeriesItem> items;
         private TimeSeriesItem min;
         private TimeSeriesItem max;
@@ -133,15 +134,23 @@ namespace SmartQuant
         {
         }
 
+        public TimeSeries(IDataSeries series)
+        {
+//            this.bool_0 = true;
+//            Indicators = new List<Indicator>();
+//            this.name = series.Name;
+//            this.description = series.Description;
+            this.dataSeries = series;
+        }
+
         public TimeSeries(string name, string description = "")
         {
             this.name = name;
             this.description = description;
+            this.dirty = true;
+            Indicators = new List<Indicator>();
             this.items = new List<TimeSeriesItem>();
-            this.Indicators = new List<Indicator>();
         }
-
-
 
         public TimeSeriesItem GetItem(int index)
         {
@@ -165,13 +174,28 @@ namespace SmartQuant
 
         public TimeSeriesItem GetByDateTime(DateTime dateTime, SearchOption option = SearchOption.ExactFirst)
         {
-            int index = this.IndexOf(dateTime, option);
+            int index = IndexOf(dateTime, option);
             return index != -1 ? this.items[index] : null;
         }
 
         public int IndexOf(DateTime dateTime, SearchOption option = SearchOption.ExactFirst)
         {
-            throw new NotImplementedException();
+            if (option == SearchOption.ExactLast)
+                throw new NotSupportedException();
+
+            if (dateTime < FirstDateTime)
+                return option == SearchOption.ExactFirst || option == SearchOption.Prev ? -1 : 0;
+            if (dateTime > LastDateTime)
+                return option == SearchOption.ExactFirst || option == SearchOption.Next ? -1 : Count - 1;
+
+            var i = this.items.BinarySearch(new TimeSeriesItem() { DateTime = dateTime, Value = 0 }, new DataObjectComparer());
+            if (i >= 0)
+                return i;
+            else if (option == SearchOption.Next)
+                return ~i;
+            else if (option == SearchOption.Prev)
+                return ~i - 1;
+            return -1; // option == IndexOption.Null
         }
 
         public double GetMin()

@@ -16,12 +16,12 @@ namespace SmartQuant
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            return new DataSeries(reader);
         }
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            (obj as DataSeries).Write(writer);
         }
     }
 }

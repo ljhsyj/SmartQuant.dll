@@ -81,73 +81,22 @@ namespace SmartQuant
 
         public int GetIndex(DateTime datetime, IndexOption option)
         {
-            int index = 0;
-            int num1 = 0;
-            int num2 = this.fills.Count - 1;
-            bool flag = true;
-            while (flag)
-            {
-                if (num2 < num1)
-                    return -1;
-                index = (num1 + num2) / 2;
-                switch (option)
-                {
-                    case IndexOption.Null:
-                        if (this.fills[index].DateTime == datetime)
-                        {
-                            flag = false;
-                            continue;
-                        }
-                        else if (this.fills[index].DateTime > datetime)
-                        {
-                            num2 = index - 1;
-                            continue;
-                        }
-                        else if (this.fills[index].DateTime < datetime)
-                        {
-                            num1 = index + 1;
-                            continue;
-                        }
-                        else
-                            continue;
-                    case IndexOption.Next:
-                        if (this.fills[index].DateTime >= datetime && (index == 0 || this.fills[index - 1].DateTime < datetime))
-                        {
-                            flag = false;
-                            continue;
-                        }
-                        else if (this.fills[index].DateTime < datetime)
-                        {
-                            num1 = index + 1;
-                            continue;
-                        }
-                        else
-                        {
-                            num2 = index - 1;
-                            continue;
-                        }
-                    case IndexOption.Prev:
-                        if (this.fills[index].DateTime <= datetime && (index == this.fills.Count - 1 || this.fills[index + 1].DateTime > datetime))
-                        {
-                            flag = false;
-                            continue;
-                        }
-                        else if (this.fills[index].DateTime > datetime)
-                        {
-                            num2 = index - 1;
-                            continue;
-                        }
-                        else
-                        {
-                            num1 = index + 1;
-                            continue;
-                        }
-                    default:
-                        continue;
-                }
-            }
-            return index;
+            var firstDateTime = fills[0].DateTime;
+            var lastDateTime = fills[fills.Count - 1].DateTime;
+
+            if (datetime < firstDateTime)
+                return option == IndexOption.Null || option == IndexOption.Prev ? -1 : 0;
+            if (datetime > lastDateTime)
+                return option == IndexOption.Null || option == IndexOption.Next ? -1 : Count - 1;
+
+            var i = this.fills.BinarySearch(new Fill() { DateTime = datetime }, new DataObjectComparer());
+            if (i >= 0)
+                return i;
+            else if (option == IndexOption.Next)
+                return ~i;
+            else if (option == IndexOption.Prev)
+                return ~i - 1;
+            return -1; // option == IndexOption.Null
         }
     }
 }
-

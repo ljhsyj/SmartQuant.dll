@@ -40,12 +40,12 @@ namespace SmartQuant
 
         public DataSeries AddDataSeries(Instrument instrument, byte type)
         {
-            return this.Server.AddDataSeries(instrument, type);
+            return Server.AddDataSeries(instrument, type);
         }
 
         public DataSeries AddDataSeries(string name)
         {
-            return this.Server.AddDataSeries(name);
+            return Server.AddDataSeries(name);
         }
 
         public DataSeries GetDataSeries(string symbol, byte type, BarType barType = BarType.Time, long barSize = 60)
@@ -61,6 +61,16 @@ namespace SmartQuant
         public DataSeries GetDataSeries(string name)
         {
             return this.Server.GetDataSeries(name);
+        }
+
+        public TimeSeries AddTimeSeries(string name)
+        {
+            return new TimeSeries(Server.AddDataSeries(name));
+        }
+
+        public TimeSeries GetTimeSeries(string name)
+        {
+            return new TimeSeries(Server.GetDataSeries(name));
         }
 
         public List<DataSeries> GetDataSeriesList(Instrument instrument = null, string pattern = null)

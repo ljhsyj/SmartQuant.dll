@@ -123,33 +123,35 @@ namespace SmartQuant
         private void Init(string name, bool createServers, EventBus externalBus, InstrumentServer instrumentServer, DataServer dataServer)
         {
             this.isDisposable = true;
-            this.Name = name;
-            this.IsExternalDataQueue = true;
-            this.LoadConfiguration();
-//            this.Mode = FrameworkMode.Simulation;
-            this.Clock = new Clock(this, ClockType.Local, ClockMode.Simulation, false);
-            this.ExchangeClock = new Clock(this, ClockType.Exchange, ClockMode.Simulation, false);
-            this.EventBus = new EventBus(this, EventBusMode.Simulation);
+            Name = name;
+            IsExternalDataQueue = true;
+            LoadConfiguration();
+            Mode = FrameworkMode.Simulation;
+            EventBus = new EventBus(this, EventBusMode.Simulation);
+            Clock = new Clock(this, ClockType.Local, ClockMode.Simulation, false);
+            EventBus.LocalClockQueue = Clock.Queue;
+            ExchangeClock = new Clock(this, ClockType.Exchange, ClockMode.Simulation, false);
+            EventBus.ExchangeClockQueue = ExchangeClock.Queue;
             if (externalBus != null)
-                externalBus.Attach(this.EventBus);
-            this.EventServer = new EventServer(this, this.EventBus);
-            this.EventManager = new EventManager(this, this.EventBus);
-            this.InstrumentServer = createServers ? (!this.Configuration.IsInstrumentFileLocal ? new FileInstrumentServer(this, "instruments.quant", this.Configuration.InstrumentFileHost) : new FileInstrumentServer(this, this.Configuration.InstrumentFileName, null)) : instrumentServer;
-            this.InstrumentManager = new InstrumentManager(this, this.InstrumentServer);
-            this.DataServer = createServers ? (!this.Configuration.IsDataFileLocal ? new FileDataServer(this, "data.quant", this.Configuration.DataFileHost) : new FileDataServer(this, this.Configuration.DataFileName, null)) : dataServer;
-            this.DataManager = new DataManager(this, this.DataServer);
-            this.StreamerManager = new StreamerManager();
-            this.LoadStreamerPlugins();
-            this.ProviderManager = new ProviderManager(this);
-            this.LoadProviderPlugins();
-            this.OrderManager = new OrderManager(this, null);
-            this.PortfolioManager = new PortfolioManager(this);
-            this.StatisticsManager = new StatisticsManager(this);
-            this.StrategyManager = new StrategyManager(this);
-            this.GroupManager = new GroupManager(this);
-            this.CurrencyConverter = new CurrencyConverter(this);
-            this.DataFileManager = new DataFileManager(Installation.DataDir.FullName);
-            this.SubscriptionManager = new SubscriptionManager(this);
+                externalBus.Attach(EventBus);
+            EventServer = new EventServer(this, EventBus);
+            EventManager = new EventManager(this, EventBus);
+            InstrumentServer = createServers ? (!Configuration.IsInstrumentFileLocal ? new FileInstrumentServer(this, "instruments.quant", Configuration.InstrumentFileHost) : new FileInstrumentServer(this, Configuration.InstrumentFileName, null)) : instrumentServer;
+            InstrumentManager = new InstrumentManager(this, InstrumentServer);
+            DataServer = createServers ? (!Configuration.IsDataFileLocal ? new FileDataServer(this, "data.quant", Configuration.DataFileHost) : new FileDataServer(this, Configuration.DataFileName, null)) : dataServer;
+            DataManager = new DataManager(this, DataServer);
+            StreamerManager = new StreamerManager();
+            LoadStreamerPlugins();
+            ProviderManager = new ProviderManager(this);
+            LoadProviderPlugins();
+            OrderManager = new OrderManager(this, null);
+            PortfolioManager = new PortfolioManager(this);
+            StatisticsManager = new StatisticsManager(this);
+            StrategyManager = new StrategyManager(this);
+            GroupManager = new GroupManager(this);
+            CurrencyConverter = new CurrencyConverter(this);
+            DataFileManager = new DataFileManager(Installation.DataDir.FullName);
+            SubscriptionManager = new SubscriptionManager(this);
             Framework.Current = Framework.Current ?? this;
         }
 
@@ -178,7 +180,6 @@ namespace SmartQuant
                 if (EventManager != null)
                     EventManager.Close();
             }
-                
             disposed = true;
         }
             
@@ -200,9 +201,6 @@ namespace SmartQuant
         {
             this.StrategyManager.Clear();
         }
-
-
-
 
         private void LoadProviderPlugins()
         {

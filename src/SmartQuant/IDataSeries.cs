@@ -11,6 +11,8 @@ namespace SmartQuant
 
         string Name { get; }
 
+        string Description { get; }
+
         DateTime DateTime1 { get; }
 
         DateTime DateTime2 { get; }
@@ -18,6 +20,13 @@ namespace SmartQuant
         DataObject this [long index] { get; }
 
         long GetIndex(DateTime dateTime, SearchOption option = SearchOption.Prev);
+
+        bool Contains(DateTime dateTime);
+
+        void Add(DataObject obj);
+
+        void Remove(long index);
+
+        void Clear(); 
     }
 }
-

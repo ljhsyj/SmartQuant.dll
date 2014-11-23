@@ -247,6 +247,66 @@ namespace SmartQuant
         {
         }
 
+        protected virtual double GetPrice(double price)
+        {
+            return price;
+        }
+
+        protected virtual double GetInstrumentPrice()
+        {
+//            if (this.position.Side == PositionSide.Long)
+//            {
+//                Bid bid = this.strategy.framework.alThAjnhqO.GetBid(this.instrument);
+//                if (bid != null)
+//                    return this.GetPrice(bid.Price);
+//            }
+//            if (this.position.Side == PositionSide.Short)
+//            {
+//                Ask ask = this.strategy.framework.alThAjnhqO.GetAsk(this.instrument);
+//                if (ask != null)
+//                    return this.GetPrice(ask.Price);
+//            }
+//            Trade trade = this.strategy.framework.alThAjnhqO.GetTrade(this.instrument);
+//            if (trade != null)
+//                return this.GetPrice(trade.Price);
+//            Bar bar = this.strategy.framework.alThAjnhqO.GetBar(this.instrument);
+//            if (bar != null)
+//                return this.GetPrice(bar.Close);
+//            else
+                return 0.0;
+        }
+
+        protected virtual double GetStopPrice()
+        {
+            return 0;
+//            this.initPrice = this.trailPrice;
+//            switch (this.mode)
+//            {
+//                case StopMode.Absolute:
+//                    switch (this.side)
+//                    {
+//                        case PositionSide.Long:
+//                            return this.trailPrice - Math.Abs(this.level);
+//                        case PositionSide.Short:
+//                            return this.trailPrice + Math.Abs(this.level);
+//                        default:
+//                            throw new ArgumentException("Unknown position side : " + (object) this.position.Side);
+//                    }
+//                case StopMode.Percent:
+//                    switch (this.position.Side)
+//                    {
+//                        case PositionSide.Long:
+//                            return this.trailPrice - Math.Abs(this.trailPrice * this.level);
+//                        case PositionSide.Short:
+//                            return this.trailPrice + Math.Abs(this.trailPrice * this.level);
+//                        default:
+//                            throw new ArgumentException("Unknown position side : " + (object) this.position.Side);
+//                    }
+//                default:
+//                    throw new ArgumentException("Unknown stop mode : " + (object) this.mode);
+//            }
+        }
+
         public void Disconnect()
         {
         }

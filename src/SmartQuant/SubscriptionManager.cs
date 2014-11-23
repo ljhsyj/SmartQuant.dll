@@ -19,22 +19,22 @@ namespace SmartQuant
 
         public void Subscribe(int providerId, Instrument instrument)
         {
-            this.Subscribe(this.framework.ProviderManager.GetProvider(providerId) as IDataProvider, instrument);
+            Subscribe(this.framework.ProviderManager.GetProvider(providerId) as IDataProvider, instrument);
         }
 
         public void Subscribe(int providerId, int instrumentId)
         {
-            this.Subscribe(providerId, this.framework.InstrumentManager.GetById(instrumentId));
+            Subscribe(providerId, this.framework.InstrumentManager.GetById(instrumentId));
         }
 
         public void Subscribe(string provider, Instrument instrument)
         {
-            this.Subscribe(this.framework.ProviderManager.GetProvider(provider) as IDataProvider, instrument);
+            Subscribe(this.framework.ProviderManager.GetProvider(provider) as IDataProvider, instrument);
         }
 
         public void Subscribe(string provider, string symbol)
         {
-            this.Subscribe(this.framework.ProviderManager.GetProvider(provider) as IDataProvider, this.framework.InstrumentManager.Get(symbol));
+            Subscribe(this.framework.ProviderManager.GetProvider(provider) as IDataProvider, this.framework.InstrumentManager.Get(symbol));
         }
 
         public void Subscribe(IDataProvider provider, Instrument instrument)
@@ -43,13 +43,13 @@ namespace SmartQuant
 
         public void Unsubscribe(int providerId, Instrument instrument)
         {
-            this.Unsubscribe(this.framework.ProviderManager.GetProvider(providerId) as IDataProvider, instrument);
+            Unsubscribe(this.framework.ProviderManager.GetProvider(providerId) as IDataProvider, instrument);
         }
 
         public void Unsubscribe(int providerId, int instrumentId)
         {
             Instrument byId = this.framework.InstrumentManager.GetById(instrumentId);
-            this.Unsubscribe(providerId, byId);
+            Unsubscribe(providerId, byId);
         }
 
         public void Unsubscribe(IDataProvider provider, Instrument instrument)
@@ -58,12 +58,12 @@ namespace SmartQuant
 
         public void Unsubscribe(string provider, Instrument instrument)
         {
-            this.Unsubscribe(this.framework.ProviderManager.GetProvider(provider) as IDataProvider, instrument);
+            Unsubscribe(this.framework.ProviderManager.GetProvider(provider) as IDataProvider, instrument);
         }
 
         public void Unsubscribe(string provider, string symbol)
         {
-            this.Unsubscribe(this.framework.ProviderManager.GetProvider(provider) as IDataProvider, this.framework.InstrumentManager.Get(symbol));
+            Unsubscribe(this.framework.ProviderManager.GetProvider(provider) as IDataProvider, this.framework.InstrumentManager.Get(symbol));
         }
 
         public void Subscribe(IDataProvider provider, InstrumentList instruments)

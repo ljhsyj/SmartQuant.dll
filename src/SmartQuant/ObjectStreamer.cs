@@ -12,7 +12,21 @@ namespace SmartQuant
         protected internal Type type;
         protected internal StreamerManager streamerManager;
 
-        public StreamerManager StreamerManager  { get { return this.streamerManager; } }
+        public StreamerManager StreamerManager
+        { 
+            get
+            {
+                return this.streamerManager; 
+            }
+        }
+
+        internal byte TypeId
+        {
+            get
+            {
+                return this.typeId;
+            }
+        }
 
         public ObjectStreamer()
         {
@@ -22,12 +36,13 @@ namespace SmartQuant
 
         public virtual object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            var version = reader.ReadByte();
+            return new object();
         }
 
         public virtual void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            writer.Write((byte)0);
         }
     }
 }

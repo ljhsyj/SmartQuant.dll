@@ -16,8 +16,8 @@ namespace SmartQuant
         public InstrumentManager(Framework framework, InstrumentServer instrumentServer)
         {
             this.framework = framework;
-            this.Server = instrumentServer;
-            this.Instruments = new InstrumentList();
+            Server = instrumentServer;
+            Instruments = new InstrumentList();
         }
 
         public void Load()
@@ -42,22 +42,22 @@ namespace SmartQuant
 
         public bool Contains(string symbol)
         {
-            return this.Instruments.Contains(symbol);
+            return Instruments.Contains(symbol);
         }
 
         public Instrument Get(string symbol)
         {
-            return this.Instruments[symbol];
+            return Instruments[symbol];
         }
 
         public Instrument GetById(int id)
         {
-            return this.Instruments.GetById(id);
+            return Instruments.GetById(id);
         }
 
         public void Clear()
         {
-            this.Instruments.Clear();
+            Instruments.Clear();
         }
     }
 }

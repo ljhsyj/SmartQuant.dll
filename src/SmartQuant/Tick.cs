@@ -22,12 +22,8 @@ namespace SmartQuant
         }
 
         public Tick(Tick tick)
-            : base(tick)
+            : this(tick.DateTime, tick.ExchangeDateTime, tick.ProviderId, tick.InstrumentId, tick.Price,tick.Size)
         {
-            this.ProviderId = tick.ProviderId;
-            this.InstrumentId = tick.InstrumentId;
-            this.Price = tick.Price;
-            this.Size = tick.Size;
         }
 
         public Tick(DateTime dateTime, byte providerId, int instrumentId, double price, int size)
@@ -38,11 +34,11 @@ namespace SmartQuant
         public Tick(DateTime dateTime, DateTime exchangeDateTime, byte providerId, int instrumentId, double price, int size)
             : base(dateTime)
         {
-            this.ExchangeDateTime = exchangeDateTime;
-            this.ProviderId = providerId;
-            this.InstrumentId = instrumentId;
-            this.Price = price;
-            this.Size = size;
+            ExchangeDateTime = exchangeDateTime;
+            ProviderId = providerId;
+            InstrumentId = instrumentId;
+            Price = price;
+            Size = size;
         }
 
         public override string ToString()

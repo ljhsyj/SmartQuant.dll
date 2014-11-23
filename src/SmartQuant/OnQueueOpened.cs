@@ -7,7 +7,7 @@ namespace SmartQuant
 {
     public class OnQueueOpened : Event
     {
-        private EventQueue queue;
+        internal EventQueue Queue { get; private set; }
 
         public override byte TypeId
         {
@@ -19,13 +19,13 @@ namespace SmartQuant
 
         public OnQueueOpened(EventQueue queue)
         {
-            this.DateTime = DateTime.MinValue;
-            this.queue = queue;
+            DateTime = DateTime.MinValue;
+            Queue = queue;
         }
 
         public override string ToString()
         {
-            return this.GetType().Name;
+            return string.Format("{0} : {1}", GetType().Name, Queue.Name);
         }
     }
 }

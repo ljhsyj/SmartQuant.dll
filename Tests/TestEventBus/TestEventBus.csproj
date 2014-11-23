@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{128F04D0-0DDF-4F06-9272-9C9E0C33AAEE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>TestEventBus</RootNamespace>
+    <AssemblyName>TestEventBus</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="..\..\src\SmartQuant\Clock.cs">
+      <Link>Clock.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\ClockMode.cs">
+      <Link>ClockMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\ClockResolution.cs">
+      <Link>ClockResolution.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\ClockType.cs">
+      <Link>ClockType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\Event.cs">
+      <Link>Event.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\EventBus.cs">
+      <Link>EventBus.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\EventBusMode.cs">
+      <Link>EventBusMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\SortedEventQueue.cs">
+      <Link>SortedEventQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\IEventQueue.cs">
+      <Link>IEventQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\EventSortedSet.cs">
+      <Link>EventSortedSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\EventQueueId.cs">
+      <Link>EventQueueId.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\ReminderCallback.cs">
+      <Link>ReminderCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\Reminder.cs">
+      <Link>Reminder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\DataObject.cs">
+      <Link>DataObject.cs</Link>
+    </Compile>
+    <Compile Include="FakeClasses.cs" />
+    <Compile Include="..\..\src\SmartQuant\EventQueue.cs">
+      <Link>EventQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\EventQueuePriority.cs">
+      <Link>EventQueuePriority.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\EventPipe.cs">
+      <Link>EventPipe.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\EventQueueType.cs">
+      <Link>EventQueueType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\EventType.cs">
+      <Link>EventType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\OnQueueOpened.cs">
+      <Link>OnQueueOpened.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\Tick.cs">
+      <Link>Tick.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\DataObjectType.cs">
+      <Link>DataObjectType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\FrameworkMode.cs">
+      <Link>FrameworkMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\OnSimulatorStop.cs">
+      <Link>OnSimulatorStop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\SmartQuant\OnQueueClosed.cs">
+      <Link>OnQueueClosed.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+</Project>

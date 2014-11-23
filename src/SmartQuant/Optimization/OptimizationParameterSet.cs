@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SmartQuant.Optimization
 {
-    public class OptimizationParameterSet : IEnumerable<OptimizationParameter>, IEnumerable
+    public class OptimizationParameterSet : IEnumerable<OptimizationParameter>
     {
         private List<OptimizationParameter> parameters = new List<OptimizationParameter>();
 
@@ -43,8 +43,8 @@ namespace SmartQuant.Optimization
         public override string ToString()
         {
             string s = "";
-            foreach (OptimizationParameter param in this.parameters)
-                s = s + param.Name + " = " + param.Value + " ";
+            foreach (var param in this.parameters)
+                s += string.Format("{0} = {1} ", param.Name, param.Value);
             return s;
         }
     }

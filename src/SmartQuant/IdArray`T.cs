@@ -20,19 +20,16 @@ namespace SmartQuant
             }
         }
 
-        public T this[int id]
+        public T this [int id]
         {
             get
             {
-                if (id >= this.size)
-                    this.Resize(id);
+                EnsureSize(id);
                 return this.array[id];
             }
             set
             {
-                if (id >= this.size)
-                    this.Resize(id);
-                this.array[id] = value;
+                Add(id, value);
             }
         }
 
@@ -50,16 +47,13 @@ namespace SmartQuant
 
         public void Add(int id, T value)
         {
-            if (id >= this.size)
-                this.Resize(id);
+            EnsureSize(id);
             this.array[id] = value;
         }
 
         public void Remove(int id)
         {
-            if (id >= this.size)
-                this.Resize(id);
-            this.array[id] = default(T);
+            Add(id, default(T));
         }
 
         private void Resize(int id)
@@ -72,7 +66,13 @@ namespace SmartQuant
 
         public void CopyTo(IdArray<T> array)
         {
-            Parallel.For(0, array.Size, i => array[i] = i > this.Size - 1 ? default(T) : this.array[i]);
+            Parallel.For(0, array.Size, i => array[i] = i > Size - 1 ? default(T) : this.array[i]);
+        }
+
+        private void EnsureSize(int id)
+        {
+            if (id >= Size)
+                Resize(id);
         }
     }
 }
