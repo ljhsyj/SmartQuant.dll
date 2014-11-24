@@ -68,7 +68,7 @@ namespace SmartQuant
 
         public void OnProviderAdded(IProvider provider)
         {
-            throw new NotImplementedException();
+            OnEvent( new OnProviderAdded(provider));
         }
 
         public void OnProviderRemoved(Provider provider)

@@ -1,65 +1,58 @@
-﻿// Licensed under the Apache License, Version 2.0. 
-// Copyright (c) Alex Lee. All rights reserved.
-
-using System;
-
+﻿ 
 namespace SmartQuant
 {
     public class ObjectTable
     {
+        internal IdArray<object> fields = new IdArray<object>(16);
+
         public int Size
         {
             get
             {
-                throw new NotImplementedException();
+                return this.fields.Size;
             }
         }
 
-        public object this[int index]
+        public object this [int index]
         {
             get
             {
-                throw new NotImplementedException();
+                return this.fields[index];
             }
             set
             {
-                throw new NotImplementedException();
+                this.fields[index] = value;
             }
-        }
-
-        public ObjectTable()
-        {
         }
 
         public int GetInt(int index)
         {
-            throw new NotImplementedException();
+            return (int)this.fields[index];
         }
 
         public double GetDouble(int index)
         {
-            throw new NotImplementedException();
+            return (double)this.fields[index];
         }
 
         public string GetString(int index)
         {
-            throw new NotImplementedException();
+            return (string)this.fields[index];
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            this.fields.Remove(id);
         }
 
         public void CopyTo(ObjectTable table)
         {
-            throw new NotImplementedException();
+            this.fields.CopyTo(table.fields);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            this.fields.Clear();
         }
     }
 }
-

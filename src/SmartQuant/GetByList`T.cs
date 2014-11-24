@@ -10,22 +10,38 @@ namespace SmartQuant
 {
     class GetByList<T> : IEnumerable<T>
     {
+        private static MethodInfo nameMethodInfo;
+        private static MethodInfo idMethodInfo;
+
         private Dictionary<string, T> dictionary;
         private IdArray<T> array;
         private List<T> list;
-        MethodInfo nameMI;
-        MethodInfo idMI;
 
-        public int Count { get { return this.list.Count; } }
+        public int Count
+        {
+            get
+            { 
+                return this.list.Count; 
+            }
+        }
+
+        static GetByList()
+        {
+            nameMethodInfo = typeof(T).GetMethod("GetName", BindingFlags.NonPublic | BindingFlags.Instance);
+            idMethodInfo = typeof(T).GetMethod("GetId", BindingFlags.NonPublic | BindingFlags.Instance);
+        }
 
         public GetByList()
         {
             this.dictionary = new Dictionary<string, T>();
-            this.array = new IdArray<T>(9182);
+            this.array = new IdArray<T>(8192);
             this.list = new List<T>();
-            var t = typeof(T);
-            nameMI = t.GetMethod("GetName");
-            idMI = t.GetMethod("GetId");
+        }
+
+        public bool Contains(T obj)
+        {
+            string name = (string)((nameMethodInfo != null) ? nameMethodInfo.Invoke(obj, new object[0]) : null);
+            return Contains(name);
         }
 
         public bool Contains(string name)
@@ -40,11 +56,11 @@ namespace SmartQuant
 
         public void Add(T obj)
         {
-            int id = (int)idMI.Invoke(obj, new object[0]);
+            int id = (int)idMethodInfo.Invoke(obj, new object[0]);
             if (((T)this.array[id]).Equals(default(T)))
             {
                 this.list.Add(obj);
-                string name = (string)((nameMI != null) ? nameMI.Invoke(obj, new object[0]) : null);
+                string name = (string)((nameMethodInfo != null) ? nameMethodInfo.Invoke(obj, new object[0]) : null);
                 if (name != null)
                     this.dictionary[name] = obj;
                 this.array[id] = obj;
@@ -53,11 +69,13 @@ namespace SmartQuant
                 Console.WriteLine("GetByList::Add Object with id = {0} is already in the list", id);
 
         }
-
+        public void Remove(int id)
+        {
+        }
         public void Remove(T obj)
         {
-            string name = (string)((nameMI != null) ? nameMI.Invoke(obj, new object[0]) : null);
-            int id = (int)idMI.Invoke(obj, new object[0]);
+            string name = (string)((nameMethodInfo != null) ? nameMethodInfo.Invoke(obj, new object[0]) : null);
+            int id = (int)idMethodInfo.Invoke(obj, new object[0]);
             this.list.Remove(obj);
             if (name != null)
                 this.dictionary.Remove(name);

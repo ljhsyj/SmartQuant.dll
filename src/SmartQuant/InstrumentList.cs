@@ -4,55 +4,76 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 namespace SmartQuant
 {
     public class InstrumentList : IEnumerable<Instrument>
     {
-        private List<Instrument> instruments = new List<Instrument>();
+        private GetByList<Instrument> instruments = new GetByList<Instrument>();
+
+        public int Count
+        {
+            get
+            {
+                return this.instruments.Count;
+            }
+        }
 
         public Instrument this [string symbol]
         { 
             get
             {
-                throw new NotImplementedException();
+                return this.instruments.GetByName(symbol);
             }
         }
 
         public bool Contains(int id)
         {
-            throw new NotImplementedException();
+            return this.instruments.Contains(id);
         }
 
         public bool Contains(string symbol)
         {
-            throw new NotImplementedException();
-
+            return this.instruments.Contains(symbol);
         }
 
         public bool Contains(Instrument instrument)
         {
-            throw new NotImplementedException();
+            return this.instruments.Contains(instrument);
+        }
 
+        public Instrument Get(string symbol)
+        {
+            return this.instruments.GetByName(symbol);
         }
 
         public Instrument GetById(int id)
         {
-            throw new NotImplementedException();
+            return this.instruments.GetById(id);
         }
 
         public Instrument GetByIndex(int index)
         {
-            throw new NotImplementedException();
+            return this.instruments.GetByIndex(index);
+        }
+
+        public void Add(Instrument instrument)
+        {
+            if (this.instruments.GetById(instrument.Id) != null)
+                this.instruments.Add(instrument);
+            else
+                Console.WriteLine("InstrumentList::Add Instrument {0} with Id = {1} is already in the list", instrument.Symbol, instrument.Id);
         }
 
         public void Remove(Instrument instrument)
         {
+            this.instruments.Remove(instrument);
         }
 
         public void Clear()
         {
-            instruments.Clear();
+            this.instruments.Clear();
         }
 
         public IEnumerator<Instrument> GetEnumerator()
@@ -63,6 +84,11 @@ namespace SmartQuant
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.instruments.GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, this.instruments.Select(i => i.Symbol));
         }
     }
 }

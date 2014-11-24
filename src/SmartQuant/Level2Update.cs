@@ -11,7 +11,7 @@ namespace SmartQuant
 
         internal int InstrumentId { get; set; }
 
-        public Level2[] Entries { get; private set; }
+        public Level2[] Entries { get; internal set; }
 
         public override byte TypeId
         {
@@ -27,6 +27,10 @@ namespace SmartQuant
             ProviderId = providerId;
             InstrumentId = instrumentId;
             Entries = entries;
+        }
+
+        internal Level2Update()
+        {
         }
     }
 }

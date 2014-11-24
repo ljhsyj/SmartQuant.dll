@@ -119,7 +119,7 @@ namespace SmartQuant
             }
             ++EventCount;
 
-            throw new NotImplementedException();
+         //   throw new NotImplementedException();
         }
 
         public void Clear()

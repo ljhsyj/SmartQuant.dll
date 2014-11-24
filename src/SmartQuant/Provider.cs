@@ -79,7 +79,7 @@ namespace SmartQuant
             this.framework = framework;
             Status = ProviderStatus.Disconnected;
         }
-            
+
         public virtual void Connect()
         {
             Status = ProviderStatus.Connecting;
@@ -131,7 +131,16 @@ namespace SmartQuant
 
         protected virtual void OnDisconnected()
         {
-            throw new NotImplementedException();
+            if (this is IDataProvider && this.dataQueue != null)
+            {
+                this.dataQueue.Enqueue(new OnQueueClosed(this.dataQueue));
+                this.dataQueue = null;
+            }
+            if (this is IExecutionProvider && this.executionQueue != null)
+            {
+                this.executionQueue.Enqueue(new OnQueueClosed(this.executionQueue));
+                this.executionQueue = null;  
+            }
         }
 
         public virtual void Send(ExecutionCommand command)
@@ -272,7 +281,7 @@ namespace SmartQuant
                 }
             }
         }
-            
+
         public override string ToString()
         {
             return string.Format("provider id = {0} ({1} {2} {3})", this.Id, this.Name, this.Description, this.Url);

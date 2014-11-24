@@ -10,15 +10,18 @@ namespace SmartQuant
 {
     public class Instrument
     {
+        private Framework framework;
+        internal bool loaded;
+
         [Browsable(false)]
-        public ObjectTable Fields { get; private set; }
+        public ObjectTable Fields { get; internal set; }
 
         [Browsable(false)]
         public Instrument Parent { get; set; }
 
         [Category("Appearance")]
         [Description("Instrument symbol")]
-        public string Symbol { get; private set; }
+        public string Symbol { get; internal set; }
 
         [Category("Appearance")]
         [Description("Unique instrument id in SmartQuant framework")]
@@ -26,7 +29,7 @@ namespace SmartQuant
 
         [Category("Appearance")]
         [Description("Instrument Type (Stock, Futures, Option, Bond, ETF, Index, etc.)")]
-        public InstrumentType Type { get; private set; }
+        public InstrumentType Type { get; internal set; }
 
         [Category("Appearance")]
         [Description("Instrument description")]
@@ -102,7 +105,7 @@ namespace SmartQuant
 
         public IExecutionProvider ExecutionProvider { get; private set; }
 
-        private Instrument()
+        internal Instrument()
         {
             Exchange = "";
             PriceFormat = "F2";
@@ -125,6 +128,13 @@ namespace SmartQuant
             CurrencyId = currencyId;
         }
 
+        internal void Init(Framework framework)
+        {
+            this.framework = framework;
+            foreach (var leg in Legs)
+                leg.Init(this.framework); 
+        }
+
         public override string ToString()
         {
             return string.IsNullOrEmpty(Description) ? Symbol : string.Format("{0}({1})", Symbol, Description);
@@ -137,5 +147,18 @@ namespace SmartQuant
                 instrument.Symbol = symbol;
             return instrument;
         }
+
+        #region Extra Helper Methods
+        internal string GetName()
+        {
+            return Symbol;
+        }
+
+        internal int GetId()
+        {
+            return Id;
+        }
+
+        #endregion
     }
 }

@@ -23,8 +23,8 @@ namespace SmartQuant
         public void Add(ObjectStreamer streamer)
         {     
             streamer.streamerManager = this;
-            streamersByType.Add(streamer.GetType(), streamer);
-            streamersById.Add(streamer.TypeId, streamer);
+            streamersByType[streamer.GetType()] = streamer;
+            streamersById[streamer.TypeId] = streamer;
         }
 
         public void Serialize(BinaryWriter writer, object obj)

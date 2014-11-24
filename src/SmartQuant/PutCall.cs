@@ -3,7 +3,7 @@
 
 namespace SmartQuant
 {
-    public enum PutCall
+    public enum PutCall : byte
     {
         Put,
         Call

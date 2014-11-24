@@ -7,25 +7,30 @@ namespace SmartQuant
 {
     public class ExecutionMessage : DataObject
     {
-        public int Id { get; private set; }
-
-        public Instrument Instrument { get; set; }
+        public int Id { get; internal set; }
 
         public Order Order { get; set; }
 
         public int OrderId { get; set; }
 
+        internal int InstrumentId { get; set; }
+
+        public Instrument Instrument { get; set; }
+
+        internal ObjectTable Fields { get; set; }
+
         public object this [int index]
         { 
             get
             {
-                throw new NotImplementedException();
+                return  Fields != null ? Fields[index] : null;
             }
             set
             {
-                throw new NotImplementedException();
+                if (Fields == null)
+                    Fields = new ObjectTable();
+                Fields[index] = value;
             }
         }
-
     }
 }

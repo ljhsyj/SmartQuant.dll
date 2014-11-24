@@ -30,13 +30,15 @@ namespace SmartQuant
 
         public OrderType OrdType { get; private set; }
 
+        internal TimeInForce TimeInForce { get; set; }
+
         public double Qty { get; private set; }
 
-        public DateTime TransactTime { get; private set; }
+        public DateTime TransactTime { get; internal set; }
 
         public new Order Order { get; private set; }
 
-        public ExecutionCommandType Type { get; private set; }
+        public ExecutionCommandType Type { get; internal set; }
 
         public string Account { get; private set; }
 
@@ -59,8 +61,8 @@ namespace SmartQuant
         public ExecutionCommand(ExecutionCommand command)
             : this()
         {
-            this.Account = command.Account;
-            this.ClientID = command.ClientID;
+            Account = command.Account;
+            ClientID = command.ClientID;
         }
     }
 }

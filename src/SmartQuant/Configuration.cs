@@ -56,15 +56,39 @@ namespace SmartQuant
 
         public void AddDefaultStreamers()
         {
-            string[] types =
+            var types = new string[]
             {
-               "SmartQuant.DataObjectStreamer"
+                "SmartQuant.DataObjectStreamer",
+                "SmartQuant.InstrumentStreamer",
+                "SmartQuant.AltIdStreamer",
+                "SmartQuant.LegStreamer", 
+                "SmartQuant.BidStreamer",
+                "SmartQuant.AskStreamer", 
+                "SmartQuant.QuoteStreamer", 
+                "SmartQuant.TradeStreamer",
+                "SmartQuant.BarStreamer", 
+                "SmartQuant.Level2SnapshotStreamer",
+                "SmartQuant.NewsStreamer",
+                "SmartQuant.FundamentalStreamer",
+                "SmartQuant.DataSeriesStreamer",
+                "SmartQuant.ExecutionCommandStreamer",
+                "SmartQuant.ExecutionReportStreamer",
+                "SmartQuant.PositionStreamer",
+                "SmartQuant.PortfolioStreamer",
+                "SmartQuant.ObjectTableStreamer",
+                "SmartQuant.DoubleStreamer",
+                "SmartQuant.Int16Streamer",
+                "SmartQuant.Int32Streamer",
+                "SmartQuant.Int64Streamer",
+                "SmartQuant.StringStreamer",
+                "SmartQuant.TimeSeriesItemStreamer"
             };
 
-            foreach (string name in types)
+            foreach (var name in types)
             {
                 Type t = Type.GetType(name);
-                this.Streamers.Add(new StreamerPlugin(t.FullName));
+                if (t != null)
+                    Streamers.Add(new StreamerPlugin(t.AssemblyQualifiedName));
             }
         }
 
@@ -80,9 +104,10 @@ namespace SmartQuant
             foreach (var pair in types)
             {
                 Type t = Type.GetType(pair.Key);
-                this.Providers.Add(new ProviderPlugin(t.FullName, pair.Value));
+                if (t != null)
+                    Providers.Add(new ProviderPlugin(t.AssemblyQualifiedName, pair.Value));
             }
-		}
+        }
 
         public static Configuration DefaultConfiguaration()
         {

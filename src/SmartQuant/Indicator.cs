@@ -61,7 +61,7 @@ namespace SmartQuant
         {
             get
             {
-                this.Calculate();
+                Calculate();
                 return base[index];
             }
         }
@@ -70,7 +70,7 @@ namespace SmartQuant
         {
             get
             {
-                this.Calculate();
+                Calculate();
                 return base[index, barData];
             }
         }
@@ -94,25 +94,25 @@ namespace SmartQuant
 
         public override int GetIndex(DateTime datetime, IndexOption option = IndexOption.Null)
         {
-            this.Calculate();
+            Calculate();
             return base.GetIndex(datetime, option);
         }
 
         public override DateTime GetDateTime(int index)
         {
-            this.Calculate();
+            Calculate();
             return base.GetDateTime(index);
         }
 
         public override double GetMin(DateTime dateTime1, DateTime dateTime2)
         {
-            this.Calculate();
+            Calculate();
             return base.GetMin(dateTime1, dateTime2);
         }
 
         public override double GetMax(DateTime dateTime1, DateTime dateTime2)
         {
-            this.Calculate();
+            Calculate();
             return base.GetMax(dateTime1, dateTime2);
         }
 
@@ -125,11 +125,11 @@ namespace SmartQuant
             if (!this.calculate)
                 return;
             this.calculate = false;
-            Indicator indicator = this.input as Indicator;
+            var indicator = this.input as Indicator;
             if (indicator != null)
                 indicator.Calculate();
             for (int i = 0; i < this.input.Count; ++i)
-                this.Calculate(i);
+                Calculate(i);
         }
 
         public virtual void Calculate(int index)

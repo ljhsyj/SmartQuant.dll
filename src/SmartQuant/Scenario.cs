@@ -11,11 +11,29 @@ namespace SmartQuant
         protected Framework framework;
         protected Strategy strategy;
 
-        public Clock Clock { get { return this.framework.Clock; } }
+        public Clock Clock
+        {
+            get
+            { 
+                return this.framework.Clock;
+            }
+        }
 
-        public InstrumentManager InstrumentManager { get { return this.framework.InstrumentManager; } }
+        public InstrumentManager InstrumentManager
+        { 
+            get
+            {
+                return this.framework.InstrumentManager;
+            }
+        }
 
-        public DataManager DataManager { get { return this.framework.DataManager; } }
+        public DataManager DataManager
+        { 
+            get
+            {
+                return this.framework.DataManager;
+            }
+        }
 
         public ProviderManager ProviderManager { get { return this.framework.ProviderManager; } }
 

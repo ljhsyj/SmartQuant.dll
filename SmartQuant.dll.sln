@@ -64,7 +64,7 @@ Global
 		{128F04D0-0DDF-4F06-9272-9C9E0C33AAEE} = {06EE67C6-B437-4F90-BE5E-8A4757AA26D4}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = src\SmartQuant\SmartQuant.csproj
+		StartupItem = Tests\BollingerBands\BollingerBands.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None

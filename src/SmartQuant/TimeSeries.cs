@@ -130,7 +130,7 @@ namespace SmartQuant
         }
 
         public TimeSeries()
-            : this(null)
+            : this((string)null)
         {
         }
 

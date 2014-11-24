@@ -6,7 +6,7 @@
     <ProjectGuid>{4A09B376-7AFA-40CE-AFBD-448984BC4514}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>SmartQuant</RootNamespace>
-    <AssemblyName>SmartQuant.dll</AssemblyName>
+    <AssemblyName>SmartQuant</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,6 +32,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Data" />
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="Mono.Posix" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -443,6 +446,15 @@
     <Compile Include="DataSeries.Internal.cs" />
     <Compile Include="MemorySeries.cs" />
     <Compile Include="DataKey.cs" />
+    <Compile Include="Indicators\BBL.cs" />
+    <Compile Include="Indicators\SMD.cs" />
+    <Compile Include="Indicators\SMV.cs" />
+    <Compile Include="Indicators\BBU.cs" />
+    <Compile Include="DataObjectStreamer.cs" />
+    <Compile Include="InstrumentStreamer.cs" />
+    <Compile Include="Level2UpdateStreamer.cs" />
+    <Compile Include="ObjectTableStreamer.cs" />
+    <Compile Include="ExecutionCommandStreamer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

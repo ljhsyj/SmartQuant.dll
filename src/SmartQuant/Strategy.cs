@@ -168,52 +168,56 @@ namespace SmartQuant
         public Strategy(Framework framework, string name)
         {
             this.framework = framework;
-            this.Name = name;
-            this.Enabled = true;
-            this.Strategies = new LinkedList<Strategy>();
+            Name = name;
+            Enabled = true;
+            Strategies = new LinkedList<Strategy>();
+            Instruments = new InstrumentList();
         }
 
         public void AddReminder(DateTime dateTime, object data = null)
         {
-            this.framework.Clock.AddReminder((dt, obj) =>
-                {
-                    this.OnReminder(dt, obj);
-                }, dateTime, data);
+            this.framework.Clock.AddReminder((dt, obj) => OnReminder(dt, obj), dateTime, data);
         }
 
         public void AddExchangeReminder(DateTime dateTime, object data = null)
         {
-            this.framework.ExchangeClock.AddReminder((dt, obj) =>
-                {
-                    this.OnExchangeReminder(dt, obj);
-                }, dateTime, data);
+            this.framework.ExchangeClock.AddReminder((dt, obj) => OnExchangeReminder(dt, obj), dateTime, data);
         }
 
         public void AddInstruments(string[] symbols)
         {
             foreach (string symbol in symbols)
-                this.AddInstrument(this.framework.InstrumentManager.Get(symbol));
+                AddInstrument(this.framework.InstrumentManager.Get(symbol));
         }
 
         public void AddInstruments(InstrumentList instruments)
         {
             foreach (Instrument instrument in instruments)
-                this.AddInstrument(instrument);
+                AddInstrument(instrument);
         }
 
         public void AddInstrument(string symbol)
         {      
-            this.AddInstrument(this.framework.InstrumentManager.Get(symbol));
+            AddInstrument(this.framework.InstrumentManager.Get(symbol));
         }
 
         public void AddInstrument(int id)
         {
-            this.AddInstrument(this.framework.InstrumentManager.GetById(id));
+            AddInstrument(this.framework.InstrumentManager.GetById(id));
         }
 
         public virtual void AddInstrument(Instrument instrument)
         {
-            throw new NotImplementedException();
+            if (Instruments.Contains(instrument))
+                Console.WriteLine("Strategy::AddInstrument {0} is already added", instrument);
+            else
+            {
+                Instruments.Add(instrument);
+                Portfolio.Add(instrument);
+                if (Status == StrategyStatus.Running)
+                    ;
+                    //  this.method_1(instrument);
+            }  
         }
 
         public virtual void RemoveInstrument(Instrument instrument)
@@ -518,6 +522,38 @@ namespace SmartQuant
 
         public void Replace(Order order, double price)
         {
+        }
+
+        public Order BuyOrder(Instrument instrument, double qty, string text = "")
+        {
+            return null;
+//            Order order = new Order(this.method_3(instrument), this.portfolio_0, instrument, OrderType.Market, OrderSide.Buy, qty, 0.0, 0.0, TimeInForce.Day, (byte) 0, "");
+//            order.strategyId = (int) this.byte_0;
+//            order.string_1 = text;
+//            this.framework.orderManager_0.Register(order);
+//            return order;
+        }
+
+        public Order SellOrder(Instrument instrument, double qty, string text = "")
+        {
+            return null;
+//            Order order = new Order(this.method_3(instrument), this.portfolio_0, instrument, OrderType.Market, OrderSide.Sell, qty, 0.0, 0.0, TimeInForce.Day, (byte) 0, "");
+//            order.strategyId = (int) this.byte_0;
+//            order.string_1 = text;
+//            this.framework.orderManager_0.Register(order);
+//            return order;
+        }
+
+        public Order BuyLimitOrder(Instrument instrument, double qty, double price, string text = "")
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public Order SellLimitOrder(Instrument instrument, double qty, double price, string text = "")
+        {
+            throw new NotImplementedException();
+
         }
 
         public string GetStatusAsString()
