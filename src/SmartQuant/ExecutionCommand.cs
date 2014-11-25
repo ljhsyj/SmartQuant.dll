@@ -18,21 +18,21 @@ namespace SmartQuant
 
         public IExecutionProvider Provider { get; private set; }
 
-        public string OCA { get; private set; }
+        public string OCA { get; internal set; }
 
-        public string Text { get; private set; }
+        public string Text { get; internal set; }
 
-        public double StopPx { get; private set; }
+        public double StopPx { get; internal set; }
 
-        public double Price { get; private set; }
+        public double Price { get; internal set; }
 
-        public OrderSide Side { get; private set; }
+        public OrderSide Side { get; internal set; }
 
-        public OrderType OrdType { get; private set; }
+        public OrderType OrdType { get; internal set; }
 
         internal TimeInForce TimeInForce { get; set; }
 
-        public double Qty { get; private set; }
+        public double Qty { get; internal set; }
 
         public DateTime TransactTime { get; internal set; }
 
@@ -40,9 +40,13 @@ namespace SmartQuant
 
         public ExecutionCommandType Type { get; internal set; }
 
-        public string Account { get; private set; }
+        public string Account { get; internal set; }
 
-        public string ClientID { get; private set; }
+        public string ClientID { get; internal set; }
+
+        internal short ProviderId { get; set; }
+
+        internal short PortfolioId { get; set; }
 
         public ExecutionCommand()
         {

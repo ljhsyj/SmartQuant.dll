@@ -12,6 +12,8 @@ namespace SmartQuant
         private Framework framework;
         private Account account;
 
+        internal short Id { get; set; }
+
         public string Name { get; private set; }
 
         public Pricer Pricer { get; set; }

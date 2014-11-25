@@ -91,7 +91,7 @@ namespace SmartQuant
 
         public void Dump()
         {
-            Console.WriteLine("Instrument manager contains {0} intruments:",Instruments.Count );
+            Console.WriteLine("Instrument manager contains {0} intruments:", Instruments.Count);
             foreach (var instrument in Instruments)
                 Console.WriteLine(instrument);
         }

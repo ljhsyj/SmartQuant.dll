@@ -101,7 +101,7 @@ namespace SmartQuant
             if (version >= 2)
             {
                 writer.Write(instrument.CCY1);
-                writer.Write(instrument.CCY1);
+                writer.Write(instrument.CCY2);
             }
         }
     }

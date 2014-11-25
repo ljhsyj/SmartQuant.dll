@@ -173,6 +173,7 @@ namespace BollingerBands
 
         public override void Run()
         {
+            framework.InstrumentManager.Dump();
             Instrument instrument1 = InstrumentManager.Instruments["AAPL"];
             Instrument instrument2 = InstrumentManager.Instruments["MSFT"];
 

@@ -35,8 +35,6 @@ namespace SmartQuant
                 return this.obj;
             if (this.contentLength == -1)
                 return null;
-             Console.WriteLine(TypeId);
-             this.dataFile.streamerManager.Dump();
             this.obj = this.dataFile.streamerManager.streamersById[TypeId].Read(new BinaryReader(new MemoryStream(GetUncompressedBytes(true))));
             if (TypeId == ObjectType.DataSeries)
                 ((DataSeries)this.obj).InitDataKeys(this.dataFile, this);

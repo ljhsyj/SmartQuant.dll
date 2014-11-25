@@ -17,7 +17,7 @@ namespace SmartQuant
         public override object Read(BinaryReader reader)
         {
             var version = reader.ReadByte();
-            return  new DataObject(new DateTime(reader.ReadInt64()));
+            return new DataObject(new DateTime(reader.ReadInt64()));
         }
 
         public override void Write(BinaryWriter writer, object obj)

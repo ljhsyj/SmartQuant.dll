@@ -455,6 +455,7 @@
     <Compile Include="Level2UpdateStreamer.cs" />
     <Compile Include="ObjectTableStreamer.cs" />
     <Compile Include="ExecutionCommandStreamer.cs" />
+    <Compile Include="ExecutionReportStreamer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

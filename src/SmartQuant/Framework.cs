@@ -74,6 +74,8 @@ namespace SmartQuant
 
         public SubscriptionManager SubscriptionManager { get; private set; }
 
+        public EventLoggerManager EventLoggerManager { get; private set; }
+
         public static Framework Current
         {
             get
@@ -147,14 +149,16 @@ namespace SmartQuant
 
             // StreamerManager should be created early.
             StreamerManager = new StreamerManager();
+            LoadStreamerPlugins();
             InstrumentServer = createServers ? (!Configuration.IsInstrumentFileLocal ? new FileInstrumentServer(this, "instruments.quant", Configuration.InstrumentFileHost) : new FileInstrumentServer(this, Configuration.InstrumentFileName, null)) : instrumentServer;
             InstrumentManager = new InstrumentManager(this, InstrumentServer);
             InstrumentManager.Load();
             DataServer = createServers ? (!Configuration.IsDataFileLocal ? new FileDataServer(this, "data.quant", Configuration.DataFileHost) : new FileDataServer(this, Configuration.DataFileName, null)) : dataServer;
             DataManager = new DataManager(this, DataServer);
-            LoadStreamerPlugins();
             ProviderManager = new ProviderManager(this);
             LoadProviderPlugins();
+            EventLoggerManager = new EventLoggerManager();
+            SubscriptionManager = new SubscriptionManager(this);
             OrderManager = new OrderManager(this, null);
             PortfolioManager = new PortfolioManager(this);
             StatisticsManager = new StatisticsManager(this);
@@ -162,7 +166,6 @@ namespace SmartQuant
             GroupManager = new GroupManager(this);
             CurrencyConverter = new CurrencyConverter(this);
             DataFileManager = new DataFileManager(Installation.DataDir.FullName);
-            SubscriptionManager = new SubscriptionManager(this);
             framework = framework ?? this;
         }
 

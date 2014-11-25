@@ -23,7 +23,13 @@ namespace SmartQuant
         private Framework framework;
 
         [Category("Information")]
-        public byte Id { get { return id; } }
+        public byte Id
+        { 
+            get
+            {
+                return id;
+            }
+        }
 
         [Category("Information")]
         public string Name { get { return name; } }
