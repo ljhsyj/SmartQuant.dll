@@ -29,5 +29,18 @@ namespace SmartQuant
             foreach (var p in properties)
                 SetValue(p.Name, p.Value);
         }
+
+        internal List<XmlProviderProperty> ToXmlProviderProperties()
+        {
+            var list = new List<XmlProviderProperty>();
+            foreach (var p in properties)
+            {
+                XmlProviderProperty xml;
+                xml.Name = p.Key;
+                xml.Value = p.Value;
+                list.Add(xml);
+            }
+            return list;
+        }
     }
 }

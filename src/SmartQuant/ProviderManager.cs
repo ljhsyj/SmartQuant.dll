@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SmartQuant
 {
@@ -22,31 +23,31 @@ namespace SmartQuant
         public ProviderManager(Framework framework, IDataSimulator dataSimulator = null, IExecutionSimulator executionSimulator = null)
         {
             this.framework = framework;
-            this.Providers = new ProviderList();
-            this.DataSimulator = dataSimulator != null ? dataSimulator : new DataSimulator(framework);
-            this.AddProvider(this.DataSimulator);
-            this.ExecutionSimulator = executionSimulator != null ? executionSimulator : new ExecutionSimulator(framework);
-            this.AddProvider(this.ExecutionSimulator);
+            Providers = new ProviderList();
+            DataSimulator = dataSimulator != null ? dataSimulator : new DataSimulator(framework);
+            AddProvider(DataSimulator);
+            ExecutionSimulator = executionSimulator != null ? executionSimulator : new ExecutionSimulator(framework);
+            AddProvider(ExecutionSimulator);
         }
 
         public void SetDataSimulator(string name)
         {
-            this.DataSimulator = this.GetProvider(name) as IDataSimulator;
+            DataSimulator = GetProvider(name) as IDataSimulator;
         }
 
         public void SetExecutionSimulator(string name)
         {
-            this.ExecutionSimulator = this.GetProvider(name) as IExecutionSimulator;
+            ExecutionSimulator = GetProvider(name) as IExecutionSimulator;
         }
 
         public void SetDataSimulator(int id)
         {
-            this.DataSimulator = this.GetProvider(id) as IDataSimulator;
+            DataSimulator = GetProvider(id) as IDataSimulator;
         }
 
         public void SetExecutionSimulator(int id)
         {
-            this.ExecutionSimulator = this.GetProvider(id) as IExecutionSimulator;
+            ExecutionSimulator = GetProvider(id) as IExecutionSimulator;
         }
 
         public void LoadSettings(IProvider provider)
@@ -55,7 +56,7 @@ namespace SmartQuant
             if (!File.Exists(path))
                 return;
 
-            using (FileStream fs = new FileStream(path, FileMode.Open))
+            using (var fs = new FileStream(path, FileMode.Open))
             {
                 var settings = (XmlProviderManagerSettings)new XmlSerializer(typeof(XmlProviderManagerSettings)).Deserialize(fs);
                 foreach (var p in settings.Providers)
@@ -71,33 +72,18 @@ namespace SmartQuant
 
         public void SaveSettings(IProvider provider)
         {
-//            var path = this.framework.Configuration.ProviderManagerFileName;
-//            if (!File.Exists(path))
-//                return;
-//
-//            var props = ((Provider)provider).GetProperties();
-//            XmlProvider xp = new XmlProvider();
-//            xp.ProviderId = provider.Id;
-//            xp.InstanceId = new Random().Next();
-//            xp.Properties = (List<XmlProviderProperty>)props;
-//            XmlProviderManagerSettings settings;
-//            using (FileStream fs = new FileStream(path, FileMode.Open))
-//            {
-//                settings = (XmlProviderManagerSettings)new XmlSerializer(typeof(XmlProviderManagerSettings)).Deserialize(fs);
-//                foreach (var p in settings.Providers)
-//                {
-//                    if (p.ProviderId == provider.Id)
-//                        p = xp;
-////                    {
-////                        ((Provider)provider).SetProperties(new ProviderPropertyList(p.Properties));
-////                        break;
-////                    }
-//                }
-//            }
-//
-//
-//            using (FileStream fs = new FileStream(path, FileMode.Create))
-//                new XmlSerializer(typeof(XmlProviderManagerSettings)).Serialize(fs, settings);
+            var pSettings = new List<XmlProvider>();
+            foreach (var p in Providers)
+            {
+                XmlProvider xml;
+                xml.ProviderId = p.Id;
+                xml.InstanceId = p.Id;
+                xml.Properties = ((Provider)p).GetProperties().ToXmlProviderProperties();
+                pSettings.Add(xml);
+            }
+            var settings = new XmlProviderManagerSettings { Providers = pSettings };
+            using (FileStream fs = new FileStream(this.framework.Configuration.ProviderManagerFileName, FileMode.Create))
+                new XmlSerializer(typeof(XmlProviderManagerSettings)).Serialize(fs, settings);
 
         }
 
@@ -109,18 +95,24 @@ namespace SmartQuant
                 return;
             }
             Providers.Add(provider);
-            this.LoadSettings(provider);
+            LoadSettings(provider);
             this.framework.EventServer.OnProviderAdded(provider);
+        }
+
+        public void RemoveProvider(Provider provider)
+        {
+            Providers.Remove(provider);
+            this.framework.EventServer.OnProviderRemoved(provider);
         }
 
         public IProvider GetProvider(string name)
         {
-            return this.Providers.GetByName(name);
+            return Providers.GetByName(name);
         }
 
         public IProvider GetProvider(int id)
         {
-            return this.Providers.GetById(id);
+            return Providers.GetById(id);
         }
 
         public IDataProvider GetDataProvider(string name)
@@ -175,13 +167,16 @@ namespace SmartQuant
 
         public void DisconnectAll()
         {
-            foreach (Provider provider in this.Providers)
+            foreach (var provider in Providers)
                 provider.Disconnect();
         }
 
         public void Clear()
         {
-            Providers.Clear();
+            if (DataSimulator != null)
+                DataSimulator.Clear();
+            if (ExecutionSimulator != null)
+                ExecutionSimulator.Clear();
         }
 
         public void Dispose()
@@ -192,12 +187,11 @@ namespace SmartQuant
 
         private void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                DisconnectAll();
-                foreach (Provider provider in this.Providers)
-                    provider.Dispose();
-            }
+            if (!disposing)
+                return;
+            DisconnectAll();
+            foreach (Provider provider in Providers)
+                provider.Dispose();
         }
     }
 }

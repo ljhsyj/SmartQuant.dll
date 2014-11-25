@@ -8,7 +8,8 @@ namespace SmartQuant
     public class EventServer
     {
         private Framework framework;
-        private EventBus bus;  // Not yet used
+        private EventBus bus;
+        // Not yet used
 
         public EventServer(Framework framework, EventBus bus)
         {
@@ -68,7 +69,7 @@ namespace SmartQuant
 
         public void OnProviderAdded(IProvider provider)
         {
-            OnEvent( new OnProviderAdded(provider));
+            OnEvent(new OnProviderAdded(provider));
         }
 
         public void OnProviderRemoved(Provider provider)
@@ -108,6 +109,12 @@ namespace SmartQuant
         public void OnPortfolioDeleted(Portfolio portfolio)
         {
             throw new NotImplementedException();
+        }
+
+        internal void OnPortfolioParentChanged(Portfolio portfolio, bool queued = true)
+        {
+            if (queued)
+                OnEvent(new OnPortfolioParentChanged(portfolio));
         }
 
         public void OnPositionOpened(Portfolio portfolio, Position position, bool queued = true)

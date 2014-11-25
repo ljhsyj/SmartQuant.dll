@@ -49,6 +49,16 @@ namespace SmartQuant
             }
             return this.instruments;
         }
+
+        public override void Save(Instrument instrument)
+        {
+            this.dataFile.Write(instrument.Symbol, instrument);
+        }
+
+        public override void Delete(Instrument instrument)
+        {
+            this.dataFile.Delete(instrument.Symbol);
+        }
     }
 }
 

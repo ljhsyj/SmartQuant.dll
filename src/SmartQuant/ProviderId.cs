@@ -53,7 +53,7 @@ namespace SmartQuant
         {
             mapping = new Dictionary<string, byte>();
 
-            foreach (FieldInfo info in typeof(ProviderId).GetFields(BindingFlags.Static | BindingFlags.Public))
+            foreach (var info in typeof(ProviderId).GetFields(BindingFlags.Static | BindingFlags.Public))
             {
                 if (info.FieldType == typeof(byte))
                 {

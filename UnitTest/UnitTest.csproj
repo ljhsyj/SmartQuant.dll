@@ -67,7 +67,6 @@
     <Compile Include="EventServerTest.cs" />
     <Compile Include="ExecutionSimulatorTest.cs" />
     <Compile Include="FileDataServerTest.cs" />
-    <Compile Include="FileInstrumentServerTest.cs" />
     <Compile Include="FileManagerTest.cs" />
     <Compile Include="FillSeriesTest.cs" />
     <Compile Include="FrameworkTest.cs" />

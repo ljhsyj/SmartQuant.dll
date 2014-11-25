@@ -10,22 +10,56 @@ namespace SmartQuant
 	public class Portfolio
 	{
         private Framework framework;
-        private Account account;
+
+        private Portfolio parent;
 
         internal short Id { get; set; }
 
         public string Name { get; private set; }
 
-        public Pricer Pricer { get; set; }
-
         [Browsable(false)]
         public Account Account { get; private set; }
+
+        public List<Portfolio> Children { get; private set; }
+
+        [Browsable(false)]
+        public Portfolio Parent
+        {
+            get
+            {
+                return this.parent;
+            }
+            set
+            {
+                if (this.parent == value)
+                    return;
+                if (this.parent != null)
+                    this.parent.Children.Remove(this);
+                this.parent = value;
+                if (this.parent != null)
+                {
+                    Account.Parent = this.parent.Account;
+                    this.parent.Children.Add(this);
+                }
+                else
+                    Account.Parent = null;
+                this.framework.EventServer.OnPortfolioParentChanged(this, true);
+            }
+        }
+
+        public Pricer Pricer { get; set; }
 
         [Browsable(false)]
         public List<Transaction> Transactions { get; private set; }
 
         [Browsable(false)]
         public PortfolioPerformance Performance { get; private set; }
+
+        [Browsable(false)]
+        internal IdArray<Position> PositionArray { get; private set; }
+
+        [Browsable(false)]
+        public List<Position> Positions { get; private set; }
 
         public double Value 
         {
@@ -39,7 +73,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.account.Value;
+                return Account.Value;
             }
         }
 
@@ -58,6 +92,9 @@ namespace SmartQuant
         {
             this.framework = framework;
             this.Name = name;
+            Children = new List<Portfolio>();
+            PositionArray = new IdArray<Position>(8192);
+            Positions = new List<Position>();
         }
 
         public void Add(Fill fill)
@@ -65,17 +102,16 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
           
-        public void Add(Instrument instrument)
+        internal Position Add(Instrument instrument)
         {
-//            Position position = this.idArray_1[instrument_0.int_0];
-//            if (position == null)
-//            {
-//                position = new Position(this, instrument_0);
-//                this.idArray_1[instrument_0.Id] = position;
-//                this.list_1.Add(position);
-//            }
-//            return position;
-            throw new NotImplementedException();
+            var position =  PositionArray[instrument.Id];
+            if (position == null)
+            {
+                position = new Position(this, instrument);
+                PositionArray[instrument.Id] = position;
+                Positions.Add(position);
+            }
+           return position;
         }
 
         public bool HasPosition(Instrument instrument)

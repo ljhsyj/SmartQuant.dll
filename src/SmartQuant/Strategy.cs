@@ -170,6 +170,7 @@ namespace SmartQuant
             this.framework = framework;
             Name = name;
             Enabled = true;
+            Portfolio = new Portfolio(this.framework, name);
             Strategies = new LinkedList<Strategy>();
             Instruments = new InstrumentList();
         }
@@ -227,32 +228,32 @@ namespace SmartQuant
 
         public bool HasPosition(Instrument instrument)
         {
-            return this.Portfolio.HasPosition(instrument);
+            return Portfolio.HasPosition(instrument);
         }
 
         public bool HasPosition(Instrument instrument, PositionSide side, double qty)
         {
-            return this.Portfolio.HasPosition(instrument, side, qty);
+            return Portfolio.HasPosition(instrument, side, qty);
         }
 
         public bool HasLongPosition(Instrument instrument)
         {
-            return this.Portfolio.HasLongPosition(instrument);
+            return Portfolio.HasLongPosition(instrument);
         }
 
         public bool HasLongPosition(Instrument instrument, double qty)
         {
-            return this.Portfolio.HasLongPosition(instrument, qty);
+            return Portfolio.HasLongPosition(instrument, qty);
         }
 
         public bool HasShortPosition(Instrument instrument)
         {
-            return this.Portfolio.HasShortPosition(instrument);
+            return Portfolio.HasShortPosition(instrument);
         }
 
         public bool HasShortPosition(Instrument instrument, double qty)
         {
-            return this.Portfolio.HasShortPosition(instrument, qty);
+            return Portfolio.HasShortPosition(instrument, qty);
         }
 
         public void AddStrategy(Strategy strategy)

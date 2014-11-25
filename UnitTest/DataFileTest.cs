@@ -10,7 +10,25 @@ namespace UnitTest
     public class DataFileTest
     {
         [Test]
-        public void TestCreation()
+        public void TestInstrumentFile()
+        {
+            var file = Configuration.DefaultConfiguaration().InstrumentFileName;
+            var sm = new StreamerManager();
+            sm.Add(new InstrumentStreamer());
+            var df = new DataFile(file, sm);
+            df.Open();
+            foreach (var key in df.Keys.Values)
+            { 
+                if (key.TypeId == ObjectType.Instrument)
+                {
+                    var instrument = key.GetObject() as Instrument;
+                    Console.WriteLine(instrument);
+                }
+            }
+        }
+
+        [Test]
+        public void TestDataFile()
         {
             var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SmartQuant Ltd", "OpenQuant 2014", "data", "data.quant");
             var sm = new StreamerManager();
@@ -19,7 +37,6 @@ namespace UnitTest
             var df = new DataFile(file, sm);
             df.Open();
 //            df.DumpHeader();
-
 //            foreach (var key in df.Keys.Values)
 //                key.DumpDetail();
             DataSeries ds = null;

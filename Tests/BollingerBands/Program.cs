@@ -2,6 +2,7 @@
 using SmartQuant;
 using SmartQuant.Indicators;
 using System.Drawing;
+using SmartQuant.TT;
 
 namespace BollingerBands
 {
@@ -173,7 +174,6 @@ namespace BollingerBands
 
         public override void Run()
         {
-            framework.InstrumentManager.Dump();
             Instrument instrument1 = InstrumentManager.Instruments["AAPL"];
             Instrument instrument2 = InstrumentManager.Instruments["MSFT"];
 
@@ -196,7 +196,10 @@ namespace BollingerBands
     {
         public static void Main(string[] args)
         {
-            Scenario scenario = new Backtest(Framework.Current);
+            var f = Framework.Current;
+            Scenario scenario = new Backtest(f);
+            var pm = f.ProviderManager;
+            pm.SaveSettings(null);
             scenario.Run(); 
         }
     }

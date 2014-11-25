@@ -150,10 +150,10 @@ namespace SmartQuant
             // StreamerManager should be created early.
             StreamerManager = new StreamerManager();
             LoadStreamerPlugins();
-            InstrumentServer = createServers ? (!Configuration.IsInstrumentFileLocal ? new FileInstrumentServer(this, "instruments.quant", Configuration.InstrumentFileHost) : new FileInstrumentServer(this, Configuration.InstrumentFileName, null)) : instrumentServer;
+            InstrumentServer = createServers ? (Configuration.IsInstrumentFileLocal ? new FileInstrumentServer(this, Configuration.InstrumentFileName) : new FileInstrumentServer(this, "instruments.quant", Configuration.InstrumentFileHost)) : instrumentServer;
             InstrumentManager = new InstrumentManager(this, InstrumentServer);
             InstrumentManager.Load();
-            DataServer = createServers ? (!Configuration.IsDataFileLocal ? new FileDataServer(this, "data.quant", Configuration.DataFileHost) : new FileDataServer(this, Configuration.DataFileName, null)) : dataServer;
+            DataServer = createServers ? (Configuration.IsDataFileLocal ? new FileDataServer(this, Configuration.DataFileName) : new FileDataServer(this, "data.quant", Configuration.DataFileHost)) : dataServer;
             DataManager = new DataManager(this, DataServer);
             ProviderManager = new ProviderManager(this);
             LoadProviderPlugins();

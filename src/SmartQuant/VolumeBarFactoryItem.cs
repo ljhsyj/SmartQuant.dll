@@ -14,7 +14,9 @@ namespace SmartQuant
 
         protected internal override void OnData(DataObject obj)
         {
+            base.OnData(obj);
+            if (this.bar.Volume >= this.barSize)
+                EmitBar();
         }
     }
 }
-

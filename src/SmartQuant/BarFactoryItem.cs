@@ -5,8 +5,8 @@ using System;
 
 namespace SmartQuant
 {
-	public class BarFactoryItem
-	{
+    public class BarFactoryItem
+    {
         protected internal BarFactory factory;
         protected internal Instrument instrument;
         protected internal BarType barType;
@@ -16,6 +16,10 @@ namespace SmartQuant
 
         protected BarFactoryItem(Instrument instrument, BarType barType, long barSize, BarInput barInput = BarInput.Trade)
         {
+            this.instrument = instrument;
+            this.barType = barType;
+            this.barSize = barSize;
+            this.barInput = barInput;
         }
 
         protected internal virtual void OnData(DataObject obj)
@@ -54,7 +58,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2} {3}", this.instrument.Symbol, this.barType,  this.barSize, this.barInput);
+            return string.Format("{0} {1} {2} {3}", this.instrument.Symbol, this.barType, this.barSize, this.barInput);
         }
-	}
+    }
 }

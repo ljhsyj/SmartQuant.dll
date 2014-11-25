@@ -30,6 +30,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="SmartQuant.TT">
+      <HintPath>..\..\..\..\Downloads\sqruntime_x64\SmartQuant.TT.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

@@ -15,15 +15,13 @@ namespace SmartQuant
         public override object Read(BinaryReader reader)
         {
             var version = reader.ReadByte();
-            var instrument = new Instrument
-            { 
-                Id = reader.ReadInt32(),
-                Type = (InstrumentType)reader.ReadByte(), 
-                Symbol = reader.ReadString(), 
-                Description = reader.ReadString(),
-                CurrencyId = reader.ReadByte(),
-                Exchange = reader.ReadString()
-            };
+            var id = reader.ReadInt32();
+            var type = (InstrumentType)reader.ReadByte();
+            var symbol = reader.ReadString();
+            var description = reader.ReadString();
+            var currencyId = reader.ReadByte();
+            var exchange = reader.ReadString();
+            var instrument = new Instrument(type, symbol, description, currencyId) { Id = id, Exchange = exchange };
             instrument.TickSize = reader.ReadDouble();
             instrument.Maturity = new DateTime(reader.ReadInt64());
             instrument.Factor = reader.ReadDouble();
@@ -38,11 +36,11 @@ namespace SmartQuant
                 instrument.Legs.Add((Leg)this.streamerManager.Deserialize(reader));
             if (version == 0)
             {
-                int num4 = reader.ReadInt32();
-                for (int index = 0; index < num4; ++index)
-                    instrument.Fields[index] = (object)reader.ReadDouble();
+                int fieldCount = reader.ReadInt32();
+                for (int i = 0; i < fieldCount; ++i)
+                    instrument.Fields[i] = (object)reader.ReadDouble();
             }
-            if ((int)version >= 1)
+            if (version >= 1)
             {
                 instrument.PriceFormat = reader.ReadString();
                 if (reader.ReadInt32() != -1)
@@ -89,9 +87,7 @@ namespace SmartQuant
             {
                 writer.Write(instrument.PriceFormat);
                 if (instrument.Fields == null)
-                {
                     writer.Write(-1);
-                }
                 else
                 {
                     writer.Write(instrument.Fields.Size);

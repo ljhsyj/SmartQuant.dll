@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System;
+using System.Linq;
 
 namespace SmartQuant
 {
@@ -32,18 +33,12 @@ namespace SmartQuant
 
         public IProvider GetById(int id)
         {
-            foreach (var p in providers)
-                if (p.Id == id)
-                    return p;
-            return null;
+            return providers.FirstOrDefault(p => p.Id == id);
         }
 
         public IProvider GetByName(string name)
         {
-            foreach (var p in providers)
-                if (p.Name == name)
-                    return p;
-            return null;
+            return providers.FirstOrDefault(p => p.Name == name);
         }
 
         public IProvider GetByIndex(int index)

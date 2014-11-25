@@ -456,6 +456,7 @@
     <Compile Include="ObjectTableStreamer.cs" />
     <Compile Include="ExecutionCommandStreamer.cs" />
     <Compile Include="ExecutionReportStreamer.cs" />
+    <Compile Include="TickBarFactoryItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

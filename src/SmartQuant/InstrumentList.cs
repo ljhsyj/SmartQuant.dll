@@ -60,7 +60,7 @@ namespace SmartQuant
 
         public void Add(Instrument instrument)
         {
-            if (this.instruments.GetById(instrument.Id) != null)
+            if (this.instruments.GetById(instrument.Id) == null)
                 this.instruments.Add(instrument);
             else
                 Console.WriteLine("InstrumentList::Add Instrument {0} with Id = {1} is already in the list", instrument.Symbol, instrument.Id);

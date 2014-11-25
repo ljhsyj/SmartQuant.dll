@@ -8,7 +8,6 @@ namespace SmartQuant
 {
     public class Account
     {
-        FreeKeyList list;
         private Framework framework;
 
         public byte CurrencyId { get; set; }
@@ -16,6 +15,8 @@ namespace SmartQuant
         public List<AccountPosition> Positions { get; private set; }
 
         public List<AccountTransaction> Transactions { get; private set; }
+
+        internal Account Parent { get; set; }
 
         public double Value
         {

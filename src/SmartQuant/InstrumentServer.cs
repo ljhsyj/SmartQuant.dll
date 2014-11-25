@@ -42,7 +42,7 @@ namespace SmartQuant
 
         public void Dispose()
         {
-            this.Close();
+            Close();
         }
     }
 }

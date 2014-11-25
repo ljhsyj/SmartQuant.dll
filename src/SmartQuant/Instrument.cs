@@ -25,7 +25,7 @@ namespace SmartQuant
 
         [Category("Appearance")]
         [Description("Unique instrument id in SmartQuant framework")]
-        public int Id { get; set; }
+        public int Id { get; internal set; }
 
         [Category("Appearance")]
         [Description("Instrument Type (Stock, Futures, Option, Bond, ETF, Index, etc.)")]
@@ -105,9 +105,9 @@ namespace SmartQuant
 
         public IExecutionProvider ExecutionProvider { get; private set; }
 
-        internal Instrument()
+        private Instrument()
         {
-            Exchange = "";
+            Exchange = string.Empty;
             PriceFormat = "F2";
             AltId = new AltIdList();
             Legs = new List<Leg>();

@@ -116,6 +116,7 @@ namespace SmartQuant
 
         internal void WriteHeader()
         {
+
             using (var mstream = new MemoryStream())
             {
                 using (var writer = new BinaryWriter(mstream))
@@ -132,8 +133,8 @@ namespace SmartQuant
                     writer.Write(this.fKeysCount);
                     writer.Write(CompressionMethod);
                     writer.Write(CompressionLevel);
+                    WriteBuffer(mstream.GetBuffer(), 0, (int)mstream.Length);
                 }
-                WriteBuffer(mstream.GetBuffer(), 0, (int)mstream.Length);
             }
         }
 

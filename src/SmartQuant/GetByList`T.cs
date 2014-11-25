@@ -57,7 +57,7 @@ namespace SmartQuant
         public void Add(T obj)
         {
             int id = (int)idMethodInfo.Invoke(obj, new object[0]);
-            if (((T)this.array[id]).Equals(default(T)))
+            if (((T)this.array[id])==null)
             {
                 this.list.Add(obj);
                 string name = (string)((nameMethodInfo != null) ? nameMethodInfo.Invoke(obj, new object[0]) : null);
