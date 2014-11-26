@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public HistoricalDataEndEventArgs(HistoricalDataEnd end)
         {
-            this.End = end;
+            End = end;
         }
     }
 }

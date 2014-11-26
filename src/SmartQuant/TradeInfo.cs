@@ -33,7 +33,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.PnL > 0.0;
+                return PnL > 0.0;
             }
         }
 
@@ -49,7 +49,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.Qty * (this.ExitPrice - this.EntryPrice) * (this.IsLong ? 1 : -1);
+                return Qty * (ExitPrice - EntryPrice) * (IsLong ? 1 : -1);
             }
         }
 
@@ -57,7 +57,7 @@ namespace SmartQuant
         {
             get
             {
-                return (this.ExitDate - this.EntryDate).Ticks;
+                return (ExitDate - EntryDate).Ticks;
             }
         }
     }

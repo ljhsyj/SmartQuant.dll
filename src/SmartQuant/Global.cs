@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SmartQuant
 {
-    public class Global : IEnumerable<object>, IEnumerable
+    public class Global : IEnumerable<object>
     {
         private Dictionary<string, object> data = new Dictionary<string, object>();
 

@@ -113,7 +113,7 @@ namespace SmartQuant
 
         public void AddReminder(DateTime dateTime, object data = null)
         {
-            this.Clock.AddReminder(new ReminderCallback(this.OnReminder), dateTime, data);
+            Clock.AddReminder(new ReminderCallback(this.OnReminder), dateTime, data);
         }
 
         public virtual void OnReminder(DateTime dateTime, object data)

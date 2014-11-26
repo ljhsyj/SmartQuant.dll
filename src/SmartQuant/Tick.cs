@@ -43,7 +43,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return string.Format("Tick {0} {1} {2} {3} {4}", this.DateTime, this.ProviderId, this.InstrumentId, this.Price, this.Size);
+            return string.Format("Tick {0} {1} {2} {3} {4}", DateTime, ProviderId, InstrumentId, Price, Size);
         }
     }
 }

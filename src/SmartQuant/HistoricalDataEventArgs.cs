@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public HistoricalDataEventArgs(HistoricalData data)
         {
-            this.Data = data;
+            Data = data;
         }
     }
 }

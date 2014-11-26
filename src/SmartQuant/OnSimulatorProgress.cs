@@ -31,7 +31,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return this.GetType().Name;
+            return GetType().Name;
         }
     }
 }

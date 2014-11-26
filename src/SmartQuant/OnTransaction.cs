@@ -25,7 +25,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return string.Format("OnTransaction {0}", this.Transaction.ToString());
+            return string.Format("OnTransaction {0}", Transaction);
         }
     }
 }

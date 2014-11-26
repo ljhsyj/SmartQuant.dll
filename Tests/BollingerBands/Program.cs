@@ -2,7 +2,6 @@
 using SmartQuant;
 using SmartQuant.Indicators;
 using System.Drawing;
-using SmartQuant.TT;
 
 namespace BollingerBands
 {
@@ -199,7 +198,7 @@ namespace BollingerBands
             var f = Framework.Current;
             Scenario scenario = new Backtest(f);
             var pm = f.ProviderManager;
-            pm.SaveSettings(null);
+            //pm.SaveSettings(null);
             scenario.Run(); 
         }
     }

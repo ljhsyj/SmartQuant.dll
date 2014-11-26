@@ -19,7 +19,7 @@ namespace SmartQuant
 
         public TextInfo(DateTime dateTime, string content) : base(dateTime)
         {
-            this.Content = content;
+            Content = content;
         }
 
         public TextInfo(DateTime dateTime, object data) : this(dateTime, data.ToString())

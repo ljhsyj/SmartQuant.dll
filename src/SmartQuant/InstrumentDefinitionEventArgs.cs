@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public InstrumentDefinitionEventArgs(InstrumentDefinition definition)
         {
-            this.Definition = definition;
+            Definition = definition;
         }
     }
 }

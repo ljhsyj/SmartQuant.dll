@@ -53,7 +53,7 @@ namespace SmartQuant
         {
             lock (this.list)
             {
-                foreach (object reader in this.readerIndices.Keys)
+                foreach (var reader in this.readerIndices.Keys)
                     this.readerIndices[reader] = 0;
                 this.list.Clear();
             }

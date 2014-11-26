@@ -9,29 +9,29 @@ namespace SmartQuant
         {
 
             this.typeId = DataObjectType.ObjectTable;
-            this.type = typeof (ObjectTable);
+            this.type = typeof(ObjectTable);
         }
 
         public override object Read(BinaryReader reader)
         {
-            var version =  reader.ReadByte();
+            var version = reader.ReadByte();
             var objectTable = new ObjectTable();
             int index;
             while ((index = reader.ReadInt32()) != -1)
                 objectTable.fields[index] = this.streamerManager.Deserialize(reader);
-            return (object) objectTable;
+            return (object)objectTable;
         }
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            writer.Write((byte) 0);
-            ObjectTable objectTable = (ObjectTable) obj;
-            for (int index = 0; index < objectTable.fields.Size; ++index)
+            writer.Write((byte)0);
+            var table = (ObjectTable)obj;
+            for (int i = 0; i < table.fields.Size; ++i)
             {
-                if (objectTable.fields[index] != null)
+                if (table.fields[i] != null)
                 {
-                    writer.Write(index);
-                    this.streamerManager.Serialize(writer, objectTable.fields[index]);
+                    writer.Write(i);
+                    this.streamerManager.Serialize(writer, table.fields[i]);
                 }
             }
             writer.Write(-1);

@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public InstrumentEventArgs(Instrument instrument)
         {
-            this.Instrument = instrument;
+            Instrument = instrument;
         }
     }
 }

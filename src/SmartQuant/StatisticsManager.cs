@@ -16,7 +16,7 @@ namespace SmartQuant
         public StatisticsManager(Framework framework)
         {
             this.framework = framework;
-            this.Statistics = new PortfolioStatisticsItemList();
+            Statistics = new PortfolioStatisticsItemList();
 
             foreach (var info in typeof(PortfolioStatisticsType).GetFields(BindingFlags.Static | BindingFlags.Public))
             {
@@ -26,7 +26,7 @@ namespace SmartQuant
                     if (t != null)
                     {
                         var item = (PortfolioStatisticsItem)Activator.CreateInstance(t);
-                        this.Add(item);
+                        Add(item);
                     }
                 }
             }
@@ -54,13 +54,13 @@ namespace SmartQuant
 
         public PortfolioStatisticsItem Clone(int type)
         {
-            return (PortfolioStatisticsItem)Activator.CreateInstance(this.Get(type).GetType());
+            return (PortfolioStatisticsItem)Activator.CreateInstance(Get(type).GetType());
         }
 
         public List<PortfolioStatisticsItem> CloneAll()
         {
             var list = new List<PortfolioStatisticsItem>();
-            foreach (var obj in this.Statistics)
+            foreach (var obj in Statistics)
             {
                 var item = (PortfolioStatisticsItem)Activator.CreateInstance(obj.GetType());
                 list.Add(item);

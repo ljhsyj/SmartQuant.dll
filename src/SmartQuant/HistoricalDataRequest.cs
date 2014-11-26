@@ -23,10 +23,10 @@ namespace SmartQuant
 
         public HistoricalDataRequest(Instrument instrument, DateTime dateTime1, DateTime dateTime2, byte dataType)
         {
-            this.Instrument = instrument;
-            this.DateTime1 = dateTime1;
-            this.DateTime2 = dateTime2;
-            this.DataType = dataType;
+            Instrument = instrument;
+            DateTime1 = dateTime1;
+            DateTime2 = dateTime2;
+            DataType = dataType;
         }
 
         public HistoricalDataRequest()

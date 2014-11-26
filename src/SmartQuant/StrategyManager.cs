@@ -35,8 +35,8 @@ namespace SmartQuant
             this.framework = framework;
             this.Mode = StrategyMode.Backtest;
             this.status = StrategyStatus.Stopped;
-            this.Global = new Global();
-            this.Clear();
+            Global = new Global();
+            Clear();
         }
 
         public byte GetNextId()

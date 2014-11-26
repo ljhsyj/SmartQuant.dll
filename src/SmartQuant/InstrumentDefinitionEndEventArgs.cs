@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public InstrumentDefinitionEndEventArgs(InstrumentDefinitionEnd end)
         {
-            this.End = end;
+            End = end;
         }
     }
 }
