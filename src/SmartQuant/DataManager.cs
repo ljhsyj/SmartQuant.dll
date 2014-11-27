@@ -5,6 +5,7 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace SmartQuant
 {
@@ -30,6 +31,14 @@ namespace SmartQuant
         }
 
         public void Dump()
+        {
+        }
+
+        internal void Save(BinaryWriter writer)
+        {
+        }
+
+        internal void Load(BinaryReader reader)
         {
         }
 

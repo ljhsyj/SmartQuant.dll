@@ -28,6 +28,10 @@ namespace SmartQuant
             }
         }
 
+        public InstrumentList()
+        {
+        }
+
         public bool Contains(int id)
         {
             return this.instruments.Contains(id);
@@ -90,5 +94,21 @@ namespace SmartQuant
         {
             return string.Join(Environment.NewLine, this.instruments.Select(i => i.Symbol));
         }
+
+        #region Extra Methods
+
+        internal InstrumentList(IEnumerable<Instrument> instruments)
+            : this()
+        {
+            Add(instruments);
+        }
+
+        internal void Add(IEnumerable<Instrument> instruments)
+        {
+            foreach (var i in instruments)
+                Add(i);
+        }
+
+        #endregion
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
-    class SubscriptionList
+    class SubscriptionList: Dictionary<byte, Dictionary<Instrument, int>>
     {
-        public SubscriptionList()
-        {
-        }
     }
 }
 

@@ -14,9 +14,9 @@ namespace SmartQuant
 
         internal PortfolioPerformance(Portfolio portfolio)
         {
+            Portfolio = portfolio;
             EquitySeries = new TimeSeries("Equity", "Equity");
             DrawdownSeries = new TimeSeries("Drawdown", "Drawdown");
-            Portfolio = portfolio;
         }
 
         public void Update()

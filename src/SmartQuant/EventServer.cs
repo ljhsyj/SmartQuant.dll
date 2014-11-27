@@ -22,14 +22,9 @@ namespace SmartQuant
             this.framework.EventManager.OnEvent(e);
         }
 
-        public void OnFrameworkCleared(Framework framework)
-        {
-            throw new NotImplementedException();
-        }
-
         public void OnLog(Event e)
         {
-            throw new NotImplementedException();
+            OnEvent(e);
         }
 
         public void OnData(DataObject data)
@@ -80,10 +75,10 @@ namespace SmartQuant
         public void OnProviderStatusChanged(Provider provider)
         {
             if (provider.Status == ProviderStatus.Connected)
-                this.OnProviderConnected(provider);
+                OnProviderConnected(provider);
             if (provider.Status == ProviderStatus.Disconnected)
-                this.OnProviderDisconnected(provider);
-            this.OnEvent(new OnProviderStatusChanged(provider));
+                OnProviderDisconnected(provider);
+            OnEvent(new OnProviderStatusChanged(provider));
         }
 
         public void OnProviderError(ProviderError error)
@@ -93,12 +88,12 @@ namespace SmartQuant
 
         public void OnProviderConnected(Provider provider)
         {
-            this.OnEvent(new OnProviderConnected(provider));
+            OnEvent(new OnProviderConnected(provider));
         }
 
         public void OnProviderDisconnected(Provider provider)
         {
-            this.OnEvent(new OnProviderDisconnected(provider));
+            OnEvent(new OnProviderDisconnected(provider));
         }
 
         public void OnPortfolioAdded(Portfolio portfolio)
@@ -111,12 +106,6 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        internal void OnPortfolioParentChanged(Portfolio portfolio, bool queued = true)
-        {
-            if (queued)
-                OnEvent(new OnPortfolioParentChanged(portfolio));
-        }
-
         public void OnPositionOpened(Portfolio portfolio, Position position, bool queued = true)
         {
             throw new NotImplementedException();
@@ -125,6 +114,22 @@ namespace SmartQuant
         public void EmitQueued()
         {
             throw new NotImplementedException();
+        }
+
+        internal void OnExecutionReport(ExecutionReport report)
+        {
+            OnEvent(new OnExecutionReport(report));
+        }
+
+        internal void OnPortfolioParentChanged(Portfolio portfolio, bool queued = true)
+        {
+            if (queued)
+                OnEvent(new OnPortfolioParentChanged(portfolio));
+        }
+
+        internal void OnFrameworkCleared(Framework framework)
+        {
+            OnEvent(new OnFrameworkCleared(framework));
         }
     }
 }

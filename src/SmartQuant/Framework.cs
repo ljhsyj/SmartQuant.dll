@@ -33,6 +33,7 @@ namespace SmartQuant
                 isDisposable = true;
             }
         }
+        public AccountDataManager AccountDataManager { get; private set; }
 
         public Configuration Configuration { get; private set; }
 
@@ -76,16 +77,6 @@ namespace SmartQuant
 
         public EventLoggerManager EventLoggerManager { get; private set; }
 
-        public static Framework Current
-        {
-            get
-            {
-                if (framework == null)
-                    framework = new Framework("", true);
-                return framework;
-            }
-        }
-
         public FrameworkMode Mode
         {
             get
@@ -112,6 +103,32 @@ namespace SmartQuant
                 {
                     throw new NotSupportedException();
                 }
+            }
+        }
+
+        public static Framework Current
+        {
+            get
+            {
+                if (framework == null)
+                    framework = new Framework("", true);
+                return framework;
+            }
+        }
+
+        public IExecutionProvider ExecutionProvider
+        {
+            get
+            {
+                return ProviderManager.GetExecutionProvider(Configuration.DefaultExecutionProvider);
+            }
+        }
+
+        public IDataProvider DataProvider
+        {
+            get
+            {
+                return ProviderManager.GetDataProvider(Configuration.DefaultDataProvider);
             }
         }
 
@@ -164,6 +181,7 @@ namespace SmartQuant
             StatisticsManager = new StatisticsManager(this);
             StrategyManager = new StrategyManager(this);
             GroupManager = new GroupManager(this);
+            AccountDataManager = new AccountDataManager(this);
             CurrencyConverter = new CurrencyConverter(this);
             DataFileManager = new DataFileManager(Installation.DataDir.FullName);
             framework = framework ?? this;
@@ -176,8 +194,14 @@ namespace SmartQuant
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (this.isDisposable)
+            {
+                Console.WriteLine("Framework::Dispose {0}", Name);
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+            else
+                Console.WriteLine("Framework::Dispose Framework is not disposable {0}", Name);
         }
 
         private void Dispose(bool disposing)
@@ -187,7 +211,7 @@ namespace SmartQuant
                 
             if (disposing)
             {
-                this.SaveConfiguration();
+                SaveConfiguration();
 
                 // EventManager has its inner thread running,
                 // this let it exit gracefully
@@ -196,6 +220,7 @@ namespace SmartQuant
             }
             disposed = true;
         }
+
 
         private void LoadConfiguration()
         {
@@ -216,7 +241,23 @@ namespace SmartQuant
 
         public void Clear()
         {
+            Console.WriteLine("{0} Framework::Clear", DateTime.Now);
+            Clock.Clear();
+            ExchangeClock.Clear();
+            EventBus.Clear();
+            EventManager.Clear();
+            ProviderManager.DisconnectAll();
+            ProviderManager.Clear();
+            InstrumentManager.Clear();
+            DataManager.Clear();
+            SubscriptionManager.Clear();
+            OrderManager.Clear();
+            PortfolioManager.Clear();
             StrategyManager.Clear();
+            AccountDataManager.Clear();
+            GroupManager.Clear();
+            EventServer.OnFrameworkCleared(this);
+            GC.Collect();
         }
 
         private void LoadProviderPlugins()
@@ -237,6 +278,28 @@ namespace SmartQuant
                 var streamer = (ObjectStreamer)Activator.CreateInstance(type);
                 StreamerManager.Add(streamer);
             }
+        }
+
+        public void Load(BinaryReader reader)
+        {
+            Name = reader.ReadString();
+            DataManager.Load(reader);
+            SubscriptionManager.Load(reader);
+            PortfolioManager.Load(reader);
+        }
+
+        public void Save(BinaryWriter writer)
+        {
+            writer.Write(Name);
+            DataManager.Save(writer);
+            SubscriptionManager.Save(writer);
+            PortfolioManager.Save(writer);
+        }
+
+        public void Dump()
+        {
+            Console.WriteLine("Framework {0}", Name);
+            DataManager.Dump();
         }
     }
 }

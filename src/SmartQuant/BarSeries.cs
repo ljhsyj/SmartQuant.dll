@@ -371,6 +371,11 @@ namespace SmartQuant
             return this[index];
         }
 
+        public BarSeries Compress(long barSize)
+        {
+            throw new NotImplementedException();
+        }
+      
         private void EnsureNotEmpty()
         {
             if (Count <= 0)

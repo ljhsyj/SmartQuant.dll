@@ -35,25 +35,85 @@ namespace SmartQuant
             }
         }
 
-        public ProviderManager ProviderManager { get { return this.framework.ProviderManager; } }
+        public ProviderManager ProviderManager
+        { 
+            get
+            {
+                return this.framework.ProviderManager;
+            }
+        }
 
-        public OrderManager OrderManager { get { return this.framework.OrderManager; } }
+        public OrderManager OrderManager
+        { 
+            get
+            { 
+                return this.framework.OrderManager;
+            }
+        }
 
-        public IDataSimulator DataSimulator { get { return this.framework.ProviderManager.DataSimulator; } }
+        public IDataSimulator DataSimulator
+        { 
+            get
+            {
+                return this.framework.ProviderManager.DataSimulator;
+            }
+        }
 
-        public IExecutionSimulator ExecutionSimulator  { get { return this.framework.ProviderManager.ExecutionSimulator; } }
+        public IExecutionSimulator ExecutionSimulator
+        {
+            get
+            {
+                return this.framework.ProviderManager.ExecutionSimulator;
+            }
+        }
 
-        public BarFactory BarFactory { get { return this.EventManager.BarFactory; } }
+        public BarFactory BarFactory
+        { 
+            get
+            { 
+                return EventManager.BarFactory;
+            }
+        }
 
-        public EventManager EventManager { get { return this.framework.EventManager; } }
+        public EventManager EventManager
+        {
+            get
+            {
+                return this.framework.EventManager;
+            }
+        }
 
-        public StrategyManager StrategyManager { get { return this.framework.StrategyManager; } }
+        public StrategyManager StrategyManager
+        { 
+            get
+            { 
+                return this.framework.StrategyManager;
+            }
+        }
 
-        public StatisticsManager StatisticsManager { get { return this.framework.StatisticsManager; } }
+        public StatisticsManager StatisticsManager
+        { 
+            get
+            {
+                return this.framework.StatisticsManager;
+            }
+        }
 
-        public GroupManager GroupManager { get { return this.framework.GroupManager; } }
+        public GroupManager GroupManager
+        {
+            get
+            { 
+                return this.framework.GroupManager;
+            }
+        }
 
-        public DataFileManager DataFileManager { get { return this.framework.DataFileManager; } }
+        public DataFileManager DataFileManager
+        { 
+            get
+            { 
+                return this.framework.DataFileManager;
+            }
+        }
 
         public Scenario(Framework framework)
         {
@@ -62,17 +122,17 @@ namespace SmartQuant
 
         public void StartStrategy()
         {
-            this.StartStrategy(this.strategy, this.framework.StrategyManager.Mode);
+            StartStrategy(this.strategy, this.framework.StrategyManager.Mode);
         }
 
         public void StartStrategy(Strategy strategy)
         {
-            this.StartStrategy(strategy, this.framework.StrategyManager.Mode);
+            StartStrategy(strategy, this.framework.StrategyManager.Mode);
         }
 
         public void StartStrategy(StrategyMode mode)
         {
-            this.StartStrategy(this.strategy, mode);
+            StartStrategy(this.strategy, mode);
         }
 
         private void StartStrategy(Strategy strategy, StrategyMode mode)
@@ -89,22 +149,22 @@ namespace SmartQuant
 
         public void StartBacktest()
         {
-            this.StartStrategy(StrategyMode.Backtest);
+            StartStrategy(StrategyMode.Backtest);
         }
 
         public void StartPaper()
         {
-            this.StartStrategy(StrategyMode.Paper);
+            StartStrategy(StrategyMode.Paper);
         }
 
         public void StartLive()
         {
-            this.StartStrategy(StrategyMode.Live);
+            StartStrategy(StrategyMode.Live);
         }
 
         public virtual void Run()
         {
+            // no-op
         }
     }
 }
-

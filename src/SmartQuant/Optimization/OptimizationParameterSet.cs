@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SmartQuant.Optimization
 {
@@ -25,7 +26,7 @@ namespace SmartQuant.Optimization
             this.parameters.Add(parameter);
         }
 
-        public void Add(string name, double value)
+        public void Add(string name, object value)
         {
             this.parameters.Add(new OptimizationParameter(name, value));
         }
@@ -42,10 +43,7 @@ namespace SmartQuant.Optimization
 
         public override string ToString()
         {
-            string s = "";
-            foreach (var param in this.parameters)
-                s += string.Format("{0} = {1} ", param.Name, param.Value);
-            return s;
+            return string.Join(" ", this.parameters.Select(p => string.Format("{0} = {1}", p.Name, p.Value)));
         }
     }
 }

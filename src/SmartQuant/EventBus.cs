@@ -40,7 +40,7 @@ namespace SmartQuant
 
         public void Attach(EventBus bus)
         {
-            var q = new EventQueue(EventQueueId.Data, EventQueueType.Master, EventQueuePriority.Normal, 25000);
+            var q = new EventQueue(EventQueueId.Data, EventQueueType.Master, EventQueuePriority.Normal, 32768);
             q.IsSynched = true;
             q.Name = "attached";
             q.Enqueue(new OnQueueOpened(q));
@@ -58,7 +58,7 @@ namespace SmartQuant
                     while (!DataPipe.IsEmpty() && e == null)
                     {
                         e = DataPipe.Read();
-                        if (e.DateTime < this.framework.Clock.DateTime)
+                        if (e!=null && e.DateTime < this.framework.Clock.DateTime)
                         {
                             if (e.TypeId == EventType.OnQueueOpened || e.TypeId == EventType.OnQueueClosed || e.TypeId == EventType.OnSimulatorStop || e.TypeId == EventType.OnSimulatorProgress)
                             {
@@ -81,7 +81,8 @@ namespace SmartQuant
                         return ServicePipe.Read();
                     if (e != null)
                     {
-                        Parallel.For(0, qIndex, i => this.queues[i].Enqueue(e));
+                        for (int i = 0; i < qIndex; ++i)
+                            this.queues[i].Enqueue(e);
                         return e;
                     }
                     Thread.Sleep(1);
@@ -115,11 +116,13 @@ namespace SmartQuant
 
         public void Clear()
         {
+            LocalClockQueue.Clear();
             DataPipe.Clear();
             ExecutionPipe.Clear();
             ExecutionPipe.Clear();
             ServicePipe.Clear();
-            Parallel.For(0, qIndex, i => this.queues[i] = null);
+            for (int i = 0; i < qIndex; ++i)
+                this.queues[i] = null;
             qIndex = 0;
         }
     }

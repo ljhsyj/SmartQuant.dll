@@ -197,8 +197,6 @@ namespace BollingerBands
         {
             var f = Framework.Current;
             Scenario scenario = new Backtest(f);
-            var pm = f.ProviderManager;
-            //pm.SaveSettings(null);
             scenario.Run(); 
         }
     }

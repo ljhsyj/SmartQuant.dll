@@ -68,6 +68,11 @@ namespace SmartQuant
         {
         }
 
+        public virtual DataSeries AddDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
+        {
+            return null;
+        }
+
         public virtual DataSeries AddDataSeries(Instrument instrument, byte type)
         {
             return null;

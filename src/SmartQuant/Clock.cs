@@ -50,7 +50,7 @@ namespace SmartQuant
             {
                 return this.type == ClockType.Exchange || Mode == ClockMode.Simulation ? this.dateTime : DateTime.Now;
             }
-            private set
+            internal set
             {
                 if (Mode == ClockMode.Realtime)
                 {
@@ -66,7 +66,7 @@ namespace SmartQuant
                         this.dateTime = value;
                 }
 
-                throw new NotImplementedException();
+               // throw new NotImplementedException();
             }
         }
 

@@ -9,7 +9,7 @@ namespace SmartQuant
 {
 	public class Portfolio
 	{
-        private Framework framework;
+        internal Framework framework;
 
         private Portfolio parent;
 
@@ -56,10 +56,9 @@ namespace SmartQuant
         public PortfolioPerformance Performance { get; private set; }
 
         [Browsable(false)]
-        internal IdArray<Position> PositionArray { get; private set; }
-
-        [Browsable(false)]
         public List<Position> Positions { get; private set; }
+
+        internal IdArray<Position> PositionArray { get; private set; }
 
         public double Value 
         {
@@ -91,7 +90,7 @@ namespace SmartQuant
         public Portfolio(Framework framework, string name = "")
         {
             this.framework = framework;
-            this.Name = name;
+            Name = name;
             Children = new List<Portfolio>();
             PositionArray = new IdArray<Position>(8192);
             Positions = new List<Position>();

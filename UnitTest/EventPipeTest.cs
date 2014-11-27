@@ -13,7 +13,7 @@ namespace UnitTest
         [SetUp]
         public void SetUp()
         {
-        //   pipe = new EventPipe(f);
+          //  pipe = new EventPipe(Fr);
         }
         [TearDown]
         public void TearDown()
@@ -23,7 +23,7 @@ namespace UnitTest
         [Test]
         public void DequeueReturnNull()
         {
-            //var q = Substitute.For<IEventQueue>();
+         //   var pipe = new EventPipe(f);
             Assert.AreEqual(null, pipe.Dequeue());
         }
     }

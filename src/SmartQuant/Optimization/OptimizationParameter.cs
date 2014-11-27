@@ -7,9 +7,9 @@ namespace SmartQuant.Optimization
     {
         public string Name { get; set; }
 
-        public double Value { get; set; }
+        public object Value { get; set; }
 
-        public OptimizationParameter(string name, double value)
+        public OptimizationParameter(string name, object value)
         {
             Name = name;
             Value = value;

@@ -178,6 +178,11 @@ namespace SmartQuant
             return -1; // option == IndexOption.Null
         }
 
+        public BarSeries Compress(BarType barType, long barSize)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Contains(DateTime dateTime)
         {
             return GetIndex(dateTime, IndexOption.Null) != -1;

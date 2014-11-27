@@ -8,8 +8,8 @@ using LinkedListNode = System.Collections.Generic.LinkedListNode<global::SmartQu
 
 namespace SmartQuant
 {
-	public class EventPipe
-	{
+    public class EventPipe
+    {
         private Framework framework;
         private LinkedList syncedQueues;
         private LinkedList unsyncedQueues;
@@ -39,71 +39,56 @@ namespace SmartQuant
 
         public bool IsEmpty()
         {
-            return unsyncedQueues.All(q => q.IsEmpty()) && syncedQueues.All(q => q.IsEmpty());;
+            return unsyncedQueues.All(q => q.IsEmpty()) && syncedQueues.Any(q => q.IsEmpty());
         }
 
         public Event Read()
         {
             IEventQueue queue = null;
-            Event e = null;
-            if (unsyncedQueues.Count != 0)
+
+            queue = unsyncedQueues.FirstOrDefault(q => !q.IsEmpty());
+            if (queue != null)
             {
-                foreach (var q in unsyncedQueues)
+                var e = queue.Read();
+                if (e.TypeId == EventType.OnQueueClosed)
                 {
-                    if (!q.IsEmpty())
-                    {
-                        e = q.Dequeue();
-                        queue = q;
-                        break;
-                    }
+                    unsyncedQueues.Remove(queue);
                 }
-
-                if (e != null)
-                {
-                    if (e.TypeId == EventType.OnQueueClosed)
-                        unsyncedQueues.Remove(queue);
-                    return e;
-                }
+                return e;
             }
-
-            if (syncedQueues.Count == 0)
-                return null;
-                
-            DateTime dt1 = DateTime.MaxValue;
-            IEventQueue q1 = null;
-            IEventQueue qFrom = null;
+            DateTime minDateTime = DateTime.MaxValue;
+            IEventQueue removedQueue = null;
+            IEventQueue minDateTimeQueue = null;
+            Event evt;
             foreach (var q in syncedQueues)
             {
-                e = q.Peek();
-
-                if (e.TypeId != EventType.OnQueueClosed)
+                evt = q.Peek();
+                if (evt.TypeId == EventType.OnQueueClosed && (evt as OnQueueClosed).Queue == q)
                 {
-                    DateTime dt2 = e.DateTime;
-                    if (e.DateTime <= dt1)
-                    {
-                        q1 = q;
-                        dt1 = e.DateTime;
-                    }
-                    qFrom = q;
+                    removedQueue = q;
+                    break;
                 }
                 else
                 {
+                    minDateTime = minDateTime > evt.DateTime ? evt.DateTime : minDateTime;
+                    minDateTimeQueue = q;
                 }
             }
 
-            if (qFrom != null)
+            if (removedQueue != null)
             {
-                syncedQueues.Remove(qFrom);
-                if (syncedQueues.Count == 0 && this.framework.Mode == FrameworkMode.Simulation && q1.Name != "Simulator stop queue")
+                syncedQueues.Remove(removedQueue);
+                if (syncedQueues.Count == 0 && this.framework.Mode == FrameworkMode.Simulation && removedQueue.Name != "Simulator stop queue")
                 {
-                    EventQueue newQueue = new EventQueue(EventQueueId.Data,EventQueueType.Master, EventQueuePriority.Normal, 16);
+                    var newQueue = new EventQueue(EventQueueId.Data, EventQueueType.Master, EventQueuePriority.Normal, 16);
                     newQueue.IsSynched = true;
                     newQueue.Name = "Simulator stop queue";
-                    newQueue.Enqueue(new Event[] { new OnQueueOpened(newQueue), new OnSimulatorStop(), new OnQueueClosed(newQueue)});
+                    newQueue.Enqueue(new Event[] { new OnQueueOpened(newQueue), new OnSimulatorStop(), new OnQueueClosed(newQueue) });
                     Add(newQueue);
                 }
+                return removedQueue.Read();
             }
-            return q1.Read();
+            return minDateTimeQueue == null ? null : minDateTimeQueue.Read();
         }
 
         public Event Dequeue()
@@ -116,5 +101,5 @@ namespace SmartQuant
             syncedQueues.Clear();
             unsyncedQueues.Clear();
         }
-	}
+    }
 }

@@ -67,7 +67,7 @@ namespace SmartQuant
 
         public void Close()
         {
-            foreach (DataFile file in this.dataFiles.Values)
+            foreach (var file in this.dataFiles.Values)
                 file.Close();
         }
 	}

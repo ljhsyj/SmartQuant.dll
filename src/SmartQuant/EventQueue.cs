@@ -77,7 +77,7 @@ namespace SmartQuant
 
         public Event Dequeue()
         {
-            while (this.IsEmpty())
+            while (IsEmpty())
             {
                 ++EmptyCount;
                 Thread.Sleep(1);
@@ -87,7 +87,7 @@ namespace SmartQuant
 
         public void Enqueue(Event obj)
         {
-            while (this.IsFull())
+            while (IsFull())
             {
                 ++FullCount;
                 Thread.Sleep(1);

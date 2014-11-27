@@ -2,6 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
+using System.IO;
 
 namespace SmartQuant
 {
@@ -22,7 +23,7 @@ namespace SmartQuant
 
         public void Add(Portfolio portfolio)
         {
-            throw new NotImplementedException();
+//            throw new NotImplementedException();
         }
 
         public void Remove(string name)
@@ -49,6 +50,24 @@ namespace SmartQuant
         public void Clear()
         {
             Portfolios.Clear();
+        }
+
+        internal void Save(BinaryWriter writer)
+        {
+            writer.Write(Portfolios.Count);
+            foreach (var portfolio in Portfolios)
+                this.framework.StreamerManager.Serialize(writer, portfolio);
+        }
+
+        internal void Load(BinaryReader reader)
+        {
+            int num = reader.ReadInt32();
+            for (int i = 0; i < num; ++i)
+            {
+                var portfolio = (Portfolio) this.framework.StreamerManager.Deserialize(reader);
+                portfolio.framework = this.framework;
+                Add(portfolio);
+            }
         }
     }
 }

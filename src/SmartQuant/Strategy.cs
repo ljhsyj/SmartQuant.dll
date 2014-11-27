@@ -8,9 +8,12 @@ namespace SmartQuant
 {
     public class Strategy
     {
+        private bool initialized;
+        private IDataProvider dataProvider;
+        private IExecutionProvider executionProvider;
+
         protected internal Framework framework;
         protected bool raiseEvents;
-        private LinkedList<Strategy> strategies;
 
         public byte Id { get; private set; }
 
@@ -34,7 +37,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.ProviderManager.DataSimulator;
+                return ProviderManager.DataSimulator;
             }
         }
 
@@ -42,7 +45,7 @@ namespace SmartQuant
         { 
             get
             {
-                return this.ProviderManager.ExecutionSimulator;
+                return ProviderManager.ExecutionSimulator;
             }
         }
 
@@ -64,11 +67,13 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return FindDataProvider(this, null);
             }
             set
             {
-                throw new NotImplementedException();
+                this.dataProvider = value;
+                for (var node = Strategies.First; node != null; node = node.Next)
+                    node.Data.DataProvider = value; 
             }
         }
 
@@ -76,11 +81,13 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return FindExecutionProvider(null);
             }
             set
             {
-                throw new NotImplementedException();
+                this.executionProvider = value;
+                for (var node = Strategies.First; node != null; node = node.Next)
+                    node.Data.ExecutionProvider = value;   
             }
         }
 
@@ -99,7 +106,6 @@ namespace SmartQuant
                 return this.framework.StrategyManager.Mode;
             }
         }
-
 
         public InstrumentManager InstrumentManager
         {
@@ -168,11 +174,14 @@ namespace SmartQuant
         public Strategy(Framework framework, string name)
         {
             this.framework = framework;
+            this.raiseEvents = true;
             Name = name;
             Enabled = true;
             Portfolio = new Portfolio(this.framework, name);
+            this.framework.PortfolioManager.Add(Portfolio);
             Strategies = new LinkedList<Strategy>();
             Instruments = new InstrumentList();
+            Status = StrategyStatus.Stopped;
         }
 
         public void AddReminder(DateTime dateTime, object data = null)
@@ -216,14 +225,19 @@ namespace SmartQuant
                 Instruments.Add(instrument);
                 Portfolio.Add(instrument);
                 if (Status == StrategyStatus.Running)
-                    ;
-                    //  this.method_1(instrument);
+                    RegisterMarketDataRequest(instrument);
             }  
         }
 
         public virtual void RemoveInstrument(Instrument instrument)
         {
-            throw new NotImplementedException();
+            Instruments.Remove(instrument);
+            var instrumentList = new InstrumentList();
+            instrumentList.Add(instrument);
+            //    this.framework.StrategyManager.Unsubscribe(this.method_5(this, instrument), instrumentList);
+//            if (this.strategy_0 == null)
+//                return;
+//            this.strategy_0.method_3(this, instrumentList, (int) this.byte_0);
         }
 
         public bool HasPosition(Instrument instrument)
@@ -286,6 +300,35 @@ namespace SmartQuant
 
         public virtual void Init()
         {
+            if (this.initialized)
+                return;
+            OnStrategyInit();
+            for (var node = Strategies.First; node != null; node = node.Next)
+                node.Data.Init();
+            this.initialized = true;
+        }
+
+        internal virtual void Start()
+        {
+            Status = StrategyStatus.Running;
+            foreach (var instrument in Instruments)
+                RegisterMarketDataRequest(instrument);
+            if (this.raiseEvents)
+                OnStrategyStart();
+            for (var node = Strategies.First; node != null; node = node.Next)
+            {
+                this.method_2(node.Data, node.Data.Instruments, node.Data.Id);
+                node.Data.Start();
+            }
+        }
+
+        internal virtual void Stop()
+        {
+            Status = StrategyStatus.Stopped;
+            if (this.raiseEvents)
+                OnStrategyStop();
+            for (var node = Strategies.First; node != null; node = node.Next)
+                node.Data.Stop();
         }
 
         public virtual double Objective()
@@ -583,6 +626,108 @@ namespace SmartQuant
                 default:
                     return "Undefined";
             }
+        }
+
+        private void RegisterMarketDataRequest(Instrument instrument)
+        {
+            var instrumentList = new InstrumentList();
+            instrumentList.Add(instrument);
+            var dataProvider = FindDataProvider(this, instrument);
+            var executionProvider = FindExecutionProvider(instrument);
+
+            if (dataProvider.Status == ProviderStatus.Disconnected)
+                dataProvider.Connect();
+            if (executionProvider.Status == ProviderStatus.Disconnected)
+                executionProvider.Connect();
+            this.framework.StrategyManager.RegisterMarketDataRequest(dataProvider, instrumentList);
+            if (Parent != null)
+                Parent.method_2(this, instrumentList, Id);
+        }
+
+        //TODO: rewrite it
+        internal void method_2(Strategy strategy_1, InstrumentList instrumentList_1, int id)
+        {
+//            strategy_1.portfolio_0.Parent = this.portfolio_0;
+//            foreach (Instrument instrument in instrumentList_1)
+//            {
+//                LinkedList<Strategy> linkedList;
+//                if (this.idArray_0[instrument.Id] == null)
+//                {
+//                    linkedList = new LinkedList<Strategy>();
+//                    this.idArray_0[instrument.Id] = linkedList;
+//                }
+//                else
+//                    linkedList = this.idArray_0[instrument.Id];
+//                linkedList.Add(strategy_1);
+//                IdArray<int> idArray;
+//                int index;
+//                (idArray = this.idArray_2)[index = instrument.int_0] = idArray[index] + 1;
+//            }
+//            Dictionary<IDataProvider, InstrumentList> dictionary = new Dictionary<IDataProvider, InstrumentList>();
+//            foreach (Instrument instrument in instrumentList_1)
+//            {
+//                InstrumentList instrumentList = (InstrumentList) null;
+//                IDataProvider key = this.method_5(strategy_1, instrument);
+//                GInterface2 ginterface2 = strategy_1.method_4(instrument);
+//                if (key.Status == ProviderStatus.Disconnected)
+//                    key.Connect();
+//                if (ginterface2.Status == ProviderStatus.Disconnected)
+//                    ginterface2.Connect();
+//                if (!dictionary.TryGetValue(key, out instrumentList))
+//                {
+//                    instrumentList = new InstrumentList();
+//                    dictionary[key] = instrumentList;
+//                }
+//                instrumentList.Add(instrument);
+//            }
+//            foreach (KeyValuePair<IDataProvider, InstrumentList> keyValuePair in dictionary)
+//                this.framework.strategyManager_0.RegisterMarketDataRequest(keyValuePair.Key, keyValuePair.Value);
+//            this.idArray_1[id] = strategy_1;
+//            if (Parent != null)
+//                Parent.method_2(this, instrumentList_1, id);
+        }
+
+        internal IExecutionProvider FindExecutionProvider(Instrument instrument = null)
+        {
+            if (instrument != null && instrument.ExecutionProvider != null)
+                return instrument.ExecutionProvider;
+            if (this.framework.Mode == FrameworkMode.Simulation)
+                return this.framework.ProviderManager.ExecutionSimulator;
+            return this.framework.ExecutionProvider;
+
+//            IExecutionProvider ginterface2 = null;
+//            if (instrument_0 != null && instrument_0.ExecutionProvider != null)
+//                ginterface2 = instrument_0.ExecutionProvider;
+//            if (ginterface2 == null && this.ginterface2_0 != null)
+//                ginterface2 = this.ginterface2_0;
+//            if (Mode == StrategyMode.Live)
+//                return ginterface2 ?? this.framework.ExecutionProvider;
+//            if (ginterface2 != null && ginterface2 is SellSideStrategy)
+//                return ginterface2;
+//            else
+//                return this.framework.ProviderManager.ExecutionSimulator;
+        }
+
+        internal IDataProvider FindDataProvider(Strategy strategy, Instrument instrument = null)
+        {
+            if (instrument != null && instrument.DataProvider != null)
+                return instrument.DataProvider;
+            if (this.framework.Mode == FrameworkMode.Simulation)
+                return this.framework.ProviderManager.DataSimulator;
+            return this.framework.DataProvider;
+//
+//            IDataProvider dataProvider =  null;
+//
+//            if (dataProvider == null && strategy != null && strategy.idataProvider_0 != null)
+//                dataProvider = strategy.idataProvider_0;
+//
+//
+//            if (this.framework.Mode != FrameworkMode.Simulation)
+//                return dataProvider ?? this.framework.DataProvider;
+//            if (dataProvider != null && dataProvider is SellSideStrategy)
+//                return dataProvider;
+//            else
+//                return this.framework.ProviderManager.DataSimulator;
         }
     }
 }
