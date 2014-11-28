@@ -155,9 +155,9 @@ namespace SmartQuant
             LoadConfiguration();
             Mode = FrameworkMode.Simulation;
             EventBus = new EventBus(this, EventBusMode.Simulation);
-            Clock = new Clock(this, ClockType.Local, ClockMode.Simulation, false);
+            Clock = new Clock(this, ClockType.Local);
             EventBus.LocalClockQueue = Clock.Queue;
-            ExchangeClock = new Clock(this, ClockType.Exchange, ClockMode.Simulation, false);
+            ExchangeClock = new Clock(this, ClockType.Exchange);
             EventBus.ExchangeClockQueue = ExchangeClock.Queue;
             if (externalBus != null)
                 externalBus.Attach(EventBus);

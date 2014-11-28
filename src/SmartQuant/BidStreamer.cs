@@ -16,12 +16,27 @@ namespace SmartQuant
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            byte version = reader.ReadByte();
+            if (version == 0)
+                return new Bid(new DateTime(reader.ReadInt64()), reader.ReadByte(), reader.ReadInt32(), reader.ReadDouble(), reader.ReadInt32());
+            else
+                return new Bid(new DateTime(reader.ReadInt64()), new DateTime(reader.ReadInt64()), reader.ReadByte(), reader.ReadInt32(), reader.ReadDouble(), reader.ReadInt32());
         }
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            var bid = obj as Bid;
+            byte version = 0;
+            if (bid.ExchangeDateTime.Ticks != 0)
+                version = 1;
+            writer.Write(version);
+            writer.Write(bid.DateTime.Ticks);
+            if ((int)version == 1)
+                writer.Write(bid.ExchangeDateTime.Ticks);
+            writer.Write(bid.ProviderId);
+            writer.Write(bid.InstrumentId);
+            writer.Write(bid.Price);
+            writer.Write(bid.Size); 
         }
     }
 }

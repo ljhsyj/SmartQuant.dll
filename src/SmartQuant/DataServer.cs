@@ -41,11 +41,11 @@ namespace SmartQuant
         {
         }
 
-        public virtual void Save(Instrument instrument, DataObject obj)
+        public virtual void Save(Instrument instrument, DataObject obj, SaveMode option = SaveMode.Add)
         {
         }
 
-        public virtual DataSeries GetDataSeries(Instrument instrument, byte type)
+        public virtual DataSeries GetDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
             return null;
         }
@@ -60,7 +60,7 @@ namespace SmartQuant
             return null;
         }
 
-        public virtual void DeleteDataSeries(Instrument instrument, byte type)
+        public virtual void DeleteDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60L)
         {
         }
 

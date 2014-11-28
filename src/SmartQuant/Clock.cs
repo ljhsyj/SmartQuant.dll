@@ -66,7 +66,7 @@ namespace SmartQuant
                         this.dateTime = value;
                 }
 
-               // throw new NotImplementedException();
+                // throw new NotImplementedException();
             }
         }
 
@@ -82,7 +82,7 @@ namespace SmartQuant
                     return;
                 this.mode = value;
                 if (this.mode == ClockMode.Simulation)
-                    this.dateTime = DateTime.MinValue;
+                    Clear();
             }
         }
 
@@ -92,8 +92,9 @@ namespace SmartQuant
         {
             get
             { 
-                return Mode == ClockMode.Simulation ? this.dateTime.Ticks : DateTime.Now.Ticks;
-           }
+                return DateTime.Ticks;
+//                return Mode == ClockMode.Simulation ? this.dateTime.Ticks : DateTime.Now.Ticks;
+            }
         }
 
         public Clock(Framework framework, ClockType type = ClockType.Local, ClockMode mode = ClockMode.Simulation, bool isStandalone = false)
@@ -102,16 +103,16 @@ namespace SmartQuant
             this.type = type;
             this.dateTime = DateTime.MinValue;
             this.ticks = DateTime.Now.Ticks;
+            this.isStandalone = isStandalone;
             Mode = mode;
             Queue = new ReminderEventQueue();
-            this.isStandalone = isStandalone;
-            if (isStandalone)
-            {
-                Thread thread = new Thread(new ThreadStart(this.Run));
-                thread.Name = "Clock Thread";
-                thread.IsBackground = true;
-                thread.Start();
-            }
+//            if (isStandalone)
+//            {
+//                Thread thread = new Thread(new ThreadStart(Run));
+//                thread.Name = "Clock Thread";
+//                thread.IsBackground = true;
+//                thread.Start();
+//            }
         }
 
         public bool AddReminder(ReminderCallback callback, DateTime dateTime, object data = null)
@@ -154,28 +155,28 @@ namespace SmartQuant
             }
         }
 
-        private void Run()
-        {
-            Console.WriteLine("{0} Clock thread started", DateTime.Now);
-            bool pending = false;
-            while (true)
-            {
-                while (Mode != ClockMode.Realtime)
-                    Thread.Sleep(10);
-                if (!Queue.IsEmpty())
-                {
-                    var ticks1 = this.Queue.PeekDateTime().Ticks;
-                    var ticks2 = this.framework.Clock.Ticks;
-                    if (ticks1 <= ticks2)
-                        ((Reminder)Queue.Read()).Execute();
-                    else if (ticks1 - ticks2 < 15000)
-                        pending = true;
-                }
-                if (pending)
-                    Thread.SpinWait(1);
-                else
-                    Thread.Sleep(1);
-            }
-        }
+        //        private void Run()
+        //        {
+        //            Console.WriteLine("{0} Clock thread started", DateTime.Now);
+        //            bool pending = false;
+        //            while (true)
+        //            {
+        //                while (Mode != ClockMode.Realtime)
+        //                    Thread.Sleep(10);
+        //                if (!Queue.IsEmpty())
+        //                {
+        //                    var ticks1 = this.Queue.PeekDateTime().Ticks;
+        //                    var ticks2 = this.framework.Clock.Ticks;
+        //                    if (ticks1 <= ticks2)
+        //                        ((Reminder)Queue.Read()).Execute();
+        //                    else if (ticks1 - ticks2 < 15000)
+        //                        pending = true;
+        //                }
+        //                if (pending)
+        //                    Thread.SpinWait(1);
+        //                else
+        //                    Thread.Sleep(1);
+        //            }
+        //        }
     }
 }

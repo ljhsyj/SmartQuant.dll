@@ -29,7 +29,6 @@ namespace SmartQuant
 
         internal DataObject method_0(Class25 class25_1)
         {
-//            throw new NotImplementedException();
             this.class25_0 = class25_1;
             return this.OnData(class25_1.dataObject_0);
         }

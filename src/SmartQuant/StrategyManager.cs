@@ -68,51 +68,51 @@ namespace SmartQuant
             this.framework.EventServer.OnLog(new GroupEvent(new StrategyStatusInfo(this.framework.Clock.DateTime, StrategyStatusType.Started) { Solution = strategy.Name == null ? "Solution" : strategy.Name, Mode = mode.ToString() }, null));
             strategy.Init();
             strategy.Start();
-            if (!this.framework.IsExternalDataQueue)
-            {
-                var dictionary1 = new Dictionary<IDataProvider, InstrumentList>();
-                while (this.subscriptions.Count != 0)
-                {
-                    var dictionary2 = new Dictionary<IDataProvider, InstrumentList>(this.subscriptions);
-                    this.subscriptions.Clear();
-                    foreach (var keyValuePair in new Dictionary<IDataProvider, InstrumentList>(dictionary2))
-                    {
-                        InstrumentList instrumentList = null;
-                        if (!dictionary1.TryGetValue(keyValuePair.Key, out instrumentList))
-                        {
-                            instrumentList = new InstrumentList();
-                            dictionary1[keyValuePair.Key] = instrumentList;
-                        }
-                        InstrumentList instruments = new InstrumentList();
-                        foreach (Instrument instrument in keyValuePair.Value)
-                        {
-                            if (!instrumentList.Contains(instrument))
-                            {
-                                instrumentList.Add(instrument);
-                                instruments.Add(instrument);
-                            }
-                        }
-                        if (keyValuePair.Key is SellSideStrategy && this.framework.SubscriptionManager != null)
-                            this.framework.SubscriptionManager.Subscribe(keyValuePair.Key, instruments);
-                    }
-                }
-                this.status = StrategyStatus.Running;
-                this.subscriptions = dictionary1;
-                if (this.subscriptions.Count == 0)
-                {
-                    Console.WriteLine("{0} StrategyManager::StartStrategy {1} has no data requests, stopping...", DateTime.Now, strategy.Name);
-                    StopStrategy();
-                }
-                else
-                {
-                    foreach (var subscription in this.subscriptions)
-                    {
-                        if (!(subscription.Key is SellSideStrategy) && this.framework.SubscriptionManager != null)
-                            this.framework.SubscriptionManager.Subscribe(subscription.Key, subscription.Value);
-                    }
-                }
-            }
-            else
+//            if (!this.framework.IsExternalDataQueue)
+//            {
+//                var dictionary1 = new Dictionary<IDataProvider, InstrumentList>();
+//                while (this.subscriptions.Count != 0)
+//                {
+//                    var dictionary2 = new Dictionary<IDataProvider, InstrumentList>(this.subscriptions);
+//                    this.subscriptions.Clear();
+//                    foreach (var keyValuePair in new Dictionary<IDataProvider, InstrumentList>(dictionary2))
+//                    {
+//                        InstrumentList instrumentList = null;
+//                        if (!dictionary1.TryGetValue(keyValuePair.Key, out instrumentList))
+//                        {
+//                            instrumentList = new InstrumentList();
+//                            dictionary1[keyValuePair.Key] = instrumentList;
+//                        }
+//                        InstrumentList instruments = new InstrumentList();
+//                        foreach (Instrument instrument in keyValuePair.Value)
+//                        {
+//                            if (!instrumentList.Contains(instrument))
+//                            {
+//                                instrumentList.Add(instrument);
+//                                instruments.Add(instrument);
+//                            }
+//                        }
+//                        if (keyValuePair.Key is SellSideStrategy && this.framework.SubscriptionManager != null)
+//                            this.framework.SubscriptionManager.Subscribe(keyValuePair.Key, instruments);
+//                    }
+//                }
+//                this.status = StrategyStatus.Running;
+//                this.subscriptions = dictionary1;
+//                if (this.subscriptions.Count == 0)
+//                {
+//                    Console.WriteLine("{0} StrategyManager::StartStrategy {1} has no data requests, stopping...", DateTime.Now, strategy.Name);
+//                    StopStrategy();
+//                }
+//                else
+//                {
+//                    foreach (var subscription in this.subscriptions)
+//                    {
+//                        if (!(subscription.Key is SellSideStrategy) && this.framework.SubscriptionManager != null)
+//                            this.framework.SubscriptionManager.Subscribe(subscription.Key, subscription.Value);
+//                    }
+//                }
+//            }
+//            else
                 this.status = StrategyStatus.Running;
         }
 
@@ -188,7 +188,9 @@ namespace SmartQuant
             var newInstruments = new InstrumentList(instruments.Except(subscribed, new InstrumentComparer()));
             subscribed.Add(newInstruments);
 
-            if (this.status == StrategyStatus.Running && newInstruments.Count > 0 && this.framework.SubscriptionManager != null)
+//            if (this.status == StrategyStatus.Running && newInstruments.Count > 0 && this.framework.SubscriptionManager != null)
+//                this.framework.SubscriptionManager.Subscribe(provider, newInstruments);
+            if (newInstruments.Count > 0 && this.framework.SubscriptionManager != null)
                 this.framework.SubscriptionManager.Subscribe(provider, newInstruments);
         }
 

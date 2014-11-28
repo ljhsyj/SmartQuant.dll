@@ -15,7 +15,7 @@ namespace SmartQuant
 
         private long long_0;
 
-        private System.Collections.Generic.LinkedList<Class25> linkedList_0;
+        private LinkedList<Class25> linkedList_0;
 
         public DateTime DateTime1 { get; set; }
 
@@ -68,6 +68,8 @@ namespace SmartQuant
             DateTime1 = DateTime.MinValue;
             DateTime2 = DateTime.MaxValue;
             SubscribeAll = true;
+
+            this.linkedList_0 = new LinkedList<Class25>();
             Processor = new DataProcessor();
             BarFilter = new BarFilter();
             Series = new List<IDataSeries>();
@@ -200,29 +202,26 @@ namespace SmartQuant
             this.exit = false;
             while (!this.exit)
             {
-                List<Class25> closed = new List<Class25>();
-                foreach (var link in this.linkedList_0)
+                LinkedListNode<Class25> linkedListNode1 = this.linkedList_0.First;
+                LinkedListNode<Class25> linkedListNode2 = (LinkedListNode<Class25>) null;
+                for (; linkedListNode1 != null; linkedListNode1 = linkedListNode1.Next)
                 {
-                    if (!link.bool_0)
+                    Class25 class25 = linkedListNode1.Data;
+                    if (!class25.bool_0)
                     {
-                        if (link.method_1())
+                        if (class25.method_1())
                             ++this.long_0;
+                        linkedListNode2 = linkedListNode1;
                     }
                     else
                     {
-//                        if (linkedListNode2 == null)
-//                            this.linkedList_0.First = linkedListNode1.Next;
-//                        else
-//                            linkedListNode2.Next = linkedListNode1.Next;
-                        closed.Add(link);
-                        link.eventQueue_0.Enqueue(new OnQueueClosed(link.eventQueue_0));
+                        if (linkedListNode2 == null)
+                            this.linkedList_0.First = linkedListNode1.Next;
+                        else
+                            linkedListNode2.Next = linkedListNode1.Next;
+                        --this.linkedList_0.Count;
+                        class25.eventQueue_0.Enqueue(  new OnQueueClosed(class25.eventQueue_0));
                     }
-                }
-
-                foreach (var link in closed)
-                {
-                    link.eventQueue_0.Enqueue(new OnQueueClosed(link.eventQueue_0));
-                    this.linkedList_0.Remove(link);
                 }
             }   
             this.exit = false;
@@ -239,7 +238,7 @@ namespace SmartQuant
                 q.Name = dataSeries.Name;
                 q.Enqueue(new OnQueueOpened(q));
                 this.framework.EventBus.DataPipe.Add(q);
-                this.linkedList_0.AddLast(new Class25(dataSeries, DateTime1, DateTime2, q, Processor));
+                this.linkedList_0.Add(new Class25(dataSeries, DateTime1, DateTime2, q, Processor));
             }
         }
     }
@@ -265,7 +264,7 @@ namespace SmartQuant
             this.eventQueue_1 = new EventQueue(EventQueueId.All, EventQueueType.Master, EventQueuePriority.Normal, 128);
             this.dataSeries = dataSeries;
             this.eventQueue_0 = eventQueue_2;
-            this.dataProcessor_0 = processor != null ? processor : new DataProcessor();
+            this.dataProcessor_0 =  processor ?? new DataProcessor();
             this.index1 = dateTime1 == DateTime.MinValue || dateTime1 < dataSeries.DateTime1 ? 0 : dataSeries.GetIndex(dateTime1, SearchOption.Next);
             this.index2 = dateTime2 == DateTime.MaxValue || dateTime2 > dataSeries.DateTime2 ? dataSeries.Count - 1 : dataSeries.GetIndex(dateTime2, SearchOption.Prev);
             this.current = this.index1;

@@ -13,8 +13,10 @@ namespace UnitTest
         [SetUp]
         public void SetUp()
         {
-          //  pipe = new EventPipe(Fr);
+            var f = Substitute.For<Framework>("mock",true);
+            pipe = new EventPipe(f);
         }
+
         [TearDown]
         public void TearDown()
         {
@@ -23,7 +25,6 @@ namespace UnitTest
         [Test]
         public void DequeueReturnNull()
         {
-         //   var pipe = new EventPipe(f);
             Assert.AreEqual(null, pipe.Dequeue());
         }
     }

@@ -12,22 +12,31 @@ namespace SmartQuant
     public class DataManager
     {
         private Framework framework;
+        private Thread thread;
+        private volatile bool exit;
 
         public DataServer Server { get; private set; }
 
         public DataManager(Framework framework, DataServer dataServer)
         {
             this.framework = framework;
-            this.Server = dataServer;
-            this.Server.Open();
-            Thread thread = new Thread(new ThreadStart(this.Run));
-            thread.Name = "Data Manager Thread";
-            thread.IsBackground = true;
-            thread.Start();
+            Server = dataServer;
+            Server.Open();
+            this.thread = new Thread(new ThreadStart(Run));
+            this.thread.Name = "Data Manager Thread";
+            this.thread.IsBackground = true;
+            this.thread.Start();
+            while(!this.thread.IsAlive)
+                Thread.Sleep(1);
         }
 
         private void Run()
         {
+            Console.WriteLine("{0} Data manager thread started: Framework = {1}  Clock = {2}", DateTime.Now,this.framework.Name , this.framework.Clock.GetModeAsString());
+            while (!this.exit)
+                Thread.Sleep(10);
+            Console.WriteLine("{0} Data manager thread stopped: Framework = {1}  Clock = {2}", DateTime.Now,this.framework.Name , this.framework.Clock.GetModeAsString());
+
         }
 
         public void Dump()
@@ -59,17 +68,17 @@ namespace SmartQuant
 
         public DataSeries GetDataSeries(string symbol, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
-            return null;
+            return GetDataSeries(this.framework.InstrumentManager.Instruments[symbol], type, barType, barSize);
         }
 
         public DataSeries GetDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
         {
-            return null;
+            return Server.GetDataSeries(instrument, type, barType, barSize);
         }
 
         public DataSeries GetDataSeries(string name)
         {
-            return this.Server.GetDataSeries(name);
+            return Server.GetDataSeries(name);
         }
 
         public TimeSeries AddTimeSeries(string name)
@@ -102,12 +111,12 @@ namespace SmartQuant
 
         public void Save(BarSeries series, SaveMode option = SaveMode.Add)
         {
-            Parallel.For(0, series.Count - 1, i => this.Save((Bar)series[i], option));
+            Parallel.For(0, series.Count, i => Save((Bar)series[i], option));
         }
 
         public void Save(TickSeries series, SaveMode option = SaveMode.Add)
         {
-            Parallel.ForEach(series, s => this.Save(s, option));
+            Parallel.ForEach(series, s => Save(s, option));
         }
 
         public void Save(Tick tick, SaveMode option = SaveMode.Add)

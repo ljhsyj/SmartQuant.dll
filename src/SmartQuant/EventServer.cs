@@ -8,13 +8,14 @@ namespace SmartQuant
     public class EventServer
     {
         private Framework framework;
+        private EventQueue queue;
         private EventBus bus;
-        // Not yet used
 
         public EventServer(Framework framework, EventBus bus)
         {
             this.framework = framework;
             this.bus = bus;
+            this.queue = new EventQueue(EventQueueId.All,EventQueueType.Master, EventQueuePriority.Normal, 8192);
         }
 
         public void OnEvent(Event e)
@@ -108,12 +109,17 @@ namespace SmartQuant
 
         public void OnPositionOpened(Portfolio portfolio, Position position, bool queued = true)
         {
-            throw new NotImplementedException();
+            var e = new OnPositionOpened(portfolio, position);
+            if (queued)
+                this.queue.Enqueue(e);
+            else
+                OnEvent(e);
         }
 
         public void EmitQueued()
         {
-            throw new NotImplementedException();
+            while (!this.queue.IsEmpty())
+                OnEvent(this.queue.Read());
         }
 
         internal void OnExecutionReport(ExecutionReport report)
@@ -121,6 +127,7 @@ namespace SmartQuant
             OnEvent(new OnExecutionReport(report));
         }
 
+        // FIXME:the second param name is wrong!
         internal void OnPortfolioParentChanged(Portfolio portfolio, bool queued = true)
         {
             if (queued)
