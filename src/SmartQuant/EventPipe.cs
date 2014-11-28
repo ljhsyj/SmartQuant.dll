@@ -3,16 +3,14 @@
 
 using System;
 using System.Linq;
-using LinkedList = System.Collections.Generic.LinkedList<global::SmartQuant.IEventQueue>;
-using LinkedListNode = System.Collections.Generic.LinkedListNode<global::SmartQuant.IEventQueue>;
 
 namespace SmartQuant
 {
     public class EventPipe
     {
         private Framework framework;
-        private LinkedList syncedQueues;
-        private LinkedList unsyncedQueues;
+        private System.Collections.Generic.LinkedList<IEventQueue> syncedQueues = new System.Collections.Generic.LinkedList<IEventQueue>();
+        private System.Collections.Generic.LinkedList<IEventQueue> unsyncedQueues = new System.Collections.Generic.LinkedList<IEventQueue>();
 
         public int Count
         {
@@ -25,8 +23,6 @@ namespace SmartQuant
         public EventPipe(Framework framework)
         {
             this.framework = framework;
-            this.syncedQueues = new LinkedList();
-            this.unsyncedQueues = new LinkedList();
         }
 
         public void Add(IEventQueue queue)
@@ -44,18 +40,16 @@ namespace SmartQuant
 
         public Event Read()
         {
-            IEventQueue queue = null;
-
-            queue = unsyncedQueues.FirstOrDefault(q => !q.IsEmpty());
+            // Check the unsynced queues first.
+            var queue = unsyncedQueues.FirstOrDefault(q => !q.IsEmpty());
             if (queue != null)
             {
                 var e = queue.Read();
                 if (e.TypeId == EventType.OnQueueClosed)
-                {
                     unsyncedQueues.Remove(queue);
-                }
                 return e;
             }
+
             DateTime minDateTime = DateTime.MaxValue;
             IEventQueue removedQueue = null;
             IEventQueue minDateTimeQueue = null;
@@ -63,15 +57,15 @@ namespace SmartQuant
             foreach (var q in syncedQueues)
             {
                 evt = q.Peek();
-                if (evt.TypeId == EventType.OnQueueClosed && (evt as OnQueueClosed).Queue == q)
-                {
-                    removedQueue = q;
-                    break;
-                }
-                else
+                if (evt.TypeId != EventType.OnQueueClosed || (evt as OnQueueClosed).Queue != q)
                 {
                     minDateTime = minDateTime > evt.DateTime ? evt.DateTime : minDateTime;
                     minDateTimeQueue = q;
+                }
+                else
+                {
+                    removedQueue = q;
+                    break;
                 }
             }
 

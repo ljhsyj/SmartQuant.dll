@@ -2,7 +2,7 @@
 // Copyright (c) Alex Lee. All rights reserved.
 
 using System;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Threading;
 
 namespace SmartQuant
