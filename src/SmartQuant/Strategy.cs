@@ -9,8 +9,8 @@ namespace SmartQuant
     public class Strategy
     {
         private bool initialized;
-        private IDataProvider dataProvider;
-        private IExecutionProvider executionProvider;
+        internal IDataProvider dataProvider;
+        internal IExecutionProvider executionProvider;
 
         protected internal Framework framework;
         protected bool raiseEvents;

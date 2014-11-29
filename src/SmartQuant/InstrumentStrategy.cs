@@ -12,11 +12,13 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return FindDataProvider(this, Instrument);
             }
             set
             {
-                throw new NotImplementedException();
+                this.dataProvider = value;
+                for (var node = Strategies.First; node != null; node = node.Next)
+                    node.Data.DataProvider = this.dataProvider;
             }
         }
 
@@ -24,11 +26,13 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return FindExecutionProvider(Instrument);
             }
             set
             {
-                throw new NotImplementedException();
+                this.executionProvider = value;
+                for (var node = Strategies.First; node != null; node = node.Next)
+                    node.Data.ExecutionProvider = this.executionProvider;
             }
         }
 

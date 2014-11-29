@@ -72,7 +72,6 @@ namespace SmartQuant
                         OnConnected();
                     if (status == ProviderStatus.Disconnected)
                         OnDisconnected();
-
                     EmitProviderStatusChanged(this);
                 }
             }

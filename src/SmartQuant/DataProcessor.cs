@@ -27,10 +27,10 @@ namespace SmartQuant
             EmitBarOpenTrade = EmitBarHighTrade = EmitBarLowTrade = EmitBarCloseTrade = false;
         }
 
-        internal DataObject method_0(Class25 class25_1)
+        internal DataObject Process(Class25 class25_1)
         {
             this.class25_0 = class25_1;
-            return this.OnData(class25_1.dataObject_0);
+            return OnData(class25_1.dataObject_0);
         }
 
         protected virtual DataObject OnData(DataObject obj)

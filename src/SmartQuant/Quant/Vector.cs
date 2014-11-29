@@ -108,7 +108,7 @@ namespace SmartQuant.Quant
             EnsureNumberPositive(newNRows, "Number of rows");
             double[] newArray = new double[newNRows];
             int num = Math.Min(this.NRows, newNRows);
-            Parallel.For(0, Math.Min(this.NRows, newNRows), i => newArray[i] = Elements[i]);
+            Parallel.For(0, Math.Min(NRows, newNRows), i => newArray[i] = Elements[i]);
             NRows = newNRows;
             Elements = newArray;
         }
@@ -134,7 +134,7 @@ namespace SmartQuant.Quant
         public Vector Abs()
         {
             EnsureValid(this);
-            Vector v = new Vector(this.NRows);
+            Vector v = new Vector(NRows);
             Parallel.For(0, this.NRows, i => v[i] = Math.Abs(this.Elements[i]));
             return v;
         }
@@ -142,7 +142,7 @@ namespace SmartQuant.Quant
         public Vector Sqr()
         {
             EnsureValid(this);
-            Vector v = new Vector(this.NRows);
+            Vector v = new Vector(NRows);
             Parallel.For(0, this.NRows, i => v[i] = this.Elements[i] * this.Elements[i]);
             return v;
         }
@@ -150,8 +150,8 @@ namespace SmartQuant.Quant
         public Vector Sqrt()
         {
             EnsureValid(this);
-            Vector v = new Vector(this.NRows);
-            Parallel.For(0, this.NRows, i => v[i] = Math.Sqrt(this.Elements[i]));
+            Vector v = new Vector(NRows);
+            Parallel.For(0, NRows, i => v[i] = Math.Sqrt(this.Elements[i]));
             return v;
         }
 
@@ -162,7 +162,7 @@ namespace SmartQuant.Quant
             EnsureCompatible(target, source);
 
             Vector v = new Vector(target.NRows);
-            Parallel.For(0, this.NRows, i => v[i] = target[i] * source[i]);
+            Parallel.For(0, NRows, i => v[i] = target[i] * source[i]);
             return v;
         }
 
@@ -173,16 +173,16 @@ namespace SmartQuant.Quant
             EnsureCompatible(target, source);
 
             Vector v = new Vector(target.NRows);
-            Parallel.For(0, this.NRows, i => v[i] = target[i] / source[i]);
+            Parallel.For(0, NRows, i => v[i] = target[i] / source[i]);
             return v;
         }
 
         public override bool Equals(object vector)
         {
             Vector that = (Vector)vector;
-            if (this.NRows != that.NRows)
+            if (NRows != that.NRows)
                 return false;
-            return Enumerable.Range(0, this.NRows).All(i => this[i] == that[i]);
+            return Enumerable.Range(0, NRows).All(i => this[i] == that[i]);
         }
 
         public override int GetHashCode()

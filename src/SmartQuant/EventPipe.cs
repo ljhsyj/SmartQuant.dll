@@ -198,15 +198,17 @@ namespace SmartQuant
                     else
                         linkedListNode4.Next = linkedListNode3.Next;
                     --this.linkedList_1.Count;
+
                     if (this.linkedList_1.Count == 0 && this.framework_0.Mode == FrameworkMode.Simulation && linkedListNode3.Data.Name != "Simulator stop queue")
                     {
+                       // Console.WriteLine("q count:{0}", this.linkedList_1.Count);
                         EventQueue queue = new EventQueue((byte) 1, (byte) 0, (byte) 2, 10);
                         queue.IsSynched = true;
                         queue.Name = "Simulator stop queue";
                         queue.Enqueue((Event) new OnQueueOpened(queue));
                         queue.Enqueue((Event) new OnSimulatorStop());
                         queue.Enqueue((Event) new OnQueueClosed(queue));
-                        this.Add((IEventQueue) queue);
+                        Add(queue);
                     }
                     linkedListNode5 = linkedListNode3;
                     break;

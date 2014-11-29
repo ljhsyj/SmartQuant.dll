@@ -181,8 +181,10 @@ namespace BollingerBands
             strategy.AddInstrument(instrument1);
             strategy.AddInstrument(instrument2);
 
-            DataSimulator.DateTime1 = new DateTime(2013, 01, 01);
-            DataSimulator.DateTime2 = new DateTime(2013, 12, 31);
+//            DataSimulator.DateTime1 = new DateTime(2013, 01, 01);
+//            DataSimulator.DateTime2 = new DateTime(2013, 12, 31);
+            DataSimulator.DateTime1 = new DateTime(2013, 12, 16, 09,30,0);
+            DataSimulator.DateTime2 = new DateTime(2013, 12, 16, 10,35,0);
 
             BarFactory.Add(instrument1, BarType.Time, barSize);
             BarFactory.Add(instrument2, BarType.Time, barSize);

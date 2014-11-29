@@ -55,7 +55,7 @@ namespace SmartQuant
         private DataSeries method_0(Instrument instrument_0, BarType barType_0, long long_0, bool bool_1)
         {
             DataSeries dataSeries;
-            if (barType_0 == BarType.Time && long_0 <= 86400L)
+            if (barType_0 == BarType.Time && long_0 <= 86400)
             {
                 if (this.idArray_1[instrument_0.Id] == null)
                     this.idArray_1[instrument_0.Id] = new IdArray<DataSeries>(1000);

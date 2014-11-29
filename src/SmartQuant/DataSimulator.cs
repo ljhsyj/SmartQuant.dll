@@ -10,7 +10,7 @@ namespace SmartQuant
     class DataSimulator : Provider, IDataSimulator
     {
         private Thread thread;
-        private bool running;
+        private volatile bool running;
         private volatile bool exit;
 
         private long long_0;
@@ -96,7 +96,7 @@ namespace SmartQuant
         protected override void OnConnected()
         {
             foreach (var s in Series)
-                OpenDataQueue(s);
+                OpenDataQueue(s, DateTime1, DateTime2);
         }
 
         protected override void OnDisconnected()
@@ -138,47 +138,61 @@ namespace SmartQuant
             }
         }
 
+        // core method
         private void Subscribe(Instrument instrument, DateTime dateTime1, DateTime dateTime2)
         {
             Console.WriteLine("{0} DataSimulator::Subscribe {1}", DateTime.Now, instrument.Symbol);
             if (SubscribeTrade)
             {
                 var ds =  this.framework.DataManager.GetDataSeries(instrument, DataObjectType.Trade, BarType.Time, 60);
-                OpenDataQueue(ds);
+                OpenDataQueue(ds, dateTime1, dateTime2);
             }
             if (SubscribeBid)
             {
                 var ds =  this.framework.DataManager.GetDataSeries(instrument, DataObjectType.Bid, BarType.Time, 60);
-                OpenDataQueue(ds);
+                OpenDataQueue(ds, dateTime1, dateTime2);
             }
             if (SubscribeAsk)
             {
                 var ds =  this.framework.DataManager.GetDataSeries(instrument, DataObjectType.Ask, BarType.Time, 60);
-                OpenDataQueue(ds);
+                OpenDataQueue(ds, dateTime1, dateTime2);
             }
             if (SubscribeQuote)
             {
                 var ds =  this.framework.DataManager.GetDataSeries(instrument, DataObjectType.Quote, BarType.Time, 60);
-                OpenDataQueue(ds);
+                OpenDataQueue(ds, dateTime1, dateTime2);
             }
             if (SubscribeBar)
             {
+                foreach (var ds in this.framework.DataManager.GetDataSeriesList(instrument, "Bar"))
+                    if (!IsFilteredOut(ds))
+                        OpenDataQueue(ds, dateTime1, dateTime2);
             }
             if (SubscribeLevelII)
             {
                 var ds = this.framework.DataManager.GetDataSeries(instrument, DataObjectType.Level2, BarType.Time, 60L);
-                OpenDataQueue(ds);
+                OpenDataQueue(ds, dateTime1, dateTime2);
             }
             if (SubscribeFundamental)
             {
                 var ds = this.framework.DataManager.GetDataSeries(instrument, DataObjectType.Fundamental, BarType.Time, 60L);
-                OpenDataQueue(ds);
+                OpenDataQueue(ds, dateTime1, dateTime2);
             }
             if (SubscribeNews)
             {
                 var ds = this.framework.DataManager.GetDataSeries(instrument, DataObjectType.News, BarType.Time, 60L);
-                OpenDataQueue(ds);
+                OpenDataQueue(ds, dateTime1, dateTime2);
             }
+        }
+
+        private bool IsFilteredOut(DataSeries dataSeries)
+        {
+            if (BarFilter.Count == 0)
+                return false;
+            BarType barType;
+            long barSize;
+            DataSeriesNameHelper.TryGetBarTypeSize(dataSeries, out barType, out barSize);
+            return BarFilter.Contains(barType, barSize);
         }
 
         private void Start()
@@ -203,14 +217,15 @@ namespace SmartQuant
             while (!this.exit)
             {
                 LinkedListNode<Class25> linkedListNode1 = this.linkedList_0.First;
-                LinkedListNode<Class25> linkedListNode2 = (LinkedListNode<Class25>) null;
+                LinkedListNode<Class25> linkedListNode2 =   null;
                 for (; linkedListNode1 != null; linkedListNode1 = linkedListNode1.Next)
                 {
                     Class25 class25 = linkedListNode1.Data;
-                    if (!class25.bool_0)
+                    if (!class25.done)
                     {
                         if (class25.method_1())
                             ++this.long_0;
+                        //Console.WriteLine("long:{0}",this.long_0);
                         linkedListNode2 = linkedListNode1;
                     }
                     else
@@ -220,7 +235,7 @@ namespace SmartQuant
                         else
                             linkedListNode2.Next = linkedListNode1.Next;
                         --this.linkedList_0.Count;
-                        class25.eventQueue_0.Enqueue(  new OnQueueClosed(class25.eventQueue_0));
+                        class25.eventQueue_0.Enqueue(new OnQueueClosed(class25.eventQueue_0));
                     }
                 }
             }   
@@ -229,7 +244,7 @@ namespace SmartQuant
             Console.WriteLine("{0} Data simulator thread stopped", DateTime.Now);
         }
 
-        private void OpenDataQueue(IDataSeries dataSeries)
+        private void OpenDataQueue(IDataSeries dataSeries, DateTime dateTime1, DateTime dateTime2)
         {
             if (dataSeries != null)
             {
@@ -238,7 +253,7 @@ namespace SmartQuant
                 q.Name = dataSeries.Name;
                 q.Enqueue(new OnQueueOpened(q));
                 this.framework.EventBus.DataPipe.Add(q);
-                this.linkedList_0.Add(new Class25(dataSeries, DateTime1, DateTime2, q, Processor));
+                this.linkedList_0.Add(new Class25(dataSeries, dateTime1, dateTime2, q, Processor));
             }
         }
     }
@@ -253,29 +268,24 @@ namespace SmartQuant
         internal long current;
         internal long long_3;
         internal DataObject dataObject_0;
-        internal bool bool_0;
+        internal bool done;
+        internal int stepSize;
+        internal long stepCount;
         internal int percent;
-        internal int OfpSxMiEjt;
-        internal int int_1;
-        internal DataProcessor dataProcessor_0;
+        internal DataProcessor processor;
 
         internal Class25(IDataSeries dataSeries, DateTime dateTime1, DateTime dateTime2, EventQueue eventQueue_2, DataProcessor processor)
         {
             this.eventQueue_1 = new EventQueue(EventQueueId.All, EventQueueType.Master, EventQueuePriority.Normal, 128);
             this.dataSeries = dataSeries;
             this.eventQueue_0 = eventQueue_2;
-            this.dataProcessor_0 =  processor ?? new DataProcessor();
+            this.processor =  processor ?? new DataProcessor();
             this.index1 = dateTime1 == DateTime.MinValue || dateTime1 < dataSeries.DateTime1 ? 0 : dataSeries.GetIndex(dateTime1, SearchOption.Next);
             this.index2 = dateTime2 == DateTime.MaxValue || dateTime2 > dataSeries.DateTime2 ? dataSeries.Count - 1 : dataSeries.GetIndex(dateTime2, SearchOption.Prev);
             this.current = this.index1;
-            this.percent = (int) Math.Ceiling((double) this.method_0() / 100.0);
-            this.OfpSxMiEjt = this.percent;
-            this.int_1 = 0;
-        }
-
-        internal long method_0()
-        {
-            return this.index2 - this.index1 + 1;
+            this.stepSize = (int) Math.Ceiling(this.index2 - this.index1 + 1 / 100d);
+            this.stepCount = this.stepSize;
+            this.percent = 0;
         }
 
         internal bool method_1()
@@ -290,13 +300,13 @@ namespace SmartQuant
                     if (this.current <= this.index2)
                     {
                         this.dataObject_0 = this.dataSeries[this.current];
-                        this.dataObject_0 = this.dataProcessor_0.method_0(this);
+                        this.dataObject_0 = this.processor.Process(this);
                         ++this.current;
                         ++this.long_3;
                     }
                     else
                     {
-                        this.bool_0 = true;
+                        this.done = true;
                         return false;
                     }
                 }
@@ -310,11 +320,11 @@ namespace SmartQuant
             dataObject = (DataObject)this.eventQueue_1.Read();
             label_8:
             this.eventQueue_0.Write(dataObject);
-            if (this.long_3 == (long) this.OfpSxMiEjt)
+            if (this.long_3 ==  this.stepCount)
             {
-                this.OfpSxMiEjt += this.percent;
-                ++this.int_1;
-                this.eventQueue_0.Enqueue(new OnSimulatorProgress((long) this.OfpSxMiEjt, this.int_1));
+                this.stepCount += this.stepSize;
+                ++this.percent;
+                this.eventQueue_0.Enqueue(new OnSimulatorProgress(this.stepCount, this.percent));
             }
             return true;
         }

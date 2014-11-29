@@ -29,7 +29,7 @@ namespace SmartQuant
 
         public void Dispose()
         {
-            this.Close();
+            Close();
         }
 
         protected string GetStringValue(string key, string defaultValue)

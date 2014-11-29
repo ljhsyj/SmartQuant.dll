@@ -16,7 +16,7 @@ namespace SmartQuant.Statistics
 
         protected internal override void OnInit()
         {
-            this.Subscribe(this.type);
+            Subscribe(this.type);
         }
 
         protected internal override void OnStatistics(PortfolioStatisticsItem statistics)
@@ -29,7 +29,7 @@ namespace SmartQuant.Statistics
             this.longValues.Add(this.Clock.DateTime, this.longValue);
             this.shortValues.Add(this.Clock.DateTime, this.shortValue);
             this.totalValues.Add(this.Clock.DateTime, this.totalValue);
-            this.Emit();
+            Emit();
         }
     }
 }

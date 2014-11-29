@@ -54,9 +54,9 @@ namespace SmartQuant
             this.gates = new IdArray<EventGate>(1024);
 //            this.gates[EventType.OnProviderConnected] = new EventManager.Delegate0(this.method_2);
 //            this.gates[EventType.OnProviderDisconnected] = new EventManager.Delegate0(this.method_3);
-//            this.gates[EventType.OnSimulatorStart] = new EventManager.Delegate0(this.method_4);
-//            this.gates[EventType.OnSimulatorStop] = new EventManager.Delegate0(this.method_5);
-//            this.gates[EventType.OnSimulatorProgress] = new EventManager.Delegate0(this.method_6);
+            this.gates[EventType.OnSimulatorStart] = this.method_4;
+            this.gates[EventType.OnSimulatorStop] = this.method_5;
+            this.gates[EventType.OnSimulatorProgress] = this.method_6;
 //            this.gates[EventType.Bid] = new EventManager.Delegate0(this.method_7);
 //            this.gates[EventType.Ask] = new EventManager.Delegate0(this.method_8);
 //            this.gates[EventType.Trade] = new EventManager.Delegate0(this.method_9);
@@ -200,6 +200,33 @@ namespace SmartQuant
                 }
             }
             Console.WriteLine("{0} Event manager thread stopped: Framework = {1} Clock = {2}", DateTime.Now, this.framework.Name, this.framework.Clock.GetModeAsString());
+        }
+
+        private void method_4(Event e)
+        {
+            var onSimulatorStart = (OnSimulatorStart) e;
+            if (this.framework.Clock.Mode == ClockMode.Simulation)
+                this.framework.Clock.DateTime = onSimulatorStart.DateTime;
+            if (this.bus != null)
+                this.bus.ResetCounts();
+            EventCount = DataEventCount = 0;
+//            this.stopwatch.Reset();
+//            this.stopwatch_0.Start();
+        }
+
+        private void method_5(Event event_0)
+        {
+            this.framework.StrategyManager.Stop();
+          //  this.stopwatch_0.Stop();
+       //     long elapsedMilliseconds = this.stopwatch_0.ElapsedMilliseconds;
+//            if (elapsedMilliseconds != 0L)
+//                Console.WriteLine((string) (object) DateTime.Now + (object) " Data run done, count = " + (string) (object) this.long_1 + " ms = " + (string) (object) this.stopwatch_0.ElapsedMilliseconds + " event/sec = " + (string) (object) (this.long_1 / elapsedMilliseconds * 1000L));
+//            else
+                Console.WriteLine( "{0} Data run done, count = {1} ms = 0",DateTime.Now, DataEventCount);
+        }
+
+        private void method_6(Event e)
+        {
         }
     }
 

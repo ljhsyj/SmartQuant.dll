@@ -34,6 +34,7 @@ namespace SmartQuant
                 isDisposable = true;
             }
         }
+
         public AccountDataManager AccountDataManager { get; private set; }
 
         public Configuration Configuration { get; private set; }
@@ -154,6 +155,8 @@ namespace SmartQuant
             Name = name;
             IsExternalDataQueue = true;
             LoadConfiguration();
+
+            // Setup event infrastructure.
             Mode = FrameworkMode.Simulation;
             EventBus = new EventBus(this, EventBusMode.Simulation);
             Clock = new Clock(this, ClockType.Local);
@@ -168,11 +171,18 @@ namespace SmartQuant
             // StreamerManager should be created early.
             StreamerManager = new StreamerManager();
             LoadStreamerPlugins();
+
+            // Prepare instrument data
             InstrumentServer = createServers ? (Configuration.IsInstrumentFileLocal ? new FileInstrumentServer(this, Configuration.InstrumentFileName) : new FileInstrumentServer(this, "instruments.quant", Configuration.InstrumentFileHost)) : instrumentServer;
             InstrumentManager = new InstrumentManager(this, InstrumentServer);
             InstrumentManager.Load();
+
+            // Prepare other data
             DataServer = createServers ? (Configuration.IsDataFileLocal ? new FileDataServer(this, Configuration.DataFileName) : new FileDataServer(this, "data.quant", Configuration.DataFileHost)) : dataServer;
             DataManager = new DataManager(this, DataServer);
+            if (createServers)
+                OrderServer = CreateOrderServer<OrderServer>(Configuration.OrderServer);
+
             ProviderManager = new ProviderManager(this);
             LoadProviderPlugins();
             EventLoggerManager = new EventLoggerManager();
@@ -213,15 +223,19 @@ namespace SmartQuant
             if (disposing)
             {
                 SaveConfiguration();
-
-                // EventManager has its inner thread running,
-                // this let it exit gracefully
+                if (InstrumentServer != null)
+                    InstrumentServer.Dispose();
+                if (DataServer != null)
+                    DataServer.Dispose();
+                if (OrderServer != null)
+                    OrderServer.Dispose();
+                if (ProviderManager != null)
+                    ProviderManager.Dispose();
                 if (EventManager != null)
                     EventManager.Close();
             }
             disposed = true;
         }
-
 
         private void LoadConfiguration()
         {
@@ -285,6 +299,20 @@ namespace SmartQuant
                 var streamer = (ObjectStreamer)Activator.CreateInstance(type);
                 StreamerManager.Add(streamer);
             }
+        }
+
+        private T CreateOrderServer<T>(ServerConfiguration configuration) where T : FrameworkServer
+        {
+            var type = Type.GetType(configuration.TypeName);
+            if (type == null)
+                return default(T);
+            object instance = Activator.CreateInstance(type);
+            if (!(instance is T))
+                return default(T);
+            T server = (T)instance;
+            server.Framework = this;
+            server.ConnectionString = configuration.ConnectionString;
+            return server;
         }
 
         public void Load(BinaryReader reader)

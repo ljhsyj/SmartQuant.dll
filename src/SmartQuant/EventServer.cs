@@ -15,7 +15,7 @@ namespace SmartQuant
         {
             this.framework = framework;
             this.bus = bus;
-            this.queue = new EventQueue(EventQueueId.All,EventQueueType.Master, EventQueuePriority.Normal, 8192);
+            this.queue = new EventQueue(EventQueueId.All, EventQueueType.Master, EventQueuePriority.Normal, 8192);
         }
 
         public void OnEvent(Event e)

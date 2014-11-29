@@ -437,20 +437,20 @@ namespace SmartQuant
             {
                 dKey = GetFirstKey();
             }
-            var dataKey = dKey;
-            do
-            {
-                if (dataKey.index1 <= index && index <= dataKey.index2)
-                    return dataKey;
-                dataKey = GetNextKey(dataKey);
-            } while(dataKey != null);
-
-//            if (dKey != null && dKey.index1 <= index && index <= dKey.index2)
-//                return dKey;
-//
-//            var dataKey = dKey != null && index > dKey.index2 ? GetNextKey(dKey) : GetFirstKey();
-//            while (index < dataKey.index1 || index > dataKey.index2)
+//            var dataKey = dKey;
+//            do
+//            {
+//                if (dataKey.index1 <= index && index <= dataKey.index2)
+//                    return dataKey;
 //                dataKey = GetNextKey(dataKey);
+//            } while(dataKey != null);
+
+            if (dKey != null && dKey.index1 <= index && index <= dKey.index2)
+                return dKey;
+
+            var dataKey = dKey != null && index > dKey.index2 ? GetNextKey(dKey) : GetFirstKey();
+            while (index < dataKey.index1 || index > dataKey.index2)
+                dataKey = GetNextKey(dataKey);
             return dataKey;
         }
 
@@ -498,8 +498,8 @@ namespace SmartQuant
             count = reader.ReadInt64();
             bufferCount = reader.ReadInt32();
             dKeysKeyPosition = reader.ReadInt64();
-            DateTime1 = new DateTime(reader.ReadInt64());
             DateTime2 = new DateTime(reader.ReadInt64());
+            DateTime1 = new DateTime(reader.ReadInt64());
             position1 = reader.ReadInt64();
             position2 = reader.ReadInt64();
             Name = reader.ReadString();
@@ -511,8 +511,8 @@ namespace SmartQuant
             writer.Write(this.count);
             writer.Write(this.bufferCount);
             writer.Write(this.dKeysKeyPosition);
-            writer.Write(this.DateTime1.Ticks);
             writer.Write(this.DateTime2.Ticks);
+            writer.Write(this.DateTime1.Ticks);
             writer.Write(this.position1);
             writer.Write(this.position2);
             writer.Write(this.Name);
