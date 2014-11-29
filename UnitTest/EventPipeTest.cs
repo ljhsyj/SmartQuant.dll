@@ -13,7 +13,7 @@ namespace UnitTest
         [SetUp]
         public void SetUp()
         {
-            var f = Substitute.For<Framework>("mock",true);
+            var f = Substitute.For<Framework>("mock", true);
             pipe = new EventPipe(f);
         }
 
@@ -26,6 +26,9 @@ namespace UnitTest
         public void DequeueReturnNull()
         {
             Assert.AreEqual(null, pipe.Dequeue());
+            Assert.AreEqual(null, pipe.Read());
+            Assert.IsTrue(pipe.IsEmpty());
+
         }
     }
 }

@@ -111,12 +111,7 @@ namespace SmartQuant
                 return this.linkedList_0.Count;
             }
         }
-
-        static EventPipe()
-        {
-            System.ComponentModel.LicenseManager.Validate(typeof (EventPipe));
-        }
-
+            
         public EventPipe(Framework framework)
         {
             this.framework_0 = framework;

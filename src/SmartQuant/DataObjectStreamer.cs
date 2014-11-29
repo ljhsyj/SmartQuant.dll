@@ -22,7 +22,8 @@ namespace SmartQuant
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            writer.Write((byte)0);
+            byte version = 0;
+            writer.Write(version);
             writer.Write((obj as DataObject).DateTime.Ticks);
         }
     }

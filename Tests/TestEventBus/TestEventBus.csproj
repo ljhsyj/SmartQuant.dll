@@ -74,7 +74,6 @@
     <Compile Include="..\..\src\SmartQuant\DataObject.cs">
       <Link>DataObject.cs</Link>
     </Compile>
-    <Compile Include="FakeClasses.cs" />
     <Compile Include="..\..\src\SmartQuant\EventQueue.cs">
       <Link>EventQueue.cs</Link>
     </Compile>

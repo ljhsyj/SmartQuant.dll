@@ -14,6 +14,10 @@ namespace SmartQuant
         [XmlElement("X64")]
         public bool X64 { get; set; }
 
+        public ProviderPlugin()
+        {
+        }
+
         public ProviderPlugin(string typeName, bool x64 = false)
         {
             TypeName = typeName;

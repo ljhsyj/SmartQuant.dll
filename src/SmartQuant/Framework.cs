@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using System.Reflection;
 
 namespace SmartQuant
 {
@@ -230,7 +231,13 @@ namespace SmartQuant
                 Configuration = Configuration.DefaultConfiguaration();
             else
                 using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(text)))
+                {
                     Configuration = new XmlSerializer(typeof(Configuration)).Deserialize(stream) as Configuration;
+                    if (Configuration.Streamers.Count == 0)
+                        Configuration.AddDefaultStreamers();
+                    if (Configuration.Providers.Count == 0)
+                        Configuration.AddDefaultStreamers();
+                }
         }
 
         private void SaveConfiguration()

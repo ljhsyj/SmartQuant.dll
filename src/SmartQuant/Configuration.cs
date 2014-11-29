@@ -88,7 +88,7 @@ namespace SmartQuant
             {
                 Type t = Type.GetType(name);
                 if (t != null)
-                    Streamers.Add(new StreamerPlugin(t.AssemblyQualifiedName));
+                    Streamers.Add(new StreamerPlugin(t.FullName));
             }
         }
 
@@ -105,7 +105,7 @@ namespace SmartQuant
             {
                 Type t = Type.GetType(pair.Key);
                 if (t != null)
-                    Providers.Add(new ProviderPlugin(t.AssemblyQualifiedName, pair.Value));
+                    Providers.Add(new ProviderPlugin(t.FullName, pair.Value));
             }
         }
 

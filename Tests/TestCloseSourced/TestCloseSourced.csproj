@@ -35,6 +35,9 @@
     <Reference Include="SmartQuant">
       <HintPath>C:\Program Files\SmartQuant Ltd\OpenQuant 2014\SmartQuant.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\packages\NSubstitute.1.8.0.0\lib\net45\NSubstitute.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -43,6 +46,12 @@
   <ItemGroup>
     <Compile Include="..\..\UnitTest\EventSortedSetTest.cs">
       <Link>EventSortedSetTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UnitTest\EventPipeTest.cs">
+      <Link>EventPipeTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UnitTest\SortedEventQueueTest.cs">
+      <Link>SortedEventQueueTest.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>
