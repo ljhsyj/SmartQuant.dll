@@ -5,7 +5,7 @@ using System;
 
 namespace SmartQuant
 {
-    public class FrameworkServer
+    public class FrameworkServer : IDisposable
     {
         public Framework Framework { get; internal set; }
 
@@ -27,7 +27,7 @@ namespace SmartQuant
         {
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Close();
         }

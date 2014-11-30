@@ -43,9 +43,18 @@ namespace SmartQuant
         public ExecutionSimulator(Framework framework)
             : base(framework)
         {
-            this.BarFilter = new BarFilter();
-            this.CommissionProvider = new CommissionProvider();
-            this.SlippageProvider = new SlippageProvider();
+            this.id = ProviderId.ExecutionSimulator;
+            this.name = "ExecutionSimulator";
+            this.description = "Default execution simulator";
+            this.url = "www.smartquant.com";
+            BarFilter = new BarFilter();
+            CommissionProvider = new CommissionProvider();
+            SlippageProvider = new SlippageProvider();
+        }
+
+        public override void Send(ExecutionCommand command)
+        {
+            throw new NotImplementedException();
         }
 
         public void OnBid(Bid bid)
@@ -60,12 +69,12 @@ namespace SmartQuant
 
         public void OnLevel2(Level2Snapshot snapshot)
         {
-            throw new NotImplementedException();
+            // no-op
         }
 
         public void OnLevel2(Level2Update update)
         {
-            throw new NotImplementedException();
+            // no-op
         }
 
         public void OnTrade(Trade trade)
@@ -78,6 +87,15 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
+        public void OnBarOpen(Bar bar)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Fill(Order order, double price, int size)
+        {
+            throw new NotImplementedException();
+        }
         public void Clear()
         {
             throw new NotImplementedException();

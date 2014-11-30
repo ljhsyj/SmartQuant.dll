@@ -66,9 +66,9 @@ namespace SmartQuant
             }
         }
 
-        public virtual void Add(DataObject dataObject)
+        public virtual void Add(DataObject obj)
         {
-            if (dataObject.DateTime.Ticks == 0)
+            if (obj.DateTime.Ticks == 0)
                 Console.WriteLine("DataSeries::Add Error: can not add object with DateTime = 0");
             else
             {
@@ -77,17 +77,17 @@ namespace SmartQuant
                 ++this.count;
                 if (this.count == 1)
                 {
-                    DateTime1 = dataObject.DateTime;
-                    DateTime2 = dataObject.DateTime;
+                    DateTime1 = obj.DateTime;
+                    DateTime2 = obj.DateTime;
                 }
-                else if (dataObject.DateTime < DateTime2)
+                else if (obj.DateTime < DateTime2)
                 {
-                    SaveDataObject(dataObject);
+                    SaveDataObject(obj);
                     return;
                 }
                 else
-                    DateTime2 = dataObject.DateTime;
-                this.lastReadDKey.Add(dataObject);
+                    DateTime2 = obj.DateTime;
+                this.lastReadDKey.Add(obj);
                 if (this.lastReadDKey.count == this.lastReadDKey.capacity)
                 {
                     SaveWriteDKey(this.lastReadDKey);
@@ -272,6 +272,12 @@ namespace SmartQuant
             this.changed = true;
             Flush();
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
         // reviewed
         public void Dump()
         {

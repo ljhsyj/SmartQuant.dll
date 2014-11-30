@@ -9,6 +9,8 @@ namespace SmartQuant
 {
     public class Order : DataObject
     {
+        internal int strategyId;
+
         public override byte TypeId
         {
             get
@@ -165,22 +167,22 @@ namespace SmartQuant
         public double StopPx { get; set; }
 
         [ReadOnly(true)]
-        public double Price{ get; set; }
+        public double Price { get; set; }
 
         [ReadOnly(true)]
-        public OrderSide Side{ get; set; }
+        public OrderSide Side { get; set; }
 
         [ReadOnly(true)]
-        public OrderType Type{ get; set; }
+        public OrderType Type { get; set; }
 
         [ReadOnly(true)]
-        public double Qty{ get; set; }
+        public double Qty { get; set; }
 
         public double CumQty { get; private set; }
 
-        public double LeavesQty{ get; private set; }
+        public double LeavesQty { get; private set; }
 
-        public double AvgPx{ get; private set; }
+        public double AvgPx { get; private set; }
 
         [ReadOnly(true)]
         public TimeInForce TimeInForce { get; set; }
@@ -189,8 +191,112 @@ namespace SmartQuant
         public DateTime ExpireTime { get; set; }
 
         [ReadOnly(true)]
-        public byte Route{ get; set; }
+        public byte Route { get; set; }
 
-        public DateTime TransactTime{ get; private set; }
+        public DateTime TransactTime { get; private set; }
+
+        public object this[int index]
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Order()
+        {
+        }
+
+        public Order(IExecutionProvider provider, Instrument instrument, OrderType type, OrderSide side, double qty, double price, double stopPx, TimeInForce timeInForce, string text)
+            : this(provider, null, instrument, type, side, qty, price, stopPx, timeInForce, 0, text)
+        {
+        }
+
+        public Order(IExecutionProvider provider, Portfolio portfolio, Instrument instrument, OrderType type, OrderSide side, double qty, double price, double stopPx, TimeInForce timeInForce, byte route, string text)
+        {
+        }
+
+        public Order (Order order)
+        {
+        }
+
+        public string GetSideAsString()
+        {
+            switch (Side)
+            {
+                case OrderSide.Buy:
+                    return "Buy";
+                case OrderSide.Sell:
+                    return "Sell";
+                default:
+                    return "Undefined";
+            }
+        }
+
+        public string GetTypeAsString()
+        {
+            switch (Type)
+            {
+                case OrderType.Market:
+                    return "Market";
+                case OrderType.Stop:
+                    return "Stop";
+                case OrderType.Limit:
+                    return "Limit";
+                case OrderType.StopLimit:
+                    return "StopLimit";
+                default:
+                    return "Undefined";
+            }
+        }
+
+        public string GetStatusAsString()
+        {
+            switch (Status)
+            {
+                case OrderStatus.NotSent:
+                    return "NotSent";
+                case OrderStatus.PendingNew:
+                    return "PendingNew";
+                case OrderStatus.New:
+                    return "New";
+                case OrderStatus.Rejected:
+                    return "Rejected";
+                case OrderStatus.PartiallyFilled:
+                    return "PartiallyFilled";
+                case OrderStatus.Filled:
+                    return "Filled";
+                case OrderStatus.PendingCancel:
+                    return "PendingCancel";
+                case OrderStatus.Cancelled:
+                    return "Cancelled";
+                case OrderStatus.PendingReplace:
+                    return "PendingReplace";
+                case OrderStatus.Replaced:
+                    return "Replaced";
+                default:
+                    return "Undefined";
+            }
+        }
+
+        public void OnExecutionCommand (ExecutionCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnExecutionReport (ExecutionReport report)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2} {3}", Id, DateTime, GetTypeAsString(), GetSideAsString());
+        }
+
     }
 }

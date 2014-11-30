@@ -151,14 +151,14 @@ namespace SmartQuant
             WriteObjectKey(oKey);
         }
 
-        public object Get(string name)
+        public virtual object Get(string name)
         {
             ObjectKey key;
             Keys.TryGetValue(name, out key);
             return key != null ? key.GetObject() : null;
         }
 
-        public void Delete(string name)
+        public virtual void Delete(string name)
         {
             ObjectKey key;
             Keys.TryGetValue(name, out key);
@@ -210,6 +210,10 @@ namespace SmartQuant
                 WriteHeader();
             }
             this.changed = false;
+        }
+
+        public virtual void Refresh()
+        {
         }
 
         public virtual void Close()

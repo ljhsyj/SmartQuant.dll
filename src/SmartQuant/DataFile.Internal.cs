@@ -6,46 +6,46 @@ using System.Runtime.InteropServices;
 namespace SmartQuant
 {
     // This class is only for documentation and size calculation
-    [StructLayout(LayoutKind.Explicit)]
-    class FileHead
-    {
-        [FieldOffset(0)]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 11)]
-        public string Marker;
-
-        [FieldOffset(11)]
-        public byte Version;
-
-        [FieldOffset(12)]
-        public long HeaderLength;
-
-        [FieldOffset(20)]
-        public long NewKeyPosition;
-
-        [FieldOffset(28)]
-        public long OKeysKeyPosition;
-
-        [FieldOffset(36)]
-        public long FKeysKeyPosition;
-
-        [FieldOffset(44)]
-        public int OKeyLength;
-
-        [FieldOffset(48)]
-        public int FKeyLength;
-
-        [FieldOffset(52)]
-        public int OKeyCount;
-
-        [FieldOffset(56)]
-        public int FKeyCount;
-
-        [FieldOffset(60)]
-        public byte CompressionMethod;
-
-        [FieldOffset(61)]
-        public byte CompressionLevel;
-    }
+//    [StructLayout(LayoutKind.Explicit)]
+//    class FileHead
+//    {
+//        [FieldOffset(0)]
+//        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 11)]
+//        public string Marker;
+//
+//        [FieldOffset(11)]
+//        public byte Version;
+//
+//        [FieldOffset(12)]
+//        public long HeaderLength;
+//
+//        [FieldOffset(20)]
+//        public long NewKeyPosition;
+//
+//        [FieldOffset(28)]
+//        public long OKeysKeyPosition;
+//
+//        [FieldOffset(36)]
+//        public long FKeysKeyPosition;
+//
+//        [FieldOffset(44)]
+//        public int OKeyLength;
+//
+//        [FieldOffset(48)]
+//        public int FKeyLength;
+//
+//        [FieldOffset(52)]
+//        public int OKeyCount;
+//
+//        [FieldOffset(56)]
+//        public int FKeyCount;
+//
+//        [FieldOffset(60)]
+//        public byte CompressionMethod;
+//
+//        [FieldOffset(61)]
+//        public byte CompressionLevel;
+//    }
 
     // This class is for size calculation only.
     [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
@@ -69,7 +69,7 @@ namespace SmartQuant
         {
             Marker = "SmartQuant";
             Version = 1;
-            HeaderLength = NewKeyPosition = OKeysKeyPosition = FKeysKeyPosition = Marshal.SizeOf(typeof(FileHeader));
+            HeaderLength = NewKeyPosition = OKeysKeyPosition = FKeysKeyPosition = 62;//Marshal.SizeOf(typeof(FileHeader));
             OKeyLength = FKeyLength = OKeyCount = FKeyCount = 0;
             CompressionMethod = 1;
             CompressionLevel = 1;
@@ -86,7 +86,7 @@ namespace SmartQuant
 
     public partial class DataFile
     {
-        private readonly int HEADER_LENGTH = Marshal.SizeOf(typeof(FileHead));
+        private readonly int HEADER_LENGTH = 62;//Marshal.SizeOf(typeof(FileHead));
 
         internal bool ReadHeader()
         {

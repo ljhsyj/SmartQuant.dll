@@ -65,7 +65,7 @@ namespace SmartQuant
 
         public StrategyManager StrategyManager { get; private set; }
 
-        public CurrencyConverter CurrencyConverter { get; set; }
+        public ICurrencyConverter CurrencyConverter { get; set; }
 
         public GroupManager GroupManager { get; private set; }
 
@@ -78,6 +78,8 @@ namespace SmartQuant
         public SubscriptionManager SubscriptionManager { get; private set; }
 
         public EventLoggerManager EventLoggerManager { get; private set; }
+
+        public LicenseManager LicenseManager { get; private set; }
 
         public FrameworkMode Mode
         {

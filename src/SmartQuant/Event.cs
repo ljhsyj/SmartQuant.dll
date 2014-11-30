@@ -7,7 +7,19 @@ namespace SmartQuant
 {
     public class Event
     {
-        public DateTime DateTime { get; set; }
+        protected internal DateTime dateTime;
+
+        public DateTime DateTime
+        {
+            get
+            {
+                return this.dateTime;
+            }
+            set
+            {
+                this.dateTime = value;
+            }
+        }
 
         public virtual byte TypeId
         {

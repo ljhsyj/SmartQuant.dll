@@ -47,6 +47,8 @@ namespace SmartQuant
 
         void OnTrade(Trade trade);
 
+        void OnBarOpen(Bar bar);
+
         void OnBar(Bar bar);
 
         void Clear();

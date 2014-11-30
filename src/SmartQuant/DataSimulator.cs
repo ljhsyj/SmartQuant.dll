@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SmartQuant
 {
-    class DataSimulator : Provider, IDataSimulator
+    public class DataSimulator : Provider, IDataSimulator
     {
         private Thread thread;
         private volatile bool running;

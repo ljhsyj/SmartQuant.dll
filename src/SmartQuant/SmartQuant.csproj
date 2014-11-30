@@ -86,7 +86,6 @@
     <Compile Include="InstrumentList.cs" />
     <Compile Include="ICurrencyConverter.cs" />
     <Compile Include="InstrumentType.cs" />
-    <Compile Include="IOrderServer.cs" />
     <Compile Include="HistoricalDataRequest.cs" />
     <Compile Include="IDataProvider.cs" />
     <Compile Include="IHistoricalDataProvider.cs" />
@@ -121,7 +120,6 @@
     <Compile Include="Licensing\License.cs" />
     <Compile Include="AltId.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="DataMessageType.cs" />
     <Compile Include="PortfolioStatisticsType.cs" />
     <Compile Include="ProviderPlugin.cs" />
     <Compile Include="StreamerPlugin.cs" />
@@ -331,7 +329,6 @@
     <Compile Include="PortfolioList.cs" />
     <Compile Include="Account.cs" />
     <Compile Include="BarFactoryItem.cs" />
-    <Compile Include="BarFactory.Extension.cs" />
     <Compile Include="ComponentStrategy.cs" />
     <Compile Include="ConsoleEventLogger.cs" />
     <Compile Include="DataComponent.cs" />
@@ -450,6 +447,15 @@
     <Compile Include="ExecutionReportStreamer.cs" />
     <Compile Include="TickBarFactoryItem.cs" />
     <Compile Include="StrategyStatusInfo.cs" />
+    <Compile Include="OnPendingNewOrder.cs" />
+    <Compile Include="OnSendOrder.cs" />
+    <Compile Include="StrategyStatusStreamer.cs" />
+    <Compile Include="Indicators\RegressionDistanceMode.cs" />
+    <Compile Include="Indicators\IndicatorStyle.cs" />
+    <Compile Include="OnNewOrder.cs" />
+    <Compile Include="OrderFactory.cs" />
+    <Compile Include="Indicators\AD.cs" />
+    <Compile Include="Indicators\ADX.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />

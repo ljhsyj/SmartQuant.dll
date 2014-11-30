@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartQuant
 {
-    public partial class BarFactory
+    public class BarFactory
     {
         private Framework framework;
 

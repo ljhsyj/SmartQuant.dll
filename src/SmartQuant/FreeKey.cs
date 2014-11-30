@@ -9,19 +9,19 @@ using System.Runtime.InteropServices;
 namespace SmartQuant
 {
     // This class is for size calculation only.
-    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
-    class FreeKeyHead
-    {
-        [FieldOffset(0)]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
-        public string Label = "FKey";
-
-        [FieldOffset(5)]
-        public long Position;
-
-        [FieldOffset(13)]
-        public int Length;
-    }
+//    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+//    class FreeKeyHead
+//    {
+//        [FieldOffset(0)]
+//        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
+//        public string Label = "FKey";
+//
+//        [FieldOffset(5)]
+//        public long Position;
+//
+//        [FieldOffset(13)]
+//        public int Length;
+//    }
 
     // This class is for size calculation only.
     [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]

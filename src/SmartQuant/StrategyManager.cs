@@ -177,21 +177,21 @@ namespace SmartQuant
             }
         }
 
-        public void RegisterMarketDataRequest(IDataProvider provider, InstrumentList instruments)
+        public void RegisterMarketDataRequest(IDataProvider dataProvider, InstrumentList instrumentList)
         {
             InstrumentList subscribed = null;
-            if (!this.subscriptions.TryGetValue(provider, out subscribed))
+            if (!this.subscriptions.TryGetValue(dataProvider, out subscribed))
             {
                 subscribed = new InstrumentList();
-                this.subscriptions[provider] = subscribed;
+                this.subscriptions[dataProvider] = subscribed;
             }
-            var newInstruments = new InstrumentList(instruments.Except(subscribed, new InstrumentComparer()));
+            var newInstruments = new InstrumentList(instrumentList.Except(subscribed, new InstrumentComparer()));
             subscribed.Add(newInstruments);
 
 //            if (this.status == StrategyStatus.Running && newInstruments.Count > 0 && this.framework.SubscriptionManager != null)
 //                this.framework.SubscriptionManager.Subscribe(provider, newInstruments);
             if (newInstruments.Count > 0 && this.framework.SubscriptionManager != null)
-                this.framework.SubscriptionManager.Subscribe(provider, newInstruments);
+                this.framework.SubscriptionManager.Subscribe(dataProvider, newInstruments);
         }
 
         internal void UnregisterMarketDataRequest(IDataProvider povider, InstrumentList instruments)

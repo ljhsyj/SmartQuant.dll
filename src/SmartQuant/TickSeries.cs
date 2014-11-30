@@ -34,19 +34,19 @@ namespace SmartQuant
             }
         }
 
-        public DateTime DateTime1
+        DateTime IDataSeries.DateTime1
         {
             get
             {
-                return this.FirstDateTime;
+                return FirstDateTime;
             }
         }
 
-        public DateTime DateTime2
+        DateTime IDataSeries.DateTime2
         {
             get
             {
-                return this.LastDateTime;
+                return LastDateTime;
             }
         }
 
@@ -117,7 +117,7 @@ namespace SmartQuant
             return this.ticks.GetEnumerator();
         }
 
-        public long GetIndex(DateTime dateTime, SearchOption option = SearchOption.Prev)
+        long IDataSeries.GetIndex(DateTime dateTime, SearchOption option)
         {
             switch (option)
             {

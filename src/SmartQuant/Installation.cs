@@ -1,14 +1,21 @@
 ﻿// Licensed under the Apache License, Version 2.0. 
 // Copyright (c) Alex Lee. All rights reserved.
 
-using System;
 using System.IO;
-using System.ComponentModel;
+using System;
 
 namespace SmartQuant
 {
     public static class Installation
     {
+        public static DirectoryInfo ApplicationDir
+        {
+            get
+            {
+                return new DirectoryInfo(Environment.CurrentDirectory);
+            }
+        }
+
         public static DirectoryInfo DataDir
         {
             get
@@ -17,7 +24,6 @@ namespace SmartQuant
             }
         }
 
-		[Description()]
         public static DirectoryInfo ConfigDir
         {
             get

@@ -134,6 +134,18 @@ namespace SmartQuant
                 leg.Init(this.framework); 
         }
 
+        public string GetSymbol(byte providerId)
+        {
+            var altId = AltId.Get(providerId);
+            return altId != null && !string.IsNullOrEmpty(altId.Symbol) ? altId.Symbol : Symbol;
+        }
+
+        public string GetExchange(byte providerId)
+        {
+            var altId = AltId.Get(providerId);
+            return altId != null && !string.IsNullOrEmpty(altId.Exchange) ? altId.Exchange : Exchange;
+        }
+
         public override string ToString()
         {
             return string.IsNullOrEmpty(Description) ? Symbol : string.Format("{0}({1})", Symbol, Description);

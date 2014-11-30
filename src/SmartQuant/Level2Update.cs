@@ -29,7 +29,7 @@ namespace SmartQuant
             Entries = entries;
         }
 
-        internal Level2Update()
+        public Level2Update()
         {
         }
     }

@@ -7,7 +7,7 @@ namespace SmartQuant
     {
         public AccountDataEntry[] Entries { get; private set; }
 
-        public AccountDataSnapshot(AccountDataEntry[] entries)
+        internal AccountDataSnapshot(AccountDataEntry[] entries)
         {
             Entries = entries;
         }

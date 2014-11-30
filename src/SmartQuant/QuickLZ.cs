@@ -106,14 +106,14 @@ namespace SmartQuant
             return Stolen.QuickLZ.compress(source, (int)this.QLZ_COMPRESSION_LEVEL);
         }
 
-        public int SizeDecompressed(byte[] source)
+        public uint SizeDecompressed(byte[] source)
         {
-            return Stolen.QuickLZ.sizeDecompressed(source);
+            return (uint)Stolen.QuickLZ.sizeDecompressed(source);
         }
 
-        public int SizeCompressed(byte[] source)
+        public uint SizeCompressed(byte[] source)
         {
-            return Stolen.QuickLZ.sizeCompressed(source);
+            return (uint)Stolen.QuickLZ.sizeCompressed(source);
         }
     }
 

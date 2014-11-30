@@ -10,11 +10,10 @@ namespace SmartQuant
 {
     public class TimeSeries : ISeries
     {
-        protected string name;
-        protected string description;
+        protected internal string name;
+        protected internal string description;
 
         private IDataSeries dataSeries;
-        private List<TimeSeriesItem> items;
         private TimeSeriesItem min;
         private TimeSeriesItem max;
         private bool dirty;
@@ -27,7 +26,11 @@ namespace SmartQuant
         {
             get
             {
-                return name;
+                return this.name;
+            }
+            protected internal set
+            {
+                this.name = value;
             }
         }
 
@@ -35,7 +38,11 @@ namespace SmartQuant
         {
             get
             { 
-                return description;
+                return this.description;
+            }
+            protected internal set
+            {
+                this.description = value;
             }
         }
 
@@ -45,7 +52,7 @@ namespace SmartQuant
         {
             get
             { 
-                return this.items.Count;
+                return (int)this.dataSeries.Count;
             }
         }
 
@@ -53,7 +60,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.items[0].Value;
+                return ((TimeSeriesItem)this.dataSeries[0]).Value;
             }
         }
 
@@ -61,7 +68,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.items[this.items.Count - 1].Value;
+                return ((TimeSeriesItem)this.dataSeries[this.dataSeries.Count - 1]).Value;
             }
         }
 
@@ -69,7 +76,7 @@ namespace SmartQuant
         {
             get
             { 
-                return this.items[0].DateTime;
+                return this.dataSeries[0].DateTime;
             }
         }
 
@@ -77,19 +84,15 @@ namespace SmartQuant
         {
             get
             { 
-                return this.items[this.items.Count - 1].DateTime;
+                return this.dataSeries[this.dataSeries.Count - 1].DateTime;
             }
         }
 
-        public virtual double this [int index]
+        public virtual double this[int index]
         {
             get
-            { 
-                return this.items[index].Value;
-            }
-            set
-            { 
-                this.items[index].Value = value;
+            {
+                return ((TimeSeriesItem)this.dataSeries[index]).Value;
             }
         }
 
@@ -130,31 +133,42 @@ namespace SmartQuant
         }
 
         public TimeSeries()
-            : this((string)null)
+            : this(null, null, null)
         {
         }
 
         public TimeSeries(IDataSeries series)
+            :this(series.Name, series.Description, series)
         {
-//            this.bool_0 = true;
-//            Indicators = new List<Indicator>();
-//            this.name = series.Name;
-//            this.description = series.Description;
-            this.dataSeries = series;
         }
 
         public TimeSeries(string name, string description = "")
+            :this(name, description, null)
+        {
+        }
+
+        private TimeSeries(string name, string description, IDataSeries series)
         {
             this.name = name;
             this.description = description;
             this.dirty = true;
             Indicators = new List<Indicator>();
-            this.items = new List<TimeSeriesItem>();
+            this.dataSeries = series ?? new MemorySeries(name, description);
         }
 
         public TimeSeriesItem GetItem(int index)
         {
-            return items[index];
+            return (TimeSeriesItem)this.dataSeries[index];
+        }
+
+        public TimeSeriesItem GetMinItem()
+        {
+            return this.min;
+        }
+
+        public TimeSeriesItem GetMaxItem()
+        {
+            return this.max;
         }
 
         public virtual DateTime GetDateTime(int index)
@@ -167,7 +181,7 @@ namespace SmartQuant
             return GetItem(index).Value;
         }
 
-        public virtual int GetIndex(DateTime dateTime, IndexOption option = IndexOption.Null)
+        public virtual int GetIndex(DateTime datetime, IndexOption option = IndexOption.Null)
         {
             throw new NotImplementedException();
         }
@@ -175,27 +189,90 @@ namespace SmartQuant
         public TimeSeriesItem GetByDateTime(DateTime dateTime, SearchOption option = SearchOption.ExactFirst)
         {
             int index = IndexOf(dateTime, option);
-            return index != -1 ? this.items[index] : null;
+            return index != -1 ? (TimeSeriesItem)this.dataSeries[index] : null;
+        }
+
+        public Cross Crosses(double level, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Cross Crosses(TimeSeries series, DateTime dateTime)
+        {
+            throw new NotImplementedException();
         }
 
         public int IndexOf(DateTime dateTime, SearchOption option = SearchOption.ExactFirst)
         {
-            if (option == SearchOption.ExactLast)
-                throw new NotSupportedException();
-
-            if (dateTime < FirstDateTime)
-                return option == SearchOption.ExactFirst || option == SearchOption.Prev ? -1 : 0;
-            if (dateTime > LastDateTime)
-                return option == SearchOption.ExactFirst || option == SearchOption.Next ? -1 : Count - 1;
-
-            var i = this.items.BinarySearch(new TimeSeriesItem() { DateTime = dateTime, Value = 0 }, new DataObjectComparer());
-            if (i >= 0)
-                return i;
-            else if (option == SearchOption.Next)
-                return ~i;
-            else if (option == SearchOption.Prev)
-                return ~i - 1;
-            return -1; // option == IndexOption.Null
+            int index = (int) this.dataSeries.Count - 1;
+            if (dateTime == GetDateTime(index))
+                return index;
+            int num1 = 0;
+            int num2 = 0;
+            int num3 = (int) this.dataSeries.Count - 1;
+            bool flag = true;
+            while (flag)
+            {
+                if (num3 < num2)
+                    return -1;
+                num1 = (num2 + num3) / 2;
+                switch (option)
+                {
+                    case SearchOption.Next:
+                        if (this.dataSeries[(long) num1].DateTime >= dateTime && (num1 == 0 || this.dataSeries[(long) (num1 - 1)].DateTime < dateTime))
+                        {
+                            flag = false;
+                            continue;
+                        }
+                        else if (this.dataSeries[num1].dateTime < dateTime)
+                        {
+                            num2 = num1 + 1;
+                            continue;
+                        }
+                        else
+                        {
+                            num3 = num1 - 1;
+                            continue;
+                        }
+                    case SearchOption.Prev:
+                        if (this.dataSeries[num1].DateTime <= dateTime && ((long) num1 == this.dataSeries.Count - 1 || this.dataSeries[(long) (num1 + 1)].DateTime > dateTime))
+                        {
+                            flag = false;
+                            continue;
+                        }
+                        else if (this.dataSeries[(long) num1].DateTime > dateTime)
+                        {
+                            num3 = num1 - 1;
+                            continue;
+                        }
+                        else
+                        {
+                            num2 = num1 + 1;
+                            continue;
+                        }
+                    case SearchOption.ExactFirst:
+                        if (this.dataSeries[(long) num1].DateTime == dateTime)
+                        {
+                            flag = false;
+                            continue;
+                        }
+                        else if (this.dataSeries[(long) num1].DateTime > dateTime)
+                        {
+                            num3 = num1 - 1;
+                            continue;
+                        }
+                        else if (this.dataSeries[(long) num1].DateTime < dateTime)
+                        {
+                            num2 = num1 + 1;
+                            continue;
+                        }
+                        else
+                            continue;
+                    default:
+                        continue;
+                }
+            }
+            return num1;
         }
 
         public double GetMin()
@@ -208,7 +285,7 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        public virtual double GetMin(int index1, int index2)
+        public double GetMin(int index1, int index2)
         {
             return GetMin(index1, index2);
         }
@@ -228,7 +305,7 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        public virtual double GetMax(int index1, int index2)
+        public double GetMax(int index1, int index2)
         {
             throw new NotImplementedException();
         }
@@ -248,7 +325,7 @@ namespace SmartQuant
             var item = new TimeSeriesItem(dateTime, value);
             this.max = this.max == null ? item : (this.max.Value < item.Value ? item : this.max);
             this.min = this.min == null ? item : (this.min.Value > item.Value ? item : this.min);
-            this.items.Add(item);
+            this.dataSeries.Add(item);
   
             // Update indicators
 //            foreach (var indicator in this.Indicators)
@@ -258,12 +335,12 @@ namespace SmartQuant
 
         public void Remove(int index)
         {
-            this.items.RemoveAt(index);
+            this.dataSeries.Remove(index);
         }
 
         public void Clear()
         {
-            this.items.Clear();
+            this.dataSeries.Clear();
         }
 
         public double GetSum()
@@ -284,7 +361,7 @@ namespace SmartQuant
         {
             EnsureNotEmpty();
             if (this.dirty)
-                this.mean = GetMean(0, this.Count - 1);
+                this.mean = GetMean(0, Count - 1);
             return this.mean;
         }
 

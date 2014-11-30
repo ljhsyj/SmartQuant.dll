@@ -7,12 +7,12 @@ namespace SmartQuant
     {
         protected internal Framework framework;
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         public EventLogger(Framework framework, string name)
         {
             this.framework = framework;
-            this.Name = name;
+            Name = name;
         }
 
         public virtual void OnEvent(Event e)

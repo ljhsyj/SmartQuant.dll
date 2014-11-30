@@ -20,6 +20,14 @@ namespace SmartQuant
             }
         }
 
+        public IProvider this[string name]
+        {
+            get
+            {
+                return GetByName(name);
+            }
+        }
+
         public void Add(IProvider provider)
         {
             if (GetById(provider.Id) == null && GetByName(provider.Name) == null)

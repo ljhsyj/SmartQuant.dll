@@ -5,58 +5,58 @@ using System.IO;
 namespace SmartQuant
 {
     // This class is for size calculation only.
-    [StructLayout(LayoutKind.Explicit, Pack = 1)]
-    class DataKeyHead
-    {
-        [FieldOffset(0)]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
-        public string Label = "DKey";
-
-        [FieldOffset(5)]
-        public bool Freed;
-
-        [FieldOffset(6)]
-        public DateTime DateTime;
-
-        [FieldOffset(14)]
-        public long Position;
-
-        [FieldOffset(22)]
-        private int HeaderLength;
-
-        [FieldOffset(26)]
-        private int ContentLength;
-
-        [FieldOffset(30)]
-        private int TotalLength;
-
-        [FieldOffset(34)]
-        private byte CompressionMethod;
-
-        [FieldOffset(35)]
-        private byte CompressionLevel;
-
-        [FieldOffset(36)]
-        private byte TypeId;
-
-        [FieldOffset(37)]
-        public int Capacity;
-
-        [FieldOffset(41)]
-        public int Count;
-
-        [FieldOffset(45)]
-        public long MinDateTimeTicks;
-
-        [FieldOffset(53)]
-        public long MaxDateTimeTicks;
-
-        [FieldOffset(61)]
-        public long Prev;
-
-        [FieldOffset(69)]
-        public long Next;
-    }
+//    [StructLayout(LayoutKind.Explicit, Pack = 1)]
+//    class DataKeyHead
+//    {
+//        [FieldOffset(0)]
+//        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
+//        public string Label = "DKey";
+//
+//        [FieldOffset(5)]
+//        public bool Freed;
+//
+//        [FieldOffset(6)]
+//        public DateTime DateTime;
+//
+//        [FieldOffset(14)]
+//        public long Position;
+//
+//        [FieldOffset(22)]
+//        private int HeaderLength;
+//
+//        [FieldOffset(26)]
+//        private int ContentLength;
+//
+//        [FieldOffset(30)]
+//        private int TotalLength;
+//
+//        [FieldOffset(34)]
+//        private byte CompressionMethod;
+//
+//        [FieldOffset(35)]
+//        private byte CompressionLevel;
+//
+//        [FieldOffset(36)]
+//        private byte TypeId;
+//
+//        [FieldOffset(37)]
+//        public int Capacity;
+//
+//        [FieldOffset(41)]
+//        public int Count;
+//
+//        [FieldOffset(45)]
+//        public long MinDateTimeTicks;
+//
+//        [FieldOffset(53)]
+//        public long MaxDateTimeTicks;
+//
+//        [FieldOffset(61)]
+//        public long Prev;
+//
+//        [FieldOffset(69)]
+//        public long Next;
+//    }
 
 //    // This class is for size calculation only.
 //    [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
@@ -78,7 +78,7 @@ namespace SmartQuant
     // DataKey is a special type of ObjectKey used with DataSeries.
     class DataKey : ObjectKey
     {
-        public static readonly int HEADER_LENGTH = Marshal.SizeOf(typeof(DataKeyHead));
+        public static readonly int HEADER_LENGTH = 77;//Marshal.SizeOf(typeof(DataKeyHead));
         internal DataObject[] dataObjects;
         internal int capacity = 10000;
         internal int count;

@@ -9,6 +9,10 @@ namespace SmartQuant
         public RequestResult Result { get; set; }
         public string Text { get; set; }
 
+        public InstrumentDefinitionEnd()
+        {
+        }
+
         internal InstrumentDefinitionEnd(string requestId,RequestResult result, string text)
         {
             RequestId = requestId;

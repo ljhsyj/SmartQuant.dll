@@ -9,9 +9,21 @@ namespace SmartQuant
 {
     public class PortfolioList : IEnumerable<Portfolio>
     {
-        public int Count { get { throw new NotImplementedException(); } }
+        public int Count
+        {
+            get
+            { 
+                throw new NotImplementedException();
+            }
+        }
 
-        public Portfolio this [string name]  { get { throw new NotImplementedException(); } }
+        public Portfolio this [string name]
+        { 
+            get
+            { 
+                throw new NotImplementedException();
+            }
+        }
 
         public PortfolioList()
         {
@@ -46,6 +58,11 @@ namespace SmartQuant
         }
 
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator<Portfolio> IEnumerable<Portfolio>.GetEnumerator()
         {
             throw new NotImplementedException();
         }

@@ -21,6 +21,10 @@ namespace SmartQuant
         {
             // do nothing
         }
+
+        internal LicenseManager()
+        {
+        }
     }
 }
 

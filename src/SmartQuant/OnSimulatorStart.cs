@@ -26,6 +26,7 @@ namespace SmartQuant
 
         public OnSimulatorStart(DateTime dateTime1, DateTime dateTime2, long count)
         {
+            DateTime = dateTime1;
             this.dateTime1 = dateTime1;
             this.dateTime2 = dateTime2;
             this.count = count;

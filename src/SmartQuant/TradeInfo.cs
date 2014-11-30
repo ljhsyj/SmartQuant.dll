@@ -7,6 +7,8 @@ namespace SmartQuant
 {
     public class TradeInfo
     {
+        public Instrument Instrument { get; set; }
+
         public DateTime EntryDate { get; set; }
 
         public DateTime ExitDate { get; set; }

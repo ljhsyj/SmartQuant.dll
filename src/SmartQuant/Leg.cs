@@ -6,6 +6,26 @@ namespace SmartQuant
     {
         private Framework framework;
         private int instrumentId;
+        internal Instrument instrument;
+
+        public string Symbol
+        {
+            get
+            {
+                return this.instrument != null ? this.instrument.Symbol : null;
+            }
+            set
+            {
+                var instrument = this.framework.InstrumentManager[value];
+                if (instrument != null)
+                {
+                    this.instrument = instrument;
+                    this.instrumentId = instrument.Id;
+                }
+                else
+                    Console.WriteLine("Leg::Symbol Can not find instrument with such symbol in the framework instrument manager. Symbol = {0}", this.instrumentId);
+            }
+        }
 
         public Instrument Instrument { get; set; }
 

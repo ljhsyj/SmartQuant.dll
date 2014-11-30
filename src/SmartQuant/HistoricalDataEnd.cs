@@ -20,6 +20,10 @@ namespace SmartQuant
 
         public string Text { get; set; }
 
+        public HistoricalDataEnd()
+        {
+        }
+
         internal HistoricalDataEnd(string requestId, RequestResult result, string text)
         {
             RequestId = requestId;

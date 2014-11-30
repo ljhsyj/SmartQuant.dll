@@ -172,19 +172,19 @@ namespace SmartQuant
             }
         }
 
-        public DateTime DateTime1
+        DateTime IDataSeries.DateTime1
         {
             get
             {
-                return this.FirstDateTime;
+                return FirstDateTime;
             }
         }
 
-        public DateTime DateTime2
+        DateTime IDataSeries.DateTime2
         {
             get
             {
-                return this.LastDateTime;
+                return LastDateTime;
             }
         }
 
@@ -214,21 +214,22 @@ namespace SmartQuant
             Indicators = new List<Indicator>();
         }
 
-        public int GetIndex(DateTime dateTime, IndexOption option = IndexOption.Null)
+        public int GetIndex(DateTime datetime, IndexOption option = IndexOption.Null)
         {    
-            if (dateTime < FirstDateTime)
+            if (datetime < FirstDateTime)
                 return option == IndexOption.Null || option == IndexOption.Prev ? -1 : 0;
-            if (dateTime > LastDateTime)
+            if (datetime > LastDateTime)
                 return option == IndexOption.Null || option == IndexOption.Next ? -1 : Count - 1;
 
-            var i = this.bars.BinarySearch(new Bar() { DateTime = dateTime }, new DataObjectComparer());
+            var i = this.bars.BinarySearch(new Bar() { DateTime = datetime }, new DataObjectComparer());
             if (i >= 0)
                 return i;
             else if (option == IndexOption.Next)
                 return ~i;
             else if (option == IndexOption.Prev)
                 return ~i - 1;
-            return -1; // option == IndexOption.Null
+            else
+                return -1;
         }
 
         public DateTime GetDateTime(int index)
@@ -361,6 +362,152 @@ namespace SmartQuant
         public double HighestHigh()
         {
             return HighestHighBar().High;
+        }
+
+        public Bar HighestLowBar(int index1, int index2)
+        {
+            throw new NotImplementedException();
+//            if (this.Count == 0)
+//                return (Bar) null;
+//            if (index1 > index2)
+//                return (Bar) null;
+//            if (index1 < 0 || index1 > this.Count - 1)
+//                return (Bar) null;
+//            if (index2 < 0 || index2 > this.Count - 1)
+//                return (Bar) null;
+//            Bar bar = this.list_0[index1];
+//            for (int index = index1 + 1; index <= index2; ++index)
+//            {
+//                if (this.list_0[index].Low > bar.Low)
+//                    bar = this.list_0[index];
+//            }
+//            return bar;
+        }
+
+        public Bar HighestLowBar(int nBars)
+        {
+            return HighestLowBar(Count - nBars, Count - 1);
+        }
+
+        public Bar HighestLowBar(DateTime dateTime1, DateTime dateTime2)
+        {
+            return HighestLowBar(GetIndex(dateTime1, IndexOption.Next), GetIndex(dateTime2, IndexOption.Prev));
+        }
+
+        public double HighestLow(int index1, int index2)
+        {
+            return HighestLowBar(index1, index2).Low;
+        }
+
+        public double HighestLow(int nBars)
+        {
+            return HighestLowBar(nBars).Low;
+        }
+
+        public double HighestLow(DateTime dateTime1, DateTime dateTime2)
+        {
+            return HighestLowBar(dateTime1, dateTime2).Low;
+        }
+
+        public Bar LowestLowBar(int index1, int index2)
+        {
+            throw new NotImplementedException();
+
+//            if (this.Count == 0)
+//                return (Bar) null;
+//            if (index1 > index2)
+//                return (Bar) null;
+//            if (index1 < 0 || index1 > this.Count - 1)
+//                return (Bar) null;
+//            if (index2 < 0 || index2 > this.Count - 1)
+//                return (Bar) null;
+//            Bar bar = this.list_0[index1];
+//            for (int index = index1 + 1; index <= index2; ++index)
+//            {
+//                if (this.list_0[index].Low < bar.Low)
+//                    bar = this.list_0[index];
+//            }
+//            return bar;
+        }
+
+        public Bar LowestLowBar(int nBars)
+        {
+            return LowestLowBar(Count - nBars, Count - 1);
+        }
+
+        public Bar LowestLowBar(DateTime dateTime1, DateTime dateTime2)
+        {
+            return LowestLowBar(GetIndex(dateTime1, IndexOption.Next), GetIndex(dateTime2, IndexOption.Prev));
+        }
+
+        public Bar LowestLowBar()
+        {
+            return this.min;
+        }
+
+        public double LowestLow(int index1, int index2)
+        {
+            return LowestLowBar(index1, index2).Low;
+        }
+
+        public double LowestLow(int nBars)
+        {
+            return LowestLowBar(nBars).Low;
+        }
+
+        public double LowestLow(DateTime dateTime1, DateTime dateTime2)
+        {
+            return LowestLowBar(dateTime1, dateTime2).Low;
+        }
+
+        public double LowestLow()
+        {
+            return LowestLowBar().Low;
+        }
+
+        public Bar LowestHighBar(int index1, int index2)
+        {
+            throw new NotImplementedException();
+//            if (this.Count == 0)
+//                return (Bar) null;
+//            if (index1 > index2)
+//                return (Bar) null;
+//            if (index1 < 0 || index1 > this.Count - 1)
+//                return (Bar) null;
+//            if (index2 < 0 || index2 > this.Count - 1)
+//                return (Bar) null;
+//            Bar bar = this.list_0[index1];
+//            for (int index = index1 + 1; index <= index2; ++index)
+//            {
+//                if (this.list_0[index].High < bar.High)
+//                    bar = this.list_0[index];
+//            }
+//            return bar;
+        }
+
+        public Bar LowestHighBar(int nBars)
+        {
+            return LowestHighBar(Count - nBars, Count - 1);
+        }
+
+        public Bar LowestHighBar(DateTime dateTime1, DateTime dateTime2)
+        {
+            return LowestHighBar(GetIndex(dateTime1, IndexOption.Next), GetIndex(dateTime2, IndexOption.Prev));
+        }
+
+        public double LowestHigh(int index1, int index2)
+        {
+            return LowestHighBar(index1, index2).High;
+        }
+
+        public double LowestHigh(int nBars)
+        {
+            return LowestHighBar(nBars).High;
+        }
+
+        public double LowestHigh(DateTime dateTime1, DateTime dateTime2)
+        {
+            return LowestHighBar(dateTime1, dateTime2).High;
         }
 
         public Bar Ago(int n)

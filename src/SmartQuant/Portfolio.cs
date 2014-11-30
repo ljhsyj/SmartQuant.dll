@@ -87,6 +87,12 @@ namespace SmartQuant
             }
         }
 
+        [Browsable(false)]
+        public FillSeries Fills { get; private set; }
+
+        [Browsable(false)]
+        public PortfolioStatistics Statistics { get; private set; }
+
         public Portfolio(Framework framework, string name = "")
         {
             this.framework = framework;
@@ -123,7 +129,7 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        public bool GetPosition(Instrument instrument)
+        public Position GetPosition(Instrument instrument)
         {
             throw new NotImplementedException();
         }

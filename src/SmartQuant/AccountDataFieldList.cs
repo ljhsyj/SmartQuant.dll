@@ -60,6 +60,10 @@ namespace SmartQuant
             }
         }
 
+        internal AccountDataFieldList()
+        {
+        }
+
         public void Add(string name, string currency, object value)
         {
             Dictionary<string, object> logger;

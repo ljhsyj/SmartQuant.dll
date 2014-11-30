@@ -7,6 +7,10 @@ namespace SmartQuant
     {
         ProviderStatus Status { get; }
 
+        bool IsConnected { get; }
+
+        bool IsDisconnected { get; }
+
         byte Id { get; }
 
         string Name { get; }

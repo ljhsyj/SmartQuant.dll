@@ -14,6 +14,14 @@ namespace SmartQuant
 
         public PortfolioList Portfolios { get; private set; }
 
+        public Portfolio this[string name]
+        {
+            get
+            {
+                return Portfolios[name];
+            }
+        }
+
         public PortfolioManager(Framework framework)
         {
             this.framework = framework;

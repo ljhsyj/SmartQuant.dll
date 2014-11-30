@@ -5,10 +5,7 @@ namespace SmartQuant.Licensing
 {
     public enum License
     {
-        Demo, Retail, Professional, Enterprise,
-
-        // extended
-        OpenSource
+        Demo, Retail, Professional, Enterprise
     }
 }
 

@@ -5,8 +5,8 @@ namespace SmartQuant
 {
     public class OnPositionChanged : Event
     {
-        public Portfolio Portfolio { get; set; }
-        public Position Position { get; set; }
+        internal Portfolio Portfolio { get; set; }
+        internal Position Position { get; set; }
 
         public override byte TypeId
         {

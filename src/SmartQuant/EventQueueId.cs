@@ -9,5 +9,6 @@ namespace SmartQuant
         public const byte Data = 1;
         public const byte Execution = 2;
         public const byte Reminder = 3;
+        public const byte Service = 4;
     }
 }

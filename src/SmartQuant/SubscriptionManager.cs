@@ -121,7 +121,6 @@ namespace SmartQuant
                     instrument.Add(byIndex);
                 }
                 Dictionary<Instrument, int> dictionary = this.subscriptions[provider.Id];
-                Instrument index2;
                 dictionary[byIndex] += 1;
             }
             if (instrument.Count <= 0)

@@ -190,7 +190,17 @@ namespace SmartQuant.Quant
             return base.GetHashCode();
         }
 
-        public void Print(string format = "F2")
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        public void Print()
+        {
+            Print("F2");
+        }
+
+        public void Print(string format)
         {
             Console.WriteLine(string.Join(Environment.NewLine, Elements.Select(e => e.ToString(format))));
         }

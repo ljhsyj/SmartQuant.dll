@@ -12,8 +12,20 @@ namespace SmartQuant
 	{
         public BarFilter BarFilter { get; private set; }
 
+        public bool AddQueueToOrderText { get; set; }
+
         public MatchingEngine(Framework framework) : base(framework)
         {
+        }
+
+        public override void Connect()
+        {
+            Status = ProviderStatus.Connected;
+        }
+
+        public override void Disconnect()
+        {
+            Status = ProviderStatus.Disconnected;
         }
 
         public void OnBid(Bid bid)
@@ -37,6 +49,11 @@ namespace SmartQuant
         }
 
         public void OnTrade(Trade trade)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnBarOpen(Bar bar)
         {
             throw new NotImplementedException();
         }
@@ -228,6 +245,16 @@ namespace SmartQuant
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public void Fill (Order order, double price, int size)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Send (ExecutionCommand command)
+        {
+            throw new NotImplementedException();
         }
 	}
 }

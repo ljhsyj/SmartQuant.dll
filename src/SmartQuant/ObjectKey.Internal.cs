@@ -5,40 +5,40 @@ using System.Runtime.InteropServices;
 namespace SmartQuant
 {
     // This class is for size calculation only.
-    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
-    class ObjectKeyHead
-    {
-        [FieldOffset(0)]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
-        public string Label = "OKey";
-
-        [FieldOffset(5)]
-        public bool Freed;
-
-        [FieldOffset(6)]
-        public DateTime DateTime;
-
-        [FieldOffset(14)]
-        public long Position = -1;
-
-        [FieldOffset(22)]
-        private int HeaderLength = -1;
-
-        [FieldOffset(26)]
-        private int ContentLength = -1;
-
-        [FieldOffset(30)]
-        private int TotalLength = -1;
-
-        [FieldOffset(34)]
-        private byte CompressionMethod = 1;
-
-        [FieldOffset(35)]
-        private byte CompressionLevel = 1;
-
-        [FieldOffset(36)]
-        private byte TypeId = 1;
-    }
+//    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+//    class ObjectKeyHead
+//    {
+//        [FieldOffset(0)]
+//        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
+//        public string Label = "OKey";
+//
+//        [FieldOffset(5)]
+//        public bool Freed;
+//
+//        [FieldOffset(6)]
+//        public DateTime DateTime;
+//
+//        [FieldOffset(14)]
+//        public long Position = -1;
+//
+//        [FieldOffset(22)]
+//        private int HeaderLength = -1;
+//
+//        [FieldOffset(26)]
+//        private int ContentLength = -1;
+//
+//        [FieldOffset(30)]
+//        private int TotalLength = -1;
+//
+//        [FieldOffset(34)]
+//        private byte CompressionMethod = 1;
+//
+//        [FieldOffset(35)]
+//        private byte CompressionLevel = 1;
+//
+//        [FieldOffset(36)]
+//        private byte TypeId = 1;
+//    }
 
     // This class is for size calculation only.
     [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
@@ -59,7 +59,9 @@ namespace SmartQuant
 
     public partial class ObjectKey
     {
-        internal static readonly int HEAD_LENGTH = Marshal.SizeOf(typeof(ObjectKeyHead));
+//        internal static readonly int HEAD_LENGTH = Marshal.SizeOf(typeof(ObjectKeyHead));
+        internal static readonly int HEAD_LENGTH = 37;
+
         internal byte typeId;
         internal byte compressionMethod = 1;
         internal byte compressionLevel = 1;

@@ -4,8 +4,8 @@ namespace SmartQuant
 {
     public class PerformanceStrategy : InstrumentStrategy
     {
-        public PerformanceStrategy(Framework framework, string name)
-            : base(framework, name)
+        public PerformanceStrategy(Framework framework)
+            : base(framework, "PerformanceStrategy")
         {
         }
 

@@ -66,6 +66,10 @@ namespace SmartQuant
                 return dictionary;
             }
         }
+
+        internal LicenseInfo()
+        {
+        }
 	}
 }
 

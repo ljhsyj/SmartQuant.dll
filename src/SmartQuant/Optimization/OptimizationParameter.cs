@@ -5,9 +5,9 @@ namespace SmartQuant.Optimization
 {
     public class OptimizationParameter
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        public object Value { get; set; }
+        public object Value { get; private set; }
 
         public OptimizationParameter(string name, object value)
         {

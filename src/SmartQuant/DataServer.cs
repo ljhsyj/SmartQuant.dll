@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SmartQuant
 {
-    public abstract class DataServer : IDisposable
+    public class DataServer : IDisposable
     {
         protected Framework framework;
         protected bool tapeMode;
@@ -31,18 +31,22 @@ namespace SmartQuant
 
         public virtual void Open()
         {
+            // no-op
         }
 
         public virtual void Close()
         {
+            // no-op
         }
 
         public virtual void Flush()
         {
+            // no-op
         }
 
         public virtual void Save(Instrument instrument, DataObject obj, SaveMode option = SaveMode.Add)
         {
+            // no-op
         }
 
         public virtual DataSeries GetDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
@@ -62,18 +66,15 @@ namespace SmartQuant
 
         public virtual void DeleteDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60L)
         {
+            // no-op
         }
 
         public virtual void DeleteDataSeries(string name)
         {
+            // no-op
         }
 
         public virtual DataSeries AddDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
-        {
-            return null;
-        }
-
-        public virtual DataSeries AddDataSeries(Instrument instrument, byte type)
         {
             return null;
         }
@@ -85,7 +86,7 @@ namespace SmartQuant
 
         public virtual void Dispose()
         {
-            this.Close();
+            Close();
         }
     }
 }
