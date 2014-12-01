@@ -4,16 +4,31 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 
 namespace SmartQuant
 {
     public class Instrument
     {
-        private Framework framework;
-        internal bool loaded;
+      //  private Framework framework;
+        private ObjectTable fields;
+
+        internal bool Loaded { get; set; }
+
+        internal bool Deleted { get; set; }
+
+        internal Framework Framework { get; private set; }
 
         [Browsable(false)]
-        public ObjectTable Fields { get; internal set; }
+        public ObjectTable Fields
+        {
+            get
+            { 
+                if (fields == null)
+                    fields = new ObjectTable();
+                return fields;
+            }
+        }
 
         [Browsable(false)]
         public Instrument Parent { get; set; }
@@ -89,16 +104,16 @@ namespace SmartQuant
         public List<Leg> Legs { get; private set; }
 
         [Browsable(false)]
-        public Bid Bid { get; private set; }
+        public Bid Bid { get; internal set; }
 
         [Browsable(false)]
-        public Ask Ask { get; private set; }
+        public Ask Ask { get; internal set; }
 
         [Browsable(false)]
-        public Trade Trade { get; private set; }
+        public Trade Trade { get; internal set; }
 
         [Browsable(false)]
-        public Bar Bar { get; private set; }
+        public Bar Bar { get; internal set; }
 
         public IDataProvider DataProvider { get; private set; }
 
@@ -110,12 +125,12 @@ namespace SmartQuant
             PriceFormat = "F2";
             AltId = new AltIdList();
             Legs = new List<Leg>();
-            Fields = new ObjectTable();
         }
 
         public Instrument(Instrument instrument)
             : this()
         {
+            throw new NotImplementedException();
         }
 
         public Instrument(InstrumentType type, string symbol, string description = "", byte currencyId = global::SmartQuant.CurrencyId.USD)
@@ -127,11 +142,17 @@ namespace SmartQuant
             CurrencyId = currencyId;
         }
 
+        internal Instrument(int id, InstrumentType type, string symbol, string description = "", byte currencyId = global::SmartQuant.CurrencyId.USD)
+            : this(type, symbol, description, currencyId)
+        {
+            Id = id;
+        }
+
         internal void Init(Framework framework)
         {
-            this.framework = framework;
+            Framework = framework;
             foreach (var leg in Legs)
-                leg.Init(this.framework); 
+                leg.Init(Framework);
         }
 
         public string GetSymbol(byte providerId)
@@ -159,7 +180,103 @@ namespace SmartQuant
             return instrument;
         }
 
-        #region Extra Helper Methods
+        #region Some Extensions
+
+
+        internal Instrument(BinaryReader reader)
+            : this()
+        {
+            var version = reader.ReadByte();
+            Id = reader.ReadInt32();
+            Type = (InstrumentType)reader.ReadByte();
+            Symbol = reader.ReadString();
+            Description = reader.ReadString();
+            CurrencyId = reader.ReadByte();
+            Exchange = reader.ReadString();
+            TickSize = reader.ReadDouble();
+            Maturity = new DateTime(reader.ReadInt64());
+            Factor = reader.ReadDouble();
+            Strike = reader.ReadDouble();
+            PutCall = (PutCall)reader.ReadByte();
+            Margin = reader.ReadDouble();
+            int altIdCount = reader.ReadInt32();
+            for (int i = 0; i < altIdCount; ++i)
+                AltId.Add((AltId)Framework.StreamerManager.Deserialize(reader));
+            int legCount = reader.ReadInt32();
+            for (int i = 0; i < legCount; ++i)
+                Legs.Add((Leg)Framework.StreamerManager.Deserialize(reader));
+            this.fields = new ObjectTable();
+            if (version == 0)
+            {
+                int fieldCount = reader.ReadInt32();
+                for (int i = 0; i < fieldCount; ++i)
+                    this.fields[i] = (object)reader.ReadDouble();
+            }
+            if (version >= 1)
+            {
+                PriceFormat = reader.ReadString();
+                if (reader.ReadInt32() != -1)
+                    this.fields = (ObjectTable)Framework.StreamerManager.Deserialize(reader);
+            }
+            if (version >= 2)
+            {
+                CCY1 = reader.ReadByte();
+                CCY2 = reader.ReadByte();
+            }
+            if (version >= 3)
+                Deleted = reader.ReadBoolean();
+
+        }
+
+        internal void Write(BinaryWriter writer, StreamerManager streamerManager)
+        {
+            var instrument = this;
+            byte version = 2;
+            writer.Write(version);
+            writer.Write(instrument.Id);
+            writer.Write((byte)instrument.Type);
+            writer.Write(instrument.Symbol);
+            writer.Write(instrument.Description);
+            writer.Write(instrument.CurrencyId);
+            writer.Write(instrument.Exchange);
+            writer.Write(instrument.TickSize);
+            writer.Write(instrument.Maturity.Ticks);
+            writer.Write(instrument.Factor);
+            writer.Write(instrument.Strike);
+            writer.Write((byte)instrument.PutCall);
+            writer.Write(instrument.Margin);
+            writer.Write(instrument.AltId.Count);
+            foreach (var altId in instrument.AltId)
+                streamerManager.Serialize(writer, altId);
+            writer.Write(instrument.Legs.Count);
+            foreach (var leg in instrument.Legs)
+                streamerManager.Serialize(writer, leg);
+            if (version == 0)
+            {
+                writer.Write(instrument.Fields.Size);
+                for (int i = 0; i < instrument.Fields.Size; ++i)
+                    writer.Write((double)instrument.Fields[i]);
+            }
+            if (version >= 1)
+            {
+                writer.Write(instrument.PriceFormat);
+                if (instrument.Fields == null)
+                    writer.Write(-1);
+                else
+                {
+                    writer.Write(instrument.Fields.Size);
+                    streamerManager.Serialize(writer, instrument.Fields);
+                }
+            }
+            if (version >= 2)
+            {
+                writer.Write(instrument.CCY1);
+                writer.Write(instrument.CCY2);
+            }
+            if (version >= 3)
+                writer.Write(instrument.Deleted);
+        }
+
         internal string GetName()
         {
             return Symbol;
@@ -170,6 +287,11 @@ namespace SmartQuant
             return Id;
         }
 
+        internal void TryInitWith(Framework framework)
+        {
+            if (Framework == null)
+                Init(framework);
+        }
         #endregion
     }
 }

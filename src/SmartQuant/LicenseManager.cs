@@ -14,12 +14,12 @@ namespace SmartQuant
 
         public string GetHardwareID()
         {
-            return "AAAA-1111-BBBB-2222-CCCC";
+            throw new NotImplementedException();
         }
 
         public void LoadLicense(byte[] license)
         {
-            // do nothing
+            throw new NotImplementedException();
         }
 
         internal LicenseManager()

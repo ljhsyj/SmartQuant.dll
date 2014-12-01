@@ -94,6 +94,7 @@
     <Compile Include="EventBusTest.cs" />
     <Compile Include="MemorySeriesTest.cs" />
     <Compile Include="DataFileTest.cs" />
+    <Compile Include="Quant.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

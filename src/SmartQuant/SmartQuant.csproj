@@ -32,6 +32,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Data" />
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\packages\morelinq.1.1.0\lib\net35\MoreLinq.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -456,6 +459,7 @@
     <Compile Include="OrderFactory.cs" />
     <Compile Include="Indicators\AD.cs" />
     <Compile Include="Indicators\ADX.cs" />
+    <Compile Include="SomeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Licensing\" />
@@ -464,5 +468,8 @@
     <Folder Include="Statistics\" />
     <Folder Include="DriverFile\" />
     <Folder Include="Quant\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

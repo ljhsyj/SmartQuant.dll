@@ -22,6 +22,11 @@ namespace SmartQuant
         private double median;
         private double variance;
 
+        private static Func<double, double, double> opAdd  = (a, b) => a + b;
+        private static Func<double, double, double> opSub = (a, b) => a - b;
+        private static Func<double, double, double> opMul = (a, b) => a * b;
+        private static Func<double, double, double> opDiv = (a, b) => a / b;
+
         public string Name
         {
             get
@@ -76,6 +81,7 @@ namespace SmartQuant
         {
             get
             { 
+                EnsureNotEmpty("Array has no elements");
                 return this.dataSeries[0].DateTime;
             }
         }
@@ -84,11 +90,12 @@ namespace SmartQuant
         {
             get
             { 
+                EnsureNotEmpty("Array has no elements");
                 return this.dataSeries[this.dataSeries.Count - 1].DateTime;
             }
         }
 
-        public virtual double this[int index]
+        public virtual double this [int index]
         {
             get
             {
@@ -138,12 +145,12 @@ namespace SmartQuant
         }
 
         public TimeSeries(IDataSeries series)
-            :this(series.Name, series.Description, series)
+            : this(series.Name, series.Description, series)
         {
         }
 
         public TimeSeries(string name, string description = "")
-            :this(name, description, null)
+            : this(name, description, null)
         {
         }
 
@@ -194,7 +201,15 @@ namespace SmartQuant
 
         public Cross Crosses(double level, int index)
         {
-            throw new NotImplementedException();
+            if (index <= 0 || index > this.dataSeries.Count - 1)
+                return Cross.None;
+            var last = GetItem(index - 1).Value;
+            var current = GetItem(index).Value;
+            if (last <= level && level < current)
+                return Cross.Above;
+            if (last >= level && level > current)
+                return Cross.Below;
+            return Cross.None;
         }
 
         public Cross Crosses(TimeSeries series, DateTime dateTime)
@@ -204,12 +219,12 @@ namespace SmartQuant
 
         public int IndexOf(DateTime dateTime, SearchOption option = SearchOption.ExactFirst)
         {
-            int index = (int) this.dataSeries.Count - 1;
+            int index = (int)this.dataSeries.Count - 1;
             if (dateTime == GetDateTime(index))
                 return index;
             int num1 = 0;
             int num2 = 0;
-            int num3 = (int) this.dataSeries.Count - 1;
+            int num3 = (int)this.dataSeries.Count - 1;
             bool flag = true;
             while (flag)
             {
@@ -219,7 +234,7 @@ namespace SmartQuant
                 switch (option)
                 {
                     case SearchOption.Next:
-                        if (this.dataSeries[(long) num1].DateTime >= dateTime && (num1 == 0 || this.dataSeries[(long) (num1 - 1)].DateTime < dateTime))
+                        if (this.dataSeries[(long)num1].DateTime >= dateTime && (num1 == 0 || this.dataSeries[(long)(num1 - 1)].DateTime < dateTime))
                         {
                             flag = false;
                             continue;
@@ -235,12 +250,12 @@ namespace SmartQuant
                             continue;
                         }
                     case SearchOption.Prev:
-                        if (this.dataSeries[num1].DateTime <= dateTime && ((long) num1 == this.dataSeries.Count - 1 || this.dataSeries[(long) (num1 + 1)].DateTime > dateTime))
+                        if (this.dataSeries[num1].DateTime <= dateTime && ((long)num1 == this.dataSeries.Count - 1 || this.dataSeries[(long)(num1 + 1)].DateTime > dateTime))
                         {
                             flag = false;
                             continue;
                         }
-                        else if (this.dataSeries[(long) num1].DateTime > dateTime)
+                        else if (this.dataSeries[(long)num1].DateTime > dateTime)
                         {
                             num3 = num1 - 1;
                             continue;
@@ -251,17 +266,17 @@ namespace SmartQuant
                             continue;
                         }
                     case SearchOption.ExactFirst:
-                        if (this.dataSeries[(long) num1].DateTime == dateTime)
+                        if (this.dataSeries[(long)num1].DateTime == dateTime)
                         {
                             flag = false;
                             continue;
                         }
-                        else if (this.dataSeries[(long) num1].DateTime > dateTime)
+                        else if (this.dataSeries[(long)num1].DateTime > dateTime)
                         {
                             num3 = num1 - 1;
                             continue;
                         }
-                        else if (this.dataSeries[(long) num1].DateTime < dateTime)
+                        else if (this.dataSeries[(long)num1].DateTime < dateTime)
                         {
                             num2 = num1 + 1;
                             continue;
@@ -277,7 +292,7 @@ namespace SmartQuant
 
         public double GetMin()
         {
-            return this.min != null ? min.Value : double.NaN;
+            return this.min != null ? this.min.Value : double.NaN;
         }
 
         public virtual double GetMin(DateTime dateTime1, DateTime dateTime2)
@@ -297,7 +312,7 @@ namespace SmartQuant
 
         public double GetMax()
         {
-            return this.max != null ? max.Value : double.NaN;
+            return this.max != null ? this.max.Value : double.NaN;
         }
 
         public virtual double GetMax(DateTime dateTime1, DateTime dateTime2)
@@ -317,7 +332,7 @@ namespace SmartQuant
 
         public bool Contains(DateTime dateTime)
         {
-            return GetByDateTime(dateTime, SearchOption.ExactFirst) != null;
+            return IndexOf(dateTime, SearchOption.ExactFirst) != -1;
         }
 
         public void Add(DateTime dateTime, double value)
@@ -328,19 +343,14 @@ namespace SmartQuant
             this.dataSeries.Add(item);
   
             // Update indicators
-//            foreach (var indicator in this.Indicators)
-//                if (indicator.AutoUpdate)
-//                    indicator.Calculate(this.items.Count - 1);
+            foreach (var indicator in Indicators)
+                if (indicator.AutoUpdate)
+                    indicator.Calculate(this.dataSeries.Count - 1);
         }
 
         public void Remove(int index)
         {
             this.dataSeries.Remove(index);
-        }
-
-        public void Clear()
-        {
-            this.dataSeries.Clear();
         }
 
         public double GetSum()
@@ -863,72 +873,130 @@ namespace SmartQuant
             return ts;
         }
 
-        public static TimeSeries operator +(TimeSeries series1, TimeSeries series2)
+        private static TimeSeries DoBinaryOperation1(TimeSeries ts1, TimeSeries ts2, string name, Func<double, double, double> op)
         {
-            EnsureNotNull(series1, series2);
-            var ts = new TimeSeries(string.Format("({0}+{1})", series1.Name, series2.Name), "");
-            for (int i = 0; i < series1.Count; ++i)
+            var ts = new TimeSeries(name, "");
+            for (int i = 0; i < ts1.Count; ++i)
             {
-                var dt = series1.GetDateTime(i);
-                if (series2.Contains(dt))
-                    ts.Add(dt, series1[dt, 0, SearchOption.ExactFirst] + series2[dt, 0, SearchOption.ExactFirst]);
+                var datetime = ts1.GetDateTime(i);
+                if (ts2.Contains(datetime))
+                    ts.Add(datetime, op(ts1[datetime, 0, SearchOption.ExactFirst], ts2[datetime, 0, SearchOption.ExactFirst]));
             }
             return ts;
         }
 
+        private static TimeSeries DoBinaryOperation2(TimeSeries ts1, TimeSeries ts2, string name, Func<double, double, double> op)
+        {
+            var ts = new TimeSeries(name, "");
+            for (int i = 0; i < ts1.Count; ++i)
+            {
+                var datetime = ts1.GetDateTime(i);
+                if (ts2.Contains(datetime) && ts2[datetime, SearchOption.ExactFirst] != 0)
+                    ts.Add(datetime, op(ts1[datetime, 0, SearchOption.ExactFirst], ts2[datetime, 0, SearchOption.ExactFirst]));
+            }
+            return ts;
+        }
+
+        public static TimeSeries operator +(TimeSeries series1, TimeSeries series2)
+        {
+            EnsureNotNull(series1, series2);
+            string name = string.Format("({0}+{1})", series1.Name, series2.Name);
+            return DoBinaryOperation1(series1, series2, name, opAdd);
+        }
+
         public static TimeSeries operator -(TimeSeries series1, TimeSeries series2)
         {
-            throw new NotImplementedException();
+            EnsureNotNull(series1, series2);
+            var name = string.Format("({0}-{1})", series1.Name, series2.Name);
+            return DoBinaryOperation1(series1, series2, name, opSub);
         }
 
         public static TimeSeries operator *(TimeSeries series1, TimeSeries series2)
         {
-            throw new NotImplementedException();
+            EnsureNotNull(series1, series2);
+            var name = string.Format("({0}*{1})", series1.Name, series2.Name);
+            return DoBinaryOperation1(series1, series2, name, opMul);
         }
 
         public static TimeSeries operator /(TimeSeries series1, TimeSeries series2)
         {
-            throw new NotImplementedException();
+            EnsureNotNull(series1, series2);
+            var name = string.Format("({0}/{1})", series1.Name, series2.Name);
+            return DoBinaryOperation2(series1, series2, name, opDiv);
+        }
+
+        private static TimeSeries DoTimeSeriesWithValue(TimeSeries series, double value, string name, Func<double, double, double> op)
+        {
+            var ts = new TimeSeries(name, "");
+            for (int i = 0; i < series.Count; ++i)
+                ts.Add(series.GetDateTime(i), op(series[i, 0], value));
+            return ts;
         }
 
         public static TimeSeries operator +(TimeSeries series, double value)
         {
-            throw new NotImplementedException();
+            EnsureNotNull(series);
+            var name = string.Format("({0}+{1:F2})", series.Name, value);
+            return DoTimeSeriesWithValue(series, value, name, opAdd);
         }
 
         public static TimeSeries operator -(TimeSeries series, double value)
         {
-            throw new NotImplementedException();
+            EnsureNotNull(series);
+            var name = string.Format("({0}-{1:F2})", series.Name, value);
+            return DoTimeSeriesWithValue(series, value, name, opSub);
         }
 
         public static TimeSeries operator *(TimeSeries series, double value)
         {
-            throw new NotImplementedException();
+            EnsureNotNull(series);
+            var name = string.Format("({0}*{1:F2})", series.Name, value);
+            return DoTimeSeriesWithValue(series, value, name, opMul);
         }
 
         public static TimeSeries operator /(TimeSeries series, double value)
         {
-            throw new NotImplementedException();
+            EnsureNotNull(series);
+            var name = string.Format("({0}/{1:F2})", series.Name, value);
+            return DoTimeSeriesWithValue(series, value, name, opDiv);
+        }
+
+        private static TimeSeries DoValueWithTimeSeries(TimeSeries series, double value, string name, Func<double, double, double> op, bool checkZero =false)
+        {
+            var ts = new TimeSeries(name, "");
+            for (int i = 0; i < series.Count; ++i)
+            {
+                if (checkZero && series[i, 0] == 0)
+                    continue;
+                ts.Add(series.GetDateTime(i), op(value, series[i, 0]));
+            }
+            return ts;
         }
 
         public static TimeSeries operator +(double value, TimeSeries series)
         {
-            throw new NotImplementedException();
+            EnsureNotNull(series);
+            var name = string.Format("({0:F2}+{1})", value, series.Name);
+            return DoValueWithTimeSeries(series, value, name, opAdd);
         }
 
         public static TimeSeries operator -(double value, TimeSeries series)
         {
-            throw new NotImplementedException();
-        }
+            EnsureNotNull(series);
+            var name = string.Format("({0:F2}-{1})", value, series.Name);
+            return DoValueWithTimeSeries(series, value, name, opSub);        }
 
         public static TimeSeries operator *(double value, TimeSeries series)
         {
-            throw new NotImplementedException();
-        }
+            EnsureNotNull(series);
+            var name = string.Format("({0:F2}*{1})", value, series.Name);
+            return DoValueWithTimeSeries(series, value, name, opMul);         }
 
         public static TimeSeries operator /(double value, TimeSeries series)
         {          
-            throw new NotImplementedException();
+            EnsureNotNull(series);
+            var name = string.Format("({0:F2}/{1})", value, series.Name);
+            return DoValueWithTimeSeries(series, value, name, opDiv, true);
         }
 
         public double Ago(int n)
@@ -937,6 +1005,13 @@ namespace SmartQuant
             if (index < 0)
                 throw new ArgumentException(string.Format("Can not return an entry {0} entries ago: time series is too short.", n));
             return this[index];
+        }
+
+        public void Clear()
+        {
+            this.dataSeries.Clear();
+            this.max = this.min = null;
+            this.dirty = true;
         }
 
         private static void EnsureNotNull(params object[] objs)
@@ -948,13 +1023,13 @@ namespace SmartQuant
 
         private void EnsureAtLeastOneElement()
         {
-            if (this.Count <= 1)
+            if (Count <= 1)
                 throw new ApplicationException("Can not calculate. Insufficient number of elements in the array.");
         }
 
-        private void EnsureNotEmpty()
+        private void EnsureNotEmpty(string message = "")
         {
-            if (this.Count <= 0)
+            if (Count <= 0)
                 throw new ApplicationException("Can not calculate. Array is empty.");
         }
 
