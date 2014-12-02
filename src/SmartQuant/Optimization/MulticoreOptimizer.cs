@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using System.Linq;
-using MoreLinq;
 
 namespace SmartQuant.Optimization
 {

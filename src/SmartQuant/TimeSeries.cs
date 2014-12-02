@@ -22,7 +22,7 @@ namespace SmartQuant
         private double median;
         private double variance;
 
-        private static Func<double, double, double> opAdd  = (a, b) => a + b;
+        private static Func<double, double, double> opAdd = (a, b) => a + b;
         private static Func<double, double, double> opSub = (a, b) => a - b;
         private static Func<double, double, double> opMul = (a, b) => a * b;
         private static Func<double, double, double> opDiv = (a, b) => a / b;
@@ -190,7 +190,72 @@ namespace SmartQuant
 
         public virtual int GetIndex(DateTime datetime, IndexOption option = IndexOption.Null)
         {
-            throw new NotImplementedException();
+            int num1 = 0;
+            int num2 = 0;
+            int num3 = (int)this.dataSeries.Count - 1;
+            bool flag = true;
+            while (flag)
+            {
+                if (num3 < num2)
+                    return -1;
+                num1 = (num2 + num3) / 2;
+                switch (option)
+                {
+                    case IndexOption.Null:
+                        if (this.dataSeries[(long)num1].dateTime == datetime)
+                        {
+                            flag = false;
+                            continue;
+                        }
+                        else if (this.dataSeries[(long)num1].dateTime > datetime)
+                        {
+                            num3 = num1 - 1;
+                            continue;
+                        }
+                        else if (this.dataSeries[(long)num1].dateTime < datetime)
+                        {
+                            num2 = num1 + 1;
+                            continue;
+                        }
+                        else
+                            continue;
+                    case IndexOption.Next:
+                        if (this.dataSeries[(long)num1].dateTime >= datetime && (num1 == 0 || this.dataSeries[(long)(num1 - 1)].dateTime < datetime))
+                        {
+                            flag = false;
+                            continue;
+                        }
+                        else if (this.dataSeries[(long)num1].dateTime < datetime)
+                        {
+                            num2 = num1 + 1;
+                            continue;
+                        }
+                        else
+                        {
+                            num3 = num1 - 1;
+                            continue;
+                        }
+                    case IndexOption.Prev:
+                        if (this.dataSeries[(long)num1].dateTime <= datetime && ((long)num1 == this.dataSeries.Count - 1L || this.dataSeries[(long)(num1 + 1)].dateTime > datetime))
+                        {
+                            flag = false;
+                            continue;
+                        }
+                        else if (this.dataSeries[(long)num1].dateTime > datetime)
+                        {
+                            num3 = num1 - 1;
+                            continue;
+                        }
+                        else
+                        {
+                            num2 = num1 + 1;
+                            continue;
+                        }
+                    default:
+                        continue;
+                }
+            }
+            return num1;
         }
 
         public TimeSeriesItem GetByDateTime(DateTime dateTime, SearchOption option = SearchOption.ExactFirst)
@@ -212,11 +277,47 @@ namespace SmartQuant
             return Cross.None;
         }
 
+        // TODO:rewrite it
         public Cross Crosses(TimeSeries series, DateTime dateTime)
         {
-            throw new NotImplementedException();
+            int index1 = this.IndexOf(dateTime, SearchOption.ExactFirst);
+            int index2 = series.IndexOf(dateTime, SearchOption.ExactFirst);
+            if (index1 <= 0 || (long)index1 >= this.dataSeries.Count || (index2 <= 0 || index2 >= series.Count))
+                return Cross.None;
+            DateTime dateTime1 = this.GetDateTime(index1 - 1);
+            DateTime dateTime2 = series.GetDateTime(index2 - 1);
+            if (dateTime1 == dateTime2)
+            {
+                if (this.GetValue(index1 - 1) <= series.GetValue(index2 - 1) && this.GetValue(index1) > series.GetValue(index2))
+                    return Cross.Above;
+                if (this.GetValue(index1 - 1) >= series.GetValue(index2 - 1) && this.GetValue(index1) < series.GetValue(index2))
+                    return Cross.Below;
+            }
+            else
+            {
+                double num1;
+                double num2;
+                if (dateTime1 < dateTime2)
+                {
+                    DateTime dateTime3 = this.GetDateTime(index1 - 1);
+                    num1 = this.GetValue(index1 - 1);
+                    num2 = series.IndexOf(dateTime3, SearchOption.Next) == index2 ? series.GetValue(series.IndexOf(dateTime3, SearchOption.Prev)) : series.GetValue(series.IndexOf(dateTime3, SearchOption.Next));
+                }
+                else
+                {
+                    DateTime dateTime3 = series.GetDateTime(index2 - 1);
+                    num2 = series.GetValue(index2 - 1);
+                    num1 = this.IndexOf(dateTime3, SearchOption.Prev) == index1 ? this.GetValue(this.IndexOf(dateTime3, SearchOption.Prev)) : this.GetValue(this.IndexOf(dateTime3, SearchOption.Next));
+                }
+                if (num1 <= num2 && this.GetValue(index1) > series.GetValue(index2))
+                    return Cross.Above;
+                if (num1 >= num2 && this.GetValue(index1) < series.GetValue(index2))
+                    return Cross.Below;
+            }
+            return Cross.None;
         }
 
+        // TODO: rewrite it
         public int IndexOf(DateTime dateTime, SearchOption option = SearchOption.ExactFirst)
         {
             int index = (int)this.dataSeries.Count - 1;
@@ -297,17 +398,30 @@ namespace SmartQuant
 
         public virtual double GetMin(DateTime dateTime1, DateTime dateTime2)
         {
-            throw new NotImplementedException();
+            TimeSeriesItem result = null;
+            for (int i = 0; i < this.dataSeries.Count; ++i)
+            {
+                var item = this.dataSeries[i] as TimeSeriesItem;
+                if (dateTime1 <= item.DateTime && item.DateTime <= dateTime2)
+                    result = result == null ? item : item.Value < result.Value ? item : result;
+            }
+            return result != null ? result.Value : double.NaN;
         }
 
         public double GetMin(int index1, int index2)
         {
-            return GetMin(index1, index2);
+            TimeSeriesItem result = null;
+            for (int i = index1; i <= index2; ++i)
+            {
+                var item = this.dataSeries[i] as TimeSeriesItem ;
+                result = result == null ? item : item.Value < result.Value ? item : result;
+            }
+            return result != null ? result.Value : double.NaN;
         }
 
         public virtual double GetMin(int index1, int index2, BarData barData)
         {
-            throw new NotImplementedException();
+            return GetMin(index1, index2);
         }
 
         public double GetMax()
@@ -317,12 +431,25 @@ namespace SmartQuant
 
         public virtual double GetMax(DateTime dateTime1, DateTime dateTime2)
         {
-            throw new NotImplementedException();
+            TimeSeriesItem result = null;
+            for (int i = 0; i < this.dataSeries.Count; ++i)
+            {
+                var item = this.dataSeries[i] as TimeSeriesItem;
+                if (dateTime1 <= item.DateTime && item.DateTime <= dateTime2)
+                    result = result == null ? item : item.Value > result.Value ? item : result;
+            }
+            return result != null ? result.Value : double.NaN;
         }
 
         public double GetMax(int index1, int index2)
         {
-            throw new NotImplementedException();
+            TimeSeriesItem result = null;
+            for (int i = index1; i <= index2; ++i)
+            {
+                var item = this.dataSeries[i] as TimeSeriesItem ;
+                result = result == null ? item : item.Value > result.Value ? item : result;
+            }
+            return result != null ? result.Value : double.NaN;
         }
 
         public virtual double GetMax(int index1, int index2, BarData barData)
@@ -345,7 +472,7 @@ namespace SmartQuant
             // Update indicators
             foreach (var indicator in Indicators)
                 if (indicator.AutoUpdate)
-                    indicator.Calculate(this.dataSeries.Count - 1);
+                    indicator.Calculate((int)this.dataSeries.Count - 1);
         }
 
         public void Remove(int index)
@@ -356,15 +483,14 @@ namespace SmartQuant
         public double GetSum()
         {
             if (this.dirty)
-                this.sum = GetSum(0, this.Count, 0);
+                this.sum = GetSum(0, Count - 1, 0);
             return this.sum;
         }
 
         public double GetSum(int index1, int index2, int row)
         {
-            EnsureIndexInRange(index1, index2);
-            var len = index2 - index1 + 1;
-            return Enumerable.Range(index1, len).Sum(i => this[i, row]);
+            EnsureIndexInRange(index1, index2); 
+            return Enumerable.Range(index1, index2 - index1 + 1).Sum(i => this[i, row]);
         }
 
         public double GetMean()
@@ -387,12 +513,12 @@ namespace SmartQuant
 
         public virtual double GetMean(int row)
         {
-            return GetMean(0, this.Count - 1, row);
+            return GetMean(0, Count - 1, row);
         }
 
         public double GetMean(int index1, int index2, int row)
         {
-            EnsureNotEmpty();
+            EnsureNotEmpty("Can not calculate mean. Array is empty.");
             EnsureIndexInRange(index1, index2);
             var len = index2 - index1 + 1;
             return Enumerable.Range(index1, len).Sum(i => this[i, row]) / len;
@@ -400,7 +526,7 @@ namespace SmartQuant
 
         public double GetMean(DateTime dateTime1, DateTime dateTime2, int row)
         {
-            EnsureNotEmpty();
+            EnsureNotEmpty("Can not calculate mean. Array is empty.");
             int idx1, idx2;
             EnsureIndexInRange(dateTime1, dateTime2, out idx1, out idx2);
             return GetMean(idx1, idx2, row);
@@ -418,20 +544,20 @@ namespace SmartQuant
 
         public virtual double GetMedian(int row)
         {
-            return GetMedian(0, this.Count - 1, row);
+            return GetMedian(0, Count - 1, row);
         }
 
         public double GetMedian()
         {
-            EnsureNotEmpty();
+            EnsureNotEmpty("Can not calculate median. Array is empty.");
             if (this.dirty)
-                this.median = GetMedian(0, this.Count - 1);
+                this.median = GetMedian(0, Count - 1);
             return this.median;
         }
 
         public double GetMedian(int index1, int index2, int row)
         {
-            EnsureNotEmpty();
+            EnsureNotEmpty("Can not calculate median. Array is empty.");
             EnsureIndexInRange(index1, index2);
             var list = new List<double>();
             for (int i = index1; i <= index2; ++i)
@@ -445,14 +571,14 @@ namespace SmartQuant
             EnsureNotEmpty();
             int idx1, idx2;
             EnsureIndexInRange(dateTime1, dateTime2, out idx1, out idx2);
-            return this.GetMedian(idx1, idx2, row);
+            return GetMedian(idx1, idx2, row);
         }
 
         public double GetVariance()
         {
-            EnsureAtLeastOneElement();
+            EnsureAtLeastOneElement("Can not calculate variance. Insufficient number of elements in the array.");
             if (this.dirty)
-                this.variance = GetVariance(0, this.Count - 1);
+                this.variance = GetVariance(0, Count - 1);
             return this.variance;
         }
 
@@ -468,12 +594,12 @@ namespace SmartQuant
 
         public virtual double GetVariance(int row)
         {
-            return GetVariance(0, this.Count - 1, row);
+            return GetVariance(0, Count - 1, row);
         }
 
         public double GetVariance(int index1, int index2, int row)
         {
-            EnsureAtLeastOneElement();
+            EnsureAtLeastOneElement("Can not calculate variance. Insufficient number of elements in the array.");
             EnsureIndexInRange(index1, index2);
             var m = GetMean(index1, index2, row);
             var len = index2 - index1 + 1;
@@ -490,32 +616,77 @@ namespace SmartQuant
 
         public virtual double GetPositiveVariance()
         {
-            return this.GetPositiveVariance(0);
+            return GetPositiveVariance(0);
+        }
+
+        private void AggregateWhere(int index1, int index2, int row, Predicate<double> p, Func<double,double,double> func, out double result, out int count)
+        {
+            count = 0;
+            result = 0;
+            for (int i = index1; i <= index2; ++i)
+            {
+                if (p(this[i, row]))
+                {
+                    result = func(this[i, row], result);
+                    ++count;
+                }
+            }
+        }
+
+        private double GetVarianceUsing(int index1, int index2, int row, Predicate<double> p)
+        {
+            EnsureAtLeastOneElement();
+            EnsureIndexInRange(index1, index2);
+            int count1 = 0;
+            double result1 = 0.0;
+            AggregateWhere(index1, index2, row, p, (a, sum) => sum + a, out result1, out count1);
+            double num3 = result1 / (double)count1;
+            int count2 = 0;
+            double result2 = 0;
+            AggregateWhere(index1, index2, row, p, (a, sum) => sum + (num3 - a) * (num3 - a), out result2, out count2);
+            return result2 / (double)count1;
         }
 
         public double GetPositiveVariance(int index1, int index2, int row)
         {
-            EnsureAtLeastOneElement();
-            EnsureIndexInRange(index1, index2);
+            return GetVarianceUsing(index1, index2, row, val => val > 0);
+//            EnsureAtLeastOneElement();
+//            EnsureIndexInRange(index1, index2);
+//            int count1 = 0;
+//            double result1 = 0.0;
+//            AggregateWhere(index1, index2, row, val => val > 0, (a, sum) => sum + a, out result1, out count1);
+//            double num3 = result1 / (double)count1;
+//            int count2 = 0;
+//            double result2 = 0;
+//            AggregateWhere(index1, index2, row, val => val > 0, (a, sum) => sum + (num3 - a) * (num3 - a), out result2, out count2);
+//            return result2 / (double)count1;
+        }
 
-            int num1 = 0;
-            double num2 = 0.0;
-            for (int index = index1; index <= index2; ++index)
-            {
-                if (this[index, row] > 0.0)
-                {
-                    num2 += this[index, row];
-                    ++num1;
-                }
-            }
-            double num3 = num2 / (double)num1;
-            double num4 = 0.0;
-            for (int index = index1; index <= index2; ++index)
-            {
-                if (this[index, row] > 0.0)
-                    num4 += (num3 - this[index, row]) * (num3 - this[index, row]);
-            }
-            return num4 / (double)num1;
+        public double GetNegativeVariance(int index1, int index2, int row)
+        {
+            return GetVarianceUsing(index1, index2, row, val => val < 0);
+
+//            EnsureAtLeastOneElement();
+//            EnsureIndexInRange(index1, index2);
+//
+//            int count = 0;
+//            double num2 = 0.0;
+//            for (int index = index1; index <= index2; ++index)
+//            {
+//                if (this[index, row] < 0)
+//                {
+//                    num2 += this[index, row];
+//                    ++count;
+//                }
+//            }
+//            double num3 = num2 / (double)count;
+//            double num4 = 0.0;
+//            for (int index = index1; index <= index2; ++index)
+//            {
+//                if (this[index, row] < 0)
+//                    num4 += (num3 - this[index, row]) * (num3 - this[index, row]);
+//            }
+//            return num4 / (double)count;
         }
 
         public virtual double GetPositiveVariance(DateTime dateTime1, DateTime dateTime2, int row)
@@ -528,62 +699,37 @@ namespace SmartQuant
 
         public virtual double GetPositiveVariance(int index1, int index2)
         {
-            return this.GetPositiveVariance(index1, index2, 0);
+            return GetPositiveVariance(index1, index2, 0);
         }
 
         public virtual double GetPositiveVariance(DateTime dateTime1, DateTime dateTime2)
         {
-            return this.GetPositiveVariance(dateTime1, dateTime2, 0);
+            return GetPositiveVariance(dateTime1, dateTime2, 0);
         }
 
         public virtual double GetPositiveVariance(int row)
         {
-            return this.GetPositiveVariance(0, this.Count - 1, row);
+            return GetPositiveVariance(0, Count - 1, row);
         }
 
         public virtual double GetNegativeVariance()
         {
-            return this.GetNegativeVariance(0);
+            return GetNegativeVariance(0);
         }
 
         public virtual double GetNegativeVariance(int index1, int index2)
         {
-            return this.GetNegativeVariance(index1, index2, 0);
+            return GetNegativeVariance(index1, index2, 0);
         }
 
         public virtual double GetNegativeVariance(DateTime dateTime1, DateTime dateTime2)
         {
-            return this.GetNegativeVariance(dateTime1, dateTime2, 0);
+            return GetNegativeVariance(dateTime1, dateTime2, 0);
         }
 
         public virtual double GetNegativeVariance(int row)
         {
-            return this.GetNegativeVariance(0, this.Count - 1, row);
-        }
-
-        public double GetNegativeVariance(int index1, int index2, int row)
-        {
-            EnsureAtLeastOneElement();
-            EnsureIndexInRange(index1, index2);
-
-            int num1 = 0;
-            double num2 = 0.0;
-            for (int index = index1; index <= index2; ++index)
-            {
-                if (this[index, row] < 0.0)
-                {
-                    num2 += this[index, row];
-                    ++num1;
-                }
-            }
-            double num3 = num2 / (double)num1;
-            double num4 = 0.0;
-            for (int index = index1; index <= index2; ++index)
-            {
-                if (this[index, row] < 0.0)
-                    num4 += (num3 - this[index, row]) * (num3 - this[index, row]);
-            }
-            return num4 / (double)num1;
+            return GetNegativeVariance(0, Count - 1, row);
         }
 
         public virtual double GetNegativeVariance(DateTime dateTime1, DateTime dateTime2, int row)
@@ -686,7 +832,7 @@ namespace SmartQuant
 
         public double GetMoment(int k, int index1, int index2, int row)
         {
-            EnsureNotEmpty();
+            EnsureNotEmpty(string.Format("Can not calculate momentum. Series {0} is empty.", this.name));
             EnsureIndexInRange(index1, index2);
             double m = k != 1 ? GetMean(index1, index2, row) : 0;
             var len = index2 - index1 + 1;
@@ -695,7 +841,7 @@ namespace SmartQuant
 
         public double GetAsymmetry(int index1, int index2, int row)
         {
-            EnsureNotEmpty();
+            EnsureNotEmpty(string.Format("Can not calculate asymmetry. Series {0} is empty.", this.name));
             EnsureIndexInRange(index1, index2);
             var sd = GetStdDev(index1, index2, row);
             return sd != 0 ? GetMoment(3, index1, index2, row) / Math.Pow(sd, 3) : 0;
@@ -703,20 +849,20 @@ namespace SmartQuant
 
         public double GetExcess(int index1, int index2, int row)
         {
-            EnsureNotEmpty();
+            EnsureNotEmpty(string.Format("Can not calculate excess. Series {0} is empty.", this.name));
             EnsureIndexInRange(index1, index2);
             var sd = GetStdDev(index1, index2, row);
-            return sd != 0 ? GetMoment(4, index1, index2, row) / Math.Pow(sd, 3) : 0;
+            return sd != 0 ? GetMoment(4, index1, index2, row) / Math.Pow(sd, 4) : 0;
         }
 
         public double GetCovariance(int row1, int row2, int index1, int index2)
         {
-            EnsureNotEmpty();
+            EnsureNotEmpty("Can not calculate covariance. Array is empty.");
             EnsureIndexInRange(index1, index2);
-            double m1 = this.GetMean(index1, index2, row1);
-            double m2 = this.GetMean(index1, index2, row2);
+            double m1 = GetMean(index1, index2, row1);
+            double m2 = GetMean(index1, index2, row2);
             var len = index2 - index1 + 1;
-            return len <= 1 ? 0 : Enumerable.Range(index1, index2 - index1 + 1).Sum(i => (this[i, row1] - m1) * (this[i, row2] - m2)) / len;
+            return len <= 1 ? 0 : Enumerable.Range(index1, len).Sum(i => (this[i, row1] - m1) * (this[i, row2] - m2)) / (len - 1);
         }
 
         public double GetCorrelation(int row1, int row2, int index1, int index2)
@@ -727,23 +873,20 @@ namespace SmartQuant
         public double GetCovariance(TimeSeries series)
         {
             EnsureNotNull(series);
-            var mean1 = this.GetMean();
-            var mean2 = series.GetMean();
-            double num1 = 0.0;
-            double num2 = 0.0;
-            for (int i = 0; i < this.Count; ++i)
+            var m1 = GetMean();
+            var m2 = series.GetMean();
+            int count = 0;
+            double sum = 0;
+            for (int i = 0; i < Count; ++i)
             {
-                DateTime dateTime = this.GetDateTime(i);
+                var dateTime = GetDateTime(i);
                 if (series.Contains(dateTime))
                 {
-                    num2 += (this[i] - mean1) * (series[dateTime, SearchOption.ExactFirst] - mean2);
-                    ++num1;
+                    sum += (this[i] - m1) * (series[dateTime, SearchOption.ExactFirst] - m2);
+                    ++count;
                 }
             }
-            if (num1 <= 1)
-                return 0;
-            else
-                return num2 / (num1 - 1);
+            return count <= 1 ? 0 : sum / (count - 1d);
         }
 
         public double GetCorrelation(TimeSeries series)
@@ -751,62 +894,58 @@ namespace SmartQuant
             return GetCovariance(series) / (GetStdDev() * series.GetStdDev());
         }
 
+        private TimeSeries Transform0(string name, Func<double, double> func)
+        {
+            var ts = GetType().GetConstructor(new Type[0]).Invoke(new object[0]) as TimeSeries;
+            ts.name = name;
+            ts.description = this.description;
+            for (int i = 0; i < Count; ++i)
+                ts.Add(GetDateTime(i), func(this[i, 0]));
+            return ts;
+        }
+
+        private TimeSeries Transform1(string name, Func<double, double, double> func, double param1)
+        {
+            var ts = GetType().GetConstructor(new Type[0]).Invoke(new object[0]) as TimeSeries;
+            ts.name = name;
+            ts.description = this.description;
+            for (int i = 0; i < Count; ++i)
+                ts.Add(GetDateTime(i), func(this[i, 0], param1));
+            return ts;
+        }
+
         public virtual TimeSeries Log()
         {
-            var ts = this.GetType().GetConstructor(new Type[0]).Invoke(new object[0]) as TimeSeries;
-            ts.name = string.Format("Log({0})", this.name);
-            ts.description = this.description;
-            for (int i = 0; i < this.Count; ++i)
-                ts.Add(GetDateTime(i), Math.Log(this[i, 0]));
-            return ts;
+            return Transform0(string.Format("Log({0})", this.name), Math.Log);
         }
 
         public TimeSeries Log10()
         {
-            var ts = this.GetType().GetConstructor(new Type[0]).Invoke(new object[0]) as TimeSeries;
-            ts.name = string.Format("Log10({0})", this.name);
-            ts.description = this.description;
-            for (int i = 0; i < this.Count; ++i)
-                ts.Add(GetDateTime(i), Math.Log10(this[i, 0]));
-            return ts;
+            return Transform0(string.Format("Log10({0})", this.name), Math.Log10);
         }
 
         public TimeSeries Sqrt()
         {
-            var ts = this.GetType().GetConstructor(new Type[0]).Invoke(new object[0]) as TimeSeries;
-            ts.name = string.Format("Sqrt({0})", this.name);
-            ts.description = this.description;
-            for (int i = 0; i < this.Count; ++i)
-                ts.Add(GetDateTime(i), Math.Sqrt(this[i, 0]));
-            return ts;
+            return Transform0(string.Format("Sqrt({0})", this.name), Math.Sqrt);
         }
 
         public TimeSeries Exp()
         {
-            var ts = this.GetType().GetConstructor(new Type[0]).Invoke(new object[0]) as TimeSeries;
-            ts.name = string.Format("Exp({0})", this.name);
-            ts.description = this.description;
-            for (int i = 0; i < this.Count; ++i)
-                ts.Add(this.GetDateTime(i), Math.Exp(this[i, 0]));
-            return ts;
+            return Transform0(string.Format("Exp({0})", this.name), Math.Exp);
         }
 
         public TimeSeries Pow(double pow)
         {
-            var ts = this.GetType().GetConstructor(new Type[0]).Invoke(new object[0]) as TimeSeries;
-            ts.name = string.Format("Pow({0}", this.name);
-            ts.description = this.description;
-            for (int i = 0; i < this.Count; ++i)
-                ts.Add(GetDateTime(i), Math.Pow(this[i, 0], pow));
-            return ts;
+            return Transform1(string.Format("Pow({0})", this.name), Math.Pow, pow);
         }
 
         public virtual double GetAutoCovariance(int lag)
         {
-            if (lag >= this.Count)
+            if (lag >= Count)
                 throw new ApplicationException("Not enough data points in the series to calculate autocovariance");
-            double mean = GetMean();
-            return Enumerable.Range(lag, this.Count - 1).Sum(i => (this[i, 0] - mean) * (this[i - lag, 0] - mean)) / (this.Count - lag);
+            double m = GetMean();
+            double len = Count - lag;
+            return Enumerable.Range(lag, (int)len).Sum(i => (this[i, 0] - m) * (this[i - lag, 0] - m)) / len;
         }
 
         public double GetAutoCorrelation(int Lag)
@@ -814,53 +953,46 @@ namespace SmartQuant
             return GetAutoCovariance(Lag) / GetVariance();
         }
 
-        public virtual TimeSeries GetReturnSeries()
+        private TimeSeries GetReturnUsing(Func<double, double, double> func, string desc)
         {
-            var ts = new TimeSeries(this.name, string.Format("{0} (return)", this.description));
-            if (this.Count < 2)
+            var ts = new TimeSeries(this.name, desc);
+            if (Count < 2)
                 return ts;
-
             double prev = this[0];
-            for (int i = 0; i < this.Count; ++i)
+            for (int i = 0; i < Count; ++i)
             {
                 double current = this[i];
-                ts.Add(GetDateTime(i), prev != 0 ? current / prev : 0);
+                ts.Add(GetDateTime(i), func(prev, current));
                 prev = current;
             }
             return ts;
         }
 
+        public virtual TimeSeries GetReturnSeries()
+        {
+            return GetReturnUsing((prev, current) => prev != 0 ? current / prev : 0, string.Format("{0} (return)", this.description));
+        }
+
         public virtual TimeSeries GetPercentReturnSeries()
         {
-            var ts = new TimeSeries(this.name, string.Format("{0} (% return)", this.description));
-            if (this.Count < 2)
-                return ts;
-
-            double prev = this[0];
-            for (int i = 0; i < this.Count; ++i)
-            {
-                double current = this[i];
-                ts.Add(GetDateTime(i), prev != 0 ? (current / prev - 1) * 100 : 0);
-                prev = current;
-            }
-            return ts;
+            return GetReturnUsing((prev, current) => prev != 0 ? (current / prev - 1) * 100 : 0, string.Format("{0} (% return)", this.description));
         }
 
         public virtual TimeSeries GetPositiveSeries()
         {
             var ts = new TimeSeries();
-            for (int i = 0; i < this.Count; ++i)
+            for (int i = 0; i < Count; ++i)
                 if (this[i] > 0)
-                    ts.Add(this.GetDateTime(i), this[i]);
+                    ts.Add(GetDateTime(i), this[i]);
             return ts;
         }
 
         public virtual TimeSeries GetNegativeSeries()
         {
             var ts = new TimeSeries();
-            for (int i = 0; i < this.Count; ++i)
+            for (int i = 0; i < Count; ++i)
                 if (this[i] < 0)
-                    ts.Add(this.GetDateTime(i), this[i]);
+                    ts.Add(GetDateTime(i), this[i]);
             return ts;
         }
 
@@ -868,31 +1000,24 @@ namespace SmartQuant
         {
             var ts = new TimeSeries(this.name, this.description);
             int start = offset < 0 ? Math.Abs(offset) : 0;
-            for (int i = start; i < this.Count - offset; ++i)
+            for (int i = start; i < Count - offset; ++i)
                 ts[GetDateTime(i + offset), SearchOption.ExactFirst] = this[i];
             return ts;
         }
 
-        private static TimeSeries DoBinaryOperation1(TimeSeries ts1, TimeSeries ts2, string name, Func<double, double, double> op)
+        private static TimeSeries OpTwoTimeSeries(TimeSeries ts1, TimeSeries ts2, string name, Func<double, double, double> op, bool checkZero = false)
         {
             var ts = new TimeSeries(name, "");
             for (int i = 0; i < ts1.Count; ++i)
             {
                 var datetime = ts1.GetDateTime(i);
                 if (ts2.Contains(datetime))
-                    ts.Add(datetime, op(ts1[datetime, 0, SearchOption.ExactFirst], ts2[datetime, 0, SearchOption.ExactFirst]));
-            }
-            return ts;
-        }
-
-        private static TimeSeries DoBinaryOperation2(TimeSeries ts1, TimeSeries ts2, string name, Func<double, double, double> op)
-        {
-            var ts = new TimeSeries(name, "");
-            for (int i = 0; i < ts1.Count; ++i)
-            {
-                var datetime = ts1.GetDateTime(i);
-                if (ts2.Contains(datetime) && ts2[datetime, SearchOption.ExactFirst] != 0)
-                    ts.Add(datetime, op(ts1[datetime, 0, SearchOption.ExactFirst], ts2[datetime, 0, SearchOption.ExactFirst]));
+                {
+                    var d2 = ts2[datetime, SearchOption.ExactFirst];
+                    if (checkZero && d2 == 0)
+                        continue;
+                    ts.Add(datetime, op(ts1[datetime, 0, SearchOption.ExactFirst], d2));
+                }
             }
             return ts;
         }
@@ -901,31 +1026,31 @@ namespace SmartQuant
         {
             EnsureNotNull(series1, series2);
             string name = string.Format("({0}+{1})", series1.Name, series2.Name);
-            return DoBinaryOperation1(series1, series2, name, opAdd);
+            return OpTwoTimeSeries(series1, series2, name, opAdd);
         }
 
         public static TimeSeries operator -(TimeSeries series1, TimeSeries series2)
         {
             EnsureNotNull(series1, series2);
             var name = string.Format("({0}-{1})", series1.Name, series2.Name);
-            return DoBinaryOperation1(series1, series2, name, opSub);
+            return OpTwoTimeSeries(series1, series2, name, opSub);
         }
 
         public static TimeSeries operator *(TimeSeries series1, TimeSeries series2)
         {
             EnsureNotNull(series1, series2);
             var name = string.Format("({0}*{1})", series1.Name, series2.Name);
-            return DoBinaryOperation1(series1, series2, name, opMul);
+            return OpTwoTimeSeries(series1, series2, name, opMul);
         }
 
         public static TimeSeries operator /(TimeSeries series1, TimeSeries series2)
         {
             EnsureNotNull(series1, series2);
             var name = string.Format("({0}/{1})", series1.Name, series2.Name);
-            return DoBinaryOperation2(series1, series2, name, opDiv);
+            return OpTwoTimeSeries(series1, series2, name, opDiv, true);
         }
 
-        private static TimeSeries DoTimeSeriesWithValue(TimeSeries series, double value, string name, Func<double, double, double> op)
+        private static TimeSeries OpTimeSeriesWithValue(TimeSeries series, double value, string name, Func<double, double, double> op)
         {
             var ts = new TimeSeries(name, "");
             for (int i = 0; i < series.Count; ++i)
@@ -937,31 +1062,31 @@ namespace SmartQuant
         {
             EnsureNotNull(series);
             var name = string.Format("({0}+{1:F2})", series.Name, value);
-            return DoTimeSeriesWithValue(series, value, name, opAdd);
+            return OpTimeSeriesWithValue(series, value, name, opAdd);
         }
 
         public static TimeSeries operator -(TimeSeries series, double value)
         {
             EnsureNotNull(series);
             var name = string.Format("({0}-{1:F2})", series.Name, value);
-            return DoTimeSeriesWithValue(series, value, name, opSub);
+            return OpTimeSeriesWithValue(series, value, name, opSub);
         }
 
         public static TimeSeries operator *(TimeSeries series, double value)
         {
             EnsureNotNull(series);
             var name = string.Format("({0}*{1:F2})", series.Name, value);
-            return DoTimeSeriesWithValue(series, value, name, opMul);
+            return OpTimeSeriesWithValue(series, value, name, opMul);
         }
 
         public static TimeSeries operator /(TimeSeries series, double value)
         {
             EnsureNotNull(series);
             var name = string.Format("({0}/{1:F2})", series.Name, value);
-            return DoTimeSeriesWithValue(series, value, name, opDiv);
+            return OpTimeSeriesWithValue(series, value, name, opDiv);
         }
 
-        private static TimeSeries DoValueWithTimeSeries(TimeSeries series, double value, string name, Func<double, double, double> op, bool checkZero =false)
+        private static TimeSeries OpValueWithTimeSeries(TimeSeries series, double value, string name, Func<double, double, double> op, bool checkZero = false)
         {
             var ts = new TimeSeries(name, "");
             for (int i = 0; i < series.Count; ++i)
@@ -977,31 +1102,33 @@ namespace SmartQuant
         {
             EnsureNotNull(series);
             var name = string.Format("({0:F2}+{1})", value, series.Name);
-            return DoValueWithTimeSeries(series, value, name, opAdd);
+            return OpValueWithTimeSeries(series, value, name, opAdd);
         }
 
         public static TimeSeries operator -(double value, TimeSeries series)
         {
             EnsureNotNull(series);
             var name = string.Format("({0:F2}-{1})", value, series.Name);
-            return DoValueWithTimeSeries(series, value, name, opSub);        }
+            return OpValueWithTimeSeries(series, value, name, opSub);
+        }
 
         public static TimeSeries operator *(double value, TimeSeries series)
         {
             EnsureNotNull(series);
             var name = string.Format("({0:F2}*{1})", value, series.Name);
-            return DoValueWithTimeSeries(series, value, name, opMul);         }
+            return OpValueWithTimeSeries(series, value, name, opMul);
+        }
 
         public static TimeSeries operator /(double value, TimeSeries series)
         {          
             EnsureNotNull(series);
             var name = string.Format("({0:F2}/{1})", value, series.Name);
-            return DoValueWithTimeSeries(series, value, name, opDiv, true);
+            return OpValueWithTimeSeries(series, value, name, opDiv, true);
         }
 
         public double Ago(int n)
         {
-            int index = this.Count - 1 - n;
+            int index = Count - 1 - n;
             if (index < 0)
                 throw new ArgumentException(string.Format("Can not return an entry {0} entries ago: time series is too short.", n));
             return this[index];
@@ -1021,7 +1148,7 @@ namespace SmartQuant
                     throw new ArgumentException("Operator argument can not be null");
         }
 
-        private void EnsureAtLeastOneElement()
+        private void EnsureAtLeastOneElement(string message = "")
         {
             if (Count <= 1)
                 throw new ApplicationException("Can not calculate. Insufficient number of elements in the array.");
@@ -1030,16 +1157,16 @@ namespace SmartQuant
         private void EnsureNotEmpty(string message = "")
         {
             if (Count <= 0)
-                throw new ApplicationException("Can not calculate. Array is empty.");
+                throw new ApplicationException(message);
         }
 
         private void EnsureIndexInRange(int idx1, int idx2)
         {
             if (idx1 > idx2)
                 throw new ApplicationException("index1 must be smaller than index2");
-            if (idx1 < 0 || idx2 > this.Count - 1)
+            if (idx1 < 0 || idx2 > Count - 1)
                 throw new ApplicationException("index1 is out of range");
-            if (idx2 < 0 || idx2 > this.Count - 1)
+            if (idx2 < 0 || idx2 > Count - 1)
                 throw new ApplicationException("index2 is out of range");
         }
 
