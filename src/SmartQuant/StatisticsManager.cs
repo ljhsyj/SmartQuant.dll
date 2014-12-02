@@ -61,10 +61,7 @@ namespace SmartQuant
         {
             var list = new List<PortfolioStatisticsItem>();
             foreach (var obj in Statistics)
-            {
-                var item = (PortfolioStatisticsItem)Activator.CreateInstance(obj.GetType());
-                list.Add(item);
-            }
+                list.Add((PortfolioStatisticsItem)Activator.CreateInstance(obj.GetType()));
             return list;
         }
     }

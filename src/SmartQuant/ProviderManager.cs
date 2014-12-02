@@ -12,7 +12,6 @@ namespace SmartQuant
     public class ProviderManager
     {
         private Framework framework;
-        //        private XmlProviderManagerSettings settings;
 
         public ProviderList Providers { get; private set; }
 

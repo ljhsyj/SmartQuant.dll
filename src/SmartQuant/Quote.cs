@@ -30,5 +30,13 @@ namespace SmartQuant
             : this(new Bid(dateTime, providerId, instrumentId, bidPrice, bidSize), new Ask(dateTime, providerId, instrumentId, askPrice, askSize))
         {
         }
+
+        #region Extra Helper Methods
+
+        internal Quote()
+        {
+        }
+
+        #endregion
     }
 }

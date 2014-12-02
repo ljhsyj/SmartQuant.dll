@@ -57,7 +57,6 @@ namespace SmartQuant
             }
         }
 
-        // TODO: what fields?
         public IDictionary<string, string> Fields
         {
             get

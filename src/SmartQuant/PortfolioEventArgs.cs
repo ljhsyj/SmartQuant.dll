@@ -11,7 +11,7 @@ namespace SmartQuant
 
         public PortfolioEventArgs(Portfolio portfolio)
         {
-            this.Portfolio = portfolio;
+            Portfolio = portfolio;
         }
     }
 }

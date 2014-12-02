@@ -22,9 +22,9 @@ namespace SmartQuant
         }
 
         public StrategyStatusInfo(DateTime dateTime, StrategyStatusType type)
+            : base(dateTime)
         {
             Type = type;
-            DateTime = dateTime;
         }
     }
 }

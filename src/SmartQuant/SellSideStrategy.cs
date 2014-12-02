@@ -32,42 +32,42 @@ namespace SmartQuant
 
         public void EmitBid(Bid bid)
         {
-            this.EventManager.OnEvent(bid);
+            EventManager.OnEvent(bid);
         }
 
         public void EmitAsk(Ask ask)
         {
-            this.EventManager.OnEvent(ask);
+            EventManager.OnEvent(ask);
         }
 
         public void EmitExecutionReport(ExecutionReport report)
         {
-            this.EventManager.OnEvent(report);
+            EventManager.OnEvent(report);
         }
 
         public void EmitTrade(Trade trade)
         {
-            this.EventManager.OnEvent(trade);
+            EventManager.OnEvent(trade);
         }
 
         public virtual void Subscribe(Instrument instrument)
         {
-            this.OnSubscribe(instrument);
+            OnSubscribe(instrument);
         }
 
         public virtual void Subscribe(InstrumentList instruments)
         {
-            this.OnSubscribe(instruments);
+            OnSubscribe(instruments);
         }
 
         public virtual void Unsubscribe(Instrument instrument)
         {
-            this.OnUnsubscribe(instrument);
+            OnUnsubscribe(instrument);
         }
 
         public virtual void Unsubscribe(InstrumentList instruments)
         {
-            this.OnUnsubscribe(instruments);
+            OnUnsubscribe(instruments);
         }
 
         public virtual void Send(ExecutionCommand command)

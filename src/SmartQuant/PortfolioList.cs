@@ -9,11 +9,13 @@ namespace SmartQuant
 {
     public class PortfolioList : IEnumerable<Portfolio>
     {
+        private GetByList<Portfolio> list = new GetByList<Portfolio>();
+
         public int Count
         {
             get
             { 
-                throw new NotImplementedException();
+                return this.list.Count;
             }
         }
 
@@ -21,7 +23,7 @@ namespace SmartQuant
         { 
             get
             { 
-                throw new NotImplementedException();
+                return GetByName(name);
             }
         }
 
@@ -31,40 +33,47 @@ namespace SmartQuant
 
         public void Add(Portfolio portfolio)
         {
+            this.list.Add(portfolio);
         }
 
         public Portfolio GetByName(string name)
         {
-            throw new NotImplementedException();
+            return this.list.GetByName(name);
         }
 
         public Portfolio GetByIndex(int index)
         {
-            throw new NotImplementedException();
+            return this.list.GetByIndex(index);
         }
 
         public Portfolio GetById(int id)
         {
-            throw new NotImplementedException();
+            return this.list.GetById(id);
+        }
+
+        internal void Remove(Portfolio portfolio)
+        {
+            this.list.Remove(portfolio);
         }
 
         public void Clear()
         {
+            this.list.Clear();
         }
 
         public IEnumerator<Portfolio> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.list.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.list.GetEnumerator();
         }
 
         IEnumerator<Portfolio> IEnumerable<Portfolio>.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.list.GetEnumerator();
         }
     }
 }

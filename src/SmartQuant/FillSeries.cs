@@ -10,7 +10,7 @@ namespace SmartQuant
     public class FillSeries : IEnumerable<Fill>
     {
         private string name;
-        private List<Fill> fills;
+        private List<Fill> fills = new List<Fill>();
         private Fill min;
         private Fill max; 
 
@@ -49,7 +49,6 @@ namespace SmartQuant
         public FillSeries(string name = "")
         {
             this.name = name;
-            this.fills = new List<Fill>();
         }
 
         public void Clear()
@@ -60,12 +59,11 @@ namespace SmartQuant
 
         public void Add(Fill fill)
         {
-            this.max = this.max == null ? fill : (this.max.Price < fill.Price ? fill : this.max);
-            this.min = this.min == null ? fill : (this.min.Price > fill.Price ? fill : this.min);
+            this.max = this.max == null ? fill : this.max.Price < fill.Price ? fill : this.max;
+            this.min = this.min == null ? fill : this.min.Price > fill.Price ? fill : this.min;
 
             if (this.fills.Count != 0 && fill.DateTime < this.fills[this.fills.Count - 1].DateTime)
                 Console.WriteLine("FillSeries::Add {0} + incorrect fill order : {1}", this.name, fill);
-
             this.fills.Add(fill);
         }
 
@@ -81,14 +79,12 @@ namespace SmartQuant
 
         public int GetIndex(DateTime datetime, IndexOption option)
         {
-            var firstDateTime = fills[0].DateTime;
-            var lastDateTime = fills[fills.Count - 1].DateTime;
-
+            var firstDateTime = this[0].DateTime;
+            var lastDateTime = this[Count - 1].DateTime;
             if (datetime < firstDateTime)
                 return option == IndexOption.Null || option == IndexOption.Prev ? -1 : 0;
             if (datetime > lastDateTime)
                 return option == IndexOption.Null || option == IndexOption.Next ? -1 : Count - 1;
-
             var i = this.fills.BinarySearch(new Fill() { DateTime = datetime }, new DataObjectComparer());
             if (i >= 0)
                 return i;

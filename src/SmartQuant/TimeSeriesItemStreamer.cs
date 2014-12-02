@@ -16,12 +16,20 @@ namespace SmartQuant
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            var item = new TimeSeriesItem();
+            var version = reader.ReadByte();
+            item.DateTime = DateTime.FromBinary(reader.ReadInt64());
+            item.Value = reader.ReadDouble();
+            return item;
         }
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            byte version = 0;
+            writer.Write(version);
+            var item = obj as TimeSeriesItem;
+            writer.Write(item.DateTime.ToBinary());
+            writer.Write(item.Value);
         }
     }
 }

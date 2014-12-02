@@ -8,6 +8,8 @@ namespace SmartQuant
 {
     public class Position
     {
+        private Fill entryFill;
+
         public Portfolio Portfolio { get; private set; }
 
         public Instrument Instrument { get; private set; }
@@ -26,7 +28,7 @@ namespace SmartQuant
         {
             get
             {
-                return this.Amount < 0.0 ? PositionSide.Short : PositionSide.Long;
+                return Amount < 0 ? PositionSide.Short : PositionSide.Long;
             }
         }
 
@@ -42,7 +44,7 @@ namespace SmartQuant
         {
             get
             {
-                return Instrument.Factor != 0.0 ? Price * Amount * Instrument.Factor : Price * Amount;
+                return Instrument.Factor != 0 ? Price * Amount * Instrument.Factor : Price * Amount;
             }
         }
 
@@ -50,7 +52,7 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return this.entryFill.Price;
             }
         }
 
@@ -58,7 +60,7 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return this.entryFill.DateTime;
             }
         }
 
@@ -66,7 +68,7 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return this.entryFill.Qty;
             }
         }
 
@@ -84,7 +86,15 @@ namespace SmartQuant
 
         public void Add(Fill fill)
         {
-            throw new NotImplementedException();
+            Fills.Add(fill);
+            if (Qty == 0)
+                this.entryFill = fill;
+            if (fill.Side == OrderSide.Buy)
+                QtyBought += fill.Qty;
+            else
+                QtySold += fill.Qty;
+            Amount = QtyBought - QtySold;
+            Qty = Math.Abs(Amount);
         }
 
         public string GetSideAsString()
@@ -102,7 +112,7 @@ namespace SmartQuant
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}", this.Instrument, this.Side, this.Qty);
+            return string.Format("{0} {1} {2}", Instrument, Side, Qty);
         }
     }
 }

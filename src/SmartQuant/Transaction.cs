@@ -95,16 +95,15 @@ namespace SmartQuant
 
         public Transaction(Fill fill)
         {
+            Add(fill);
         }
 
         public void Add(Fill fill)
         {
-            this.fills.Add(fill);
+            Fills.Add(fill);
             Qty += fill.Qty;
             Commission += fill.Commission;
-            // TODO: why???
-            var avgPx = Fills.Sum(f => f.Qty * f.Price) / Qty;
-            Price = (Fills.Count == 1) ? fill.Price : avgPx;
+            Price = Fills.Sum(f => f.Qty * f.Price) / Qty;
         }
 
         public override string ToString()

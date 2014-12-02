@@ -48,6 +48,7 @@ namespace SmartQuant
         }
 
         #region Extra Helper Methods
+
         internal void Dump()
         {
             foreach (var streamer in streamersByType.Values)
@@ -55,6 +56,7 @@ namespace SmartQuant
                 Console.WriteLine("TypeId:{0}", streamer.TypeId);
             }
         }
+
         #endregion
     }
 }

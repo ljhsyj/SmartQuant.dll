@@ -21,10 +21,12 @@ namespace SmartQuant
 
         public void Update()
         {
+            throw new NotImplementedException();
         }
 
         public void Reset()
         {
+            throw new NotImplementedException();
         }
     }
 }

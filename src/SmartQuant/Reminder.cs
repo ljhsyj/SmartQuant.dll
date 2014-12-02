@@ -30,7 +30,7 @@ namespace SmartQuant
 
         public void Execute()
         {
-            Callback(this.DateTime, this.Data);
+            Callback(DateTime, Data);
         }
 
         public override string ToString()

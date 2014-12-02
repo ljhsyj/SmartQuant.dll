@@ -4,14 +4,14 @@ using System.Collections;
 
 namespace SmartQuant
 {
-
     public class StrategyList : IEnumerable<Strategy>
     {
+        private GetByList<Strategy> list = new GetByList<Strategy>();
         public int Count
         {
             get
             {
-                throw new NotImplementedException();
+                return this.list.Count;
             }
         }
 
@@ -19,7 +19,7 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return this.list.GetByIndex(index);
             }
             set
             {
@@ -27,54 +27,49 @@ namespace SmartQuant
             }
         }
 
-        public StrategyList()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Contains(Strategy strategy)
         {
-            throw new NotImplementedException();
+            return this.list.Contains(strategy);
         }
 
         public bool Contains(int id)
         {
-            throw new NotImplementedException();
+            return this.list.Contains(id);
         }
 
         public void Add(Strategy strategy)
         {
-            throw new NotImplementedException();
+            this.list.Add(strategy);
         }
 
         public void Remove(Strategy strategy)
         {
-            throw new NotImplementedException();
+            this.list.Remove(strategy);
         }
 
         public Strategy GetByIndex(int index)
         {
-            throw new NotImplementedException();
+            return this.list.GetByIndex(index);
         }
 
         public Strategy GetById(int id)
         {
-            throw new NotImplementedException();
+            return this.list.GetById(id);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            this.list.Clear();
         }
 
         public IEnumerator<Strategy> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.list.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.list.GetEnumerator();
         }
     }
 }

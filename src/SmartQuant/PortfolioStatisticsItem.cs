@@ -116,28 +116,35 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return this.portfolio.framework.Clock;
             }
         }
             
         public PortfolioStatisticsItem()
         {
-            throw new NotImplementedException();
+            this.totalValues = new TimeSeries(Name, "");
+            this.longValues = new TimeSeries(string.Format("{0} Long", Name), "");
+            this.shortValues = new TimeSeries(string.Format("{0} Short", Name), "");
         }
 
         public void Subscribe(int itemType)
         {
-            throw new NotImplementedException();
+            this.statistics.Subscribe(this, itemType);
         }
 
         public void Unsubscribe(int itemType)
         {
-            throw new NotImplementedException();
+            this.statistics.Unsubscribe(this, itemType);
         }
 
         protected internal void Emit()
         {
-            throw new NotImplementedException();
+            if (this.statistics == null)
+                return;
+            this.statistics.OnStatistics(this);
+            if (this.portfolio.Parent == null)
+                return;
+            this.statistics.OnStatistics(this.portfolio, this);  
         }
 
         protected internal virtual void OnInit()

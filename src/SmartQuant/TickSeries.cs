@@ -10,7 +10,7 @@ namespace SmartQuant
     public class TickSeries : IDataSeries, IEnumerable<Tick>
     {
         // This list should be ordered by tick's DateTime.
-        private List<Tick> ticks;
+        private List<Tick> ticks = new List<Tick>();
         private Tick min;
         private Tick max;
 
@@ -64,7 +64,7 @@ namespace SmartQuant
             get
             {
                 EnsureNotEmpty();
-                return this.ticks[this.Count - 1].DateTime;
+                return this.ticks[Count - 1].DateTime;
             }
         }
 
@@ -87,13 +87,12 @@ namespace SmartQuant
         public TickSeries(string name = "")
         {
             Name = name;
-            this.ticks = new List<Tick>();
         }
 
         public void Add(Tick tick)
         {
-            this.min = (this.min == null || this.min.Price > tick.Price) ? tick : this.min;
-            this.max = (this.max == null || this.max.Price < tick.Price) ? tick : this.max;
+            this.min = this.min == null || this.min.Price > tick.Price ? tick : this.min;
+            this.max = this.max == null || this.max.Price < tick.Price ? tick : this.max;
             this.ticks.Add(tick);
         }
 
@@ -141,7 +140,7 @@ namespace SmartQuant
                     break;
                 if (tick.DateTime < dateTime1)
                     continue;
-                min = min == null ? tick : ((min != null && min.Price > tick.Price) ? tick : min);
+                min = min == null ? tick : min != null && min.Price > tick.Price ? tick : min;
             }
             return min;
         }
@@ -156,7 +155,7 @@ namespace SmartQuant
                     break;
                 if (tick.DateTime < dateTime1)
                     continue;
-                max = max == null ? tick : ((max != null && max.Price < tick.Price) ? tick : max);
+                max = max == null ? tick : max != null && max.Price < tick.Price ? tick : max;
             }
             return max;
         }
@@ -180,6 +179,8 @@ namespace SmartQuant
 
         public BarSeries Compress(BarType barType, long barSize)
         {
+            if (Count == 0)
+                return new BarSeries("", "", -1);
             throw new NotImplementedException();
         }
 

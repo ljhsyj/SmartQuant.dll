@@ -16,7 +16,7 @@ namespace SmartQuant
 
         public void Clear()
         {
-            foreach (ReportItem report in this.reports)
+            foreach (var report in this.reports)
                 report.Clear();
             this.reports.Clear();
         }

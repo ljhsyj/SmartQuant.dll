@@ -16,12 +16,14 @@ namespace SmartQuant
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            var version = reader.ReadByte();
+            return new Position();
         }
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            byte version = 0;
+            writer.Write(version);
         }
     }
 }

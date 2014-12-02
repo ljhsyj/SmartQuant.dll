@@ -469,10 +469,10 @@ namespace SmartQuant
             this.min = this.min == null ? item : (this.min.Value > item.Value ? item : this.min);
             this.dataSeries.Add(item);
   
-            // Update indicators
+            // Update the dependent indicators
             foreach (var indicator in Indicators)
                 if (indicator.AutoUpdate)
-                    indicator.Calculate((int)this.dataSeries.Count - 1);
+                    indicator.UpdateTo((int)this.dataSeries.Count - 1);
         }
 
         public void Remove(int index)

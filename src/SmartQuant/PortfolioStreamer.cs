@@ -16,12 +16,16 @@ namespace SmartQuant
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            var version = reader.ReadByte();
+            return new Portfolio(null, reader.ReadString());
         }
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            byte version = 0;
+            var portfolio =  obj as Portfolio;
+            writer.Write(version);
+            writer.Write(portfolio.Name);
         }
     }
 }

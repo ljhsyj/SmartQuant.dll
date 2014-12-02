@@ -18,12 +18,13 @@ namespace SmartQuant
         public double Value { get; internal set; }
 
         public TimeSeriesItem(DateTime dateTime, double value)
+            : base(dateTime)
         {
-            DateTime = dateTime;
             Value = value;
         }
 
-        public TimeSeriesItem(TimeSeriesItem item) : this(item.DateTime, item.Value)
+        public TimeSeriesItem(TimeSeriesItem item)
+            : this(item.DateTime, item.Value)
         {
         }
 

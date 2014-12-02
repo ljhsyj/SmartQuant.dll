@@ -16,7 +16,7 @@ namespace SmartQuant
         {
             get
             {
-                this.Calculate();
+                Calculate();
                 return base.Count;
             }
         }
@@ -25,7 +25,7 @@ namespace SmartQuant
         {
             get
             {
-                this.Calculate();
+                Calculate();
                 return base.First;
             }
         }
@@ -34,7 +34,7 @@ namespace SmartQuant
         {
             get
             {
-                this.Calculate();
+                Calculate();
                 return base.Last;
             }
         }
@@ -43,7 +43,7 @@ namespace SmartQuant
         {
             get
             {
-                this.Calculate();
+                Calculate();
                 return base.FirstDateTime;
             }
         }
@@ -52,7 +52,7 @@ namespace SmartQuant
         {
             get
             {
-                this.Calculate();
+                Calculate();
                 return base.LastDateTime;
             }
         }
@@ -122,14 +122,24 @@ namespace SmartQuant
 
         protected virtual void Calculate()
         {
+            // This should be done only once.
             if (!this.calculate)
                 return;
             this.calculate = false;
             var indicator = this.input as Indicator;
             if (indicator != null)
                 indicator.Calculate();
+            // TODO: why this way?
             for (int i = 0; i < this.input.Count; ++i)
                 Calculate(i);
+        }
+
+        internal void UpdateTo(int index)
+        {
+            if (this.calculate)
+                Calculate();
+            else
+                Calculate(index);
         }
 
         public virtual void Calculate(int index)

@@ -9,7 +9,7 @@ namespace SmartQuant
 {
     public class BarFactory
     {
-        private Framework framework;
+        internal Framework framework;
 
         private IdArray<List<BarFactoryItem>> itemLists;
 

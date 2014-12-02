@@ -21,10 +21,12 @@ namespace SmartQuant
 
         public void Add(Fill fill)
         {
+            throw new NotImplementedException();
         }
 
         public void OnEquity(double equity)
         {
+            throw new NotImplementedException();
         }
     }
 }

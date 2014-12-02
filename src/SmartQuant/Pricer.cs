@@ -16,6 +16,12 @@ namespace SmartQuant
 
         public virtual double GetPrice(Position position)
         {
+            var trade = position.Instrument.Trade;
+            if (trade != null)
+                return trade.Price;
+            var bar = position.Instrument.Bar;
+            if (bar != null)
+                return bar.Close;
             return 0.0;
         }
     }

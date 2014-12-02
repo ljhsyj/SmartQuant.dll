@@ -10,12 +10,11 @@ namespace SmartQuant
     public class QuoteSeries : IEnumerable<Quote>
     {
         private string name;
-        private List<Quote> quotes;
+        private List<Quote> quotes = new List<Quote>();
 
         public QuoteSeries(string name = "")
         {
             this.name = name;
-            this.quotes = new List<Quote>();
         }
 
         public int Count
@@ -41,7 +40,7 @@ namespace SmartQuant
             get
             {
                 EnsureNotEmpty();
-                return this.quotes[this.Count - 1].DateTime;
+                return this.quotes[Count - 1].DateTime;
 
             }
         }
@@ -66,12 +65,23 @@ namespace SmartQuant
 
         public int GetIndex(DateTime datetime, IndexOption option)
         {
-            throw new NotImplementedException();
+            if (datetime < FirstDateTime)
+                return option == IndexOption.Null || option == IndexOption.Prev ? -1 : 0;
+            if (datetime > LastDateTime)
+                return option == IndexOption.Null || option == IndexOption.Next ? -1 : Count - 1;
+            var i = this.quotes.BinarySearch(new Quote() { DateTime = datetime }, new DataObjectComparer());
+            if (i >= 0)
+                return i;
+            else if (option == IndexOption.Next)
+                return ~i;
+            else if (option == IndexOption.Prev)
+                return ~i - 1;
+            return -1; // option == IndexOption.Null
         }
 
         public IEnumerator<Quote> GetEnumerator()
         {
-            return  this.quotes.GetEnumerator();
+            return this.quotes.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -81,7 +91,7 @@ namespace SmartQuant
 
         private void EnsureNotEmpty()
         {
-            if (this.Count <= 0)
+            if (Count <= 0)
                 throw new ApplicationException("Array has no elements");
         }
     }
