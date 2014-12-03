@@ -130,11 +130,11 @@ namespace SmartQuant
         {
             get
             {
-                return this.fields[Bar.mapping[name]];
+                return this.fields[mapping[name]];
             }
             set
             {
-                this[Bar.mapping[name]] = value;
+                this[mapping[name]] = value;
             }
         }
 

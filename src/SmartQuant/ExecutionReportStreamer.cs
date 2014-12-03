@@ -63,7 +63,7 @@ namespace SmartQuant
             if (report.Fields != null)
             {
                 writer.Write(true);
-                this.streamerManager.Serialize(writer, (object)report.Fields);
+                this.streamerManager.Serialize(writer, report.Fields);
             }
             else
                 writer.Write(false);

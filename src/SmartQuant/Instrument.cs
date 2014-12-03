@@ -10,7 +10,6 @@ namespace SmartQuant
 {
     public class Instrument
     {
-      //  private Framework framework;
         private ObjectTable fields;
 
         internal bool Loaded { get; set; }
@@ -292,6 +291,7 @@ namespace SmartQuant
             if (Framework == null)
                 Init(framework);
         }
+
         #endregion
     }
 }

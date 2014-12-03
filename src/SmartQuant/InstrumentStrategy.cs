@@ -49,6 +49,7 @@ namespace SmartQuant
 
         public void AddInstance(Instrument instrument, InstrumentStrategy strategy)
         {
+            throw new NotImplementedException();
         }
 
         public bool HasPosition()

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SmartQuant
 {
@@ -13,6 +14,8 @@ namespace SmartQuant
         internal int ProviderId { get; set; }
 
         internal int InstrumentId { get; set; }
+
+        internal IdArray<double> Fields { get; set; }
 
         public override byte TypeId
         {
@@ -26,11 +29,13 @@ namespace SmartQuant
         {
             get
             {
-                throw new NotImplementedException();
+                return Fields[index];
             }
             set
             {
-                throw new NotImplementedException();
+                if (Fields == null)
+                    Fields = new IdArray<double>(16);
+                Fields[index] = value;
             }
         }
 
@@ -38,11 +43,11 @@ namespace SmartQuant
         {
             get
             {
-                return this[Fundamental.mapping[name]];
+                return this[mapping[name]];
             }
             set
             {
-                this[Fundamental.mapping[name]] = value;
+                this[mapping[name]] = value;
             }
         }
 
@@ -76,5 +81,39 @@ namespace SmartQuant
         {
             return "";
         }
+
+        #region Extra Helper Methods
+
+        internal Fundamental(BinaryReader reader)
+        {
+            var version = reader.ReadByte();
+            var datetime = new DateTime(reader.ReadInt64());
+            var providerId = reader.ReadInt32();
+            var instrumentId = reader.ReadInt32();
+            var fundamental = new Fundamental(datetime, providerId, instrumentId);
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; ++i)
+                fundamental.Fields[i] = reader.ReadDouble();
+        }
+
+        internal void Write(BinaryWriter writer)
+        {
+            byte version = 0;
+            var fundamental = this;
+            writer.Write(version);       
+            writer.Write(fundamental.DateTime.Ticks);
+            writer.Write(fundamental.ProviderId);
+            writer.Write(fundamental.InstrumentId);
+            if (fundamental.Fields != null)
+            {
+                writer.Write(fundamental.Fields.Size);
+                for (int i = 0; i < fundamental.Fields.Size; ++i)
+                    writer.Write(fundamental.Fields[i]);
+            }
+            else
+                writer.Write(0);
+        }
+
+        #endregion
     }
 }

@@ -25,6 +25,13 @@ namespace SmartQuant
         {
             Obj = obj;
             Group = group;
+            GroupId = group != null ? group.Id : -1;
+        }
+
+        internal GroupEvent(Event obj, int groupId)
+        {
+            Obj = obj;
+            GroupId = groupId;
         }
 	}
 }

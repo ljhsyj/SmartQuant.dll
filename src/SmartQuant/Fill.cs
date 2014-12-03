@@ -16,15 +16,15 @@ namespace SmartQuant
 
         public Instrument Instrument { get; private set; }
 
-        public byte CurrencyId { get; private set; }
+        public byte CurrencyId { get; internal set; }
 
-        public OrderSide Side { get; private set; }
+        public OrderSide Side { get; internal set; }
 
-        public double Qty { get; private set; }
+        public double Qty { get; internal set; }
 
-        public double Price { get; private set; }
+        public double Price { get; internal set; }
 
-        public string Text { get; private set; }
+        public string Text { get; internal set; }
 
         public double Commission { get; private set; }
 
@@ -111,15 +111,6 @@ namespace SmartQuant
         {
             return string.Format("{0} {1} {2} {3} {4} {5}", DateTime, GetSideAsString(), Instrument.Symbol, Qty, Price, Text);
         }
-
-
-
-
-
-
-
-
-
     }
 }
 

@@ -41,8 +41,9 @@ namespace SmartQuant
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            var command = (ExecutionCommand)obj;
-            writer.Write((byte)0);
+            byte version = 0;
+            var command = obj as ExecutionCommand;
+            writer.Write(version);
             writer.Write(command.Id);
             writer.Write((byte)command.Type);
             writer.Write(command.TransactTime.Ticks);

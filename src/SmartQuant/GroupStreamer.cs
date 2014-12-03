@@ -16,12 +16,35 @@ namespace SmartQuant
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            var version = reader.ReadByte();
+            string gname = reader.ReadString();
+            reader.ReadInt32();
+            var group = new Group(gname);
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; ++i)
+            {
+                string name = reader.ReadString();
+                byte type = reader.ReadByte();
+                object obj = this.streamerManager.Deserialize(reader);
+                group.Add(name, type, obj);
+            }
+            return group;
         }
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            byte version = 0;
+            var group = obj as Group;
+            writer.Write(version);
+            writer.Write(group.Name);
+            writer.Write(group.Id);
+            writer.Write(group.Fields.Count);
+            foreach (var field in group.Fields.Values)
+            {
+                writer.Write(field.Name);
+                writer.Write(field.Type);
+                this.streamerManager.Serialize(writer, field.Value);
+            }
         }
     }
 }

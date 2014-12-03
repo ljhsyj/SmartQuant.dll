@@ -7,6 +7,12 @@ namespace SmartQuant
 {
     public class FieldList
     {
+        internal IdArray<double> Fields { get; set; }
+
+        public FieldList()
+        {
+            Fields = new IdArray<double>(1024);
+        }
     }
 }
 

@@ -16,12 +16,37 @@ namespace SmartQuant
 
         public override object Read(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            var version = reader.ReadByte();
+            var flist = new FieldList();
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; ++i)
+            {
+                int index = reader.ReadInt32();
+                double value = reader.ReadDouble();
+                flist.Fields[index] = value;
+            }
+            return flist;
         }
 
         public override void Write(BinaryWriter writer, object obj)
         {
-            throw new NotImplementedException();
+            byte version = 0;
+            var flist = obj as FieldList;
+            writer.Write(version);  
+            int count = 0;
+            for (int i = 0; i < flist.Fields.Size; ++i)
+                if (flist.Fields[i] != 0)
+                    ++count;
+
+            writer.Write(count);
+            for (int i = 0; i < flist.Fields.Size; ++i)
+            {
+                if (flist.Fields[i] != 0)
+                {
+                    writer.Write(i);
+                    writer.Write(flist.Fields[i]);
+                }
+            }
         }
     }
 }
