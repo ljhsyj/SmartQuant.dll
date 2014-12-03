@@ -99,12 +99,12 @@ namespace SmartQuant
 
         public void OnPortfolioAdded(Portfolio portfolio)
         {
-            throw new NotImplementedException();
+            OnEvent(new OnPortfolioAdded(portfolio));
         }
 
         public void OnPortfolioDeleted(Portfolio portfolio)
         {
-            throw new NotImplementedException();
+            OnEvent(new OnPortfolioDeleted(portfolio));
         }
 
         public void OnPositionOpened(Portfolio portfolio, Position position, bool queued = true)
@@ -114,6 +114,22 @@ namespace SmartQuant
                 this.queue.Enqueue(e);
             else
                 OnEvent(e);
+        }
+
+        internal void OnPositionClosed(Portfolio portfolio, Position position, bool queued = true)
+        {
+            if (queued)
+                this.queue.Enqueue(new OnPositionClosed(portfolio, position));
+            else
+                OnEvent(new OnPositionClosed(portfolio, position));
+        }
+
+        internal void OnPositionChanged(Portfolio portfolio, Position position, bool queued = true)
+        {
+            if (queued)
+                this.queue.Enqueue(new OnPositionChanged(portfolio, position));
+            else
+                OnEvent(new OnPositionChanged(portfolio, position));
         }
 
         public void EmitQueued()
@@ -132,6 +148,22 @@ namespace SmartQuant
         {
             if (queued)
                 OnEvent(new OnPortfolioParentChanged(portfolio));
+        }
+
+        internal void OnTransaction(Portfolio portfolio, Transaction transaction, bool queued = true)
+        {
+            if (queued)
+                this.queue.Enqueue(new OnTransaction(portfolio, transaction));
+            else
+                OnEvent(new OnTransaction(portfolio, transaction));
+        }
+
+        internal void OnFill(Portfolio portfolio, Fill fill, bool queued = true)
+        {
+            if (queued)
+                this.queue.Enqueue(new OnFill(portfolio, fill));
+            else
+                OnEvent(new OnFill(portfolio, fill));
         }
 
         internal void OnFrameworkCleared(Framework framework)

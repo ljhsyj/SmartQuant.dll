@@ -9,6 +9,7 @@ namespace SmartQuant
     public class PortfolioManager
     {
         private Framework framework;
+        private int nextId;
 
         public Pricer Pricer { get; set; }
 
@@ -25,38 +26,59 @@ namespace SmartQuant
         public PortfolioManager(Framework framework)
         {
             this.framework = framework;
-            this.Pricer = new Pricer(framework);
-            this.Portfolios = new PortfolioList();
+            Pricer = new Pricer(framework);
+            Portfolios = new PortfolioList();
         }
 
         public void Add(Portfolio portfolio)
         {
-            throw new NotImplementedException();
+            Add(portfolio, true);
         }
 
         public void Remove(string name)
         {
-            throw new NotImplementedException();
+            var portfolio = this[name];
+            if (portfolio != null)
+                Remove(portfolio);
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            var portfolio = GetById(id);
+            if (portfolio != null)
+                Remove(portfolio);
         }
 
         public void Remove(Portfolio portfolio)
         {
-            throw new NotImplementedException();
+            Portfolios.Remove(portfolio);
+            this.framework.EventServer.OnPortfolioDeleted(portfolio);
         }
 
         public Portfolio GetById(int id)
         {
-            throw new NotImplementedException();
+            return Portfolios.GetById(id);
         }
 
         public void Clear()
         {
+            foreach (var portfolio in Portfolios)
+                this.framework.EventServer.OnPortfolioDeleted(portfolio);
             Portfolios.Clear();
+            this.nextId = 0;
+        }
+
+        private void Add(Portfolio portfolio, bool raiseEvents)
+        {
+            portfolio.Id = this.nextId++;
+            Portfolios.Add(portfolio);
+            if (raiseEvents)
+                this.framework.EventServer.OnPortfolioAdded(portfolio);
+        }
+
+        internal void OnExecutionReport(ExecutionReport report)
+        {
+            report.Order.Portfolio.OnExecutionReport(report);
         }
 
         internal void Save(BinaryWriter writer)

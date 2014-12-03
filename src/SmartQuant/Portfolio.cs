@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace SmartQuant
 {
-	public class Portfolio
-	{
+    public class Portfolio
+    {
         internal Framework framework;
 
         private Portfolio parent;
 
-        internal short Id { get; set; }
+        internal int Id { get; set; }
 
         public string Name { get; private set; }
 
@@ -52,15 +52,17 @@ namespace SmartQuant
         [Browsable(false)]
         public List<Transaction> Transactions { get; private set; }
 
+        internal IdArray<Transaction> TransactionsByOrderId { get; private set; }
+
         [Browsable(false)]
         public PortfolioPerformance Performance { get; private set; }
 
         [Browsable(false)]
         public List<Position> Positions { get; private set; }
 
-        internal IdArray<Position> PositionArray { get; private set; }
+        internal IdArray<Position> PositionsByInstrumentId { get; private set; }
 
-        public double Value 
+        public double Value
         {
             get
             {
@@ -98,25 +100,32 @@ namespace SmartQuant
             this.framework = framework;
             Name = name;
             Children = new List<Portfolio>();
-            PositionArray = new IdArray<Position>(8192);
+            Transactions = new List<Transaction>();
+            TransactionsByOrderId = new IdArray<Transaction>(131072);
+            PositionsByInstrumentId = new IdArray<Position>(8192);
             Positions = new List<Position>();
+            Account = new Account(framework);
+            Fills = new FillSeries(name);
+            Pricer = framework.PortfolioManager.Pricer;
+            Performance = new PortfolioPerformance(this);
+            Statistics = new PortfolioStatistics(this);
         }
 
         public void Add(Fill fill)
         {
             throw new NotImplementedException();
         }
-          
+
         internal Position Add(Instrument instrument)
         {
-            var position =  PositionArray[instrument.Id];
+            var position = PositionsByInstrumentId[instrument.Id];
             if (position == null)
             {
                 position = new Position(this, instrument);
-                PositionArray[instrument.Id] = position;
+                PositionsByInstrumentId[instrument.Id] = position;
                 Positions.Add(position);
             }
-           return position;
+            return position;
         }
 
         public bool HasPosition(Instrument instrument)
@@ -153,5 +162,116 @@ namespace SmartQuant
         {
             throw new NotImplementedException();
         }
-	}
+
+        internal void OnExecutionReport(ExecutionReport report)
+        {
+            OnExecutionReport(report, false);
+        }
+
+        internal void OnExecutionReport(ExecutionReport report, bool queued = true)
+        {
+            Transaction transaction;
+            switch (report.ExecType)
+            {
+                case ExecType.ExecRejected:
+                case ExecType.ExecCancelled:
+                    transaction = TransactionsByOrderId[report.Order.Id];
+                    if (transaction == null)
+                        break;
+                    transaction.IsDone = true;
+                    OnTransaction(transaction, true);
+                    break;
+                case ExecType.ExecTrade:
+                    transaction = TransactionsByOrderId[report.Order.Id];
+                    if (transaction == null)
+                    {
+                        transaction = new Transaction();
+                        method_4(transaction, true);
+                        TransactionsByOrderId[report.Order.Id] = transaction;
+                    }
+                    Fill fill = new Fill(report);
+                    transaction.Add(fill);
+                    OnFill(fill, queued);
+                    if (report.OrdStatus == OrderStatus.Filled)
+                    {
+                        transaction.IsDone = true;
+                        OnTransaction(transaction, true);
+                    }
+                    break;
+            }
+        }
+
+        internal void method_4(Transaction transaction, bool queued = true)
+        {
+            Transactions.Add(transaction);
+            if (Parent != null)
+                Parent.method_4(transaction, queued);
+        }
+
+        internal void OnTransaction(Transaction transaction, bool queued = true)
+        {
+            this.framework.EventServer.OnTransaction(this, transaction, queued);
+            if (Parent != null)
+                Parent.OnTransaction(transaction, queued);
+            Statistics.OnTransaction(transaction);
+        }
+
+        internal void OnFill(Fill fill, bool queued = true)
+        {
+            Fills.Add(fill);
+            this.framework.EventServer.OnFill(this, fill, queued);
+            var instrument = fill.Instrument;
+            bool flag = false;
+            var position = FindPosition(instrument);
+            if (position.Qty == 0)
+                flag = true;
+            position.Add(fill);
+            Account.Add(fill, false);
+            if (flag)
+            {
+                Statistics.OnPositionChanged(position);
+                this.framework.EventServer.OnPositionChanged(this, position, queued);
+                Statistics.OnPositionOpened(position);
+                this.framework.EventServer.OnPositionOpened(this, position, queued);
+            }
+            else
+            {
+                this.framework.EventServer.OnPositionChanged(this, position, queued);
+                if (position.Qty == 0)
+                {
+                    Statistics.OnPositionClosed(position);
+                    this.framework.EventServer.OnPositionClosed(this, position, queued);
+                }
+            }
+            if (Parent != null)
+                Parent.OnFill(fill, queued);
+            Statistics.OnFill(fill);
+        }
+
+        internal Position FindPosition(Instrument instrument)
+        {
+            Position position = PositionsByInstrumentId[instrument.Id];
+            if (position == null)
+            {
+                position = new Position(this, instrument);
+                PositionsByInstrumentId[instrument.Id] = position;
+                Positions.Add(position);
+            }
+            return position;
+        }
+
+        #region Extra Helper Methods
+
+        internal string GetName()
+        {
+            return Name;
+        }
+
+        internal int GetId()
+        {
+            return Id;
+        }
+
+        #endregion
+    }
 }

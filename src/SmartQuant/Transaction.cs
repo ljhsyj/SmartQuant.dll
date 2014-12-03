@@ -54,7 +54,7 @@ namespace SmartQuant
 
         public double Commission { get; private set; }
 
-        public bool IsDone { get; private set; }
+        public bool IsDone { get; internal set; }
 
         public double Amount
         {

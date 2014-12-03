@@ -3,12 +3,15 @@
 
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace SmartQuant
 {
     public class PortfolioStatistics
     {
         private Portfolio portfolio;
+        internal IdArray<TradeDetector> detectors = new IdArray<TradeDetector>(8192);
+        internal IdArray<List<int>> idArray_1 = new IdArray<List<int>>(1024);
 
         public PortfolioStatisticsItemList Items { get; private set; }
 
@@ -18,11 +21,20 @@ namespace SmartQuant
             Items = new PortfolioStatisticsItemList();
             foreach (var item in Items)
                 Add(item);
-            throw new NotImplementedException();
         }
 
         public void Add(PortfolioStatisticsItem item)
         {
+            if (item.statistics != null)
+            {
+                Console.WriteLine("PortfolioStatistics::Add Error. Item already belongs to other statistics {0}", item);
+                return;
+            }
+
+            item.statistics = this;
+            item.portfolio = this.portfolio;
+            Items.Add(item);
+            item.OnInit();
         }
 
         public PortfolioStatisticsItem Get(int type)
@@ -32,17 +44,41 @@ namespace SmartQuant
 
         internal void Subscribe(PortfolioStatisticsItem item, int type)
         {
-            throw new NotImplementedException();
+            if (Items.GetByType(type) == null)
+                Add(this.portfolio.framework.StatisticsManager.Clone(type));
+            if (this.idArray_1[type] == null)
+                this.idArray_1[type] = new List<int>();
+            else if (this.idArray_1[type].Contains(item.Type))
+            {
+                Console.WriteLine("PortfolioStatistics::Subscribe Item {0} is already subscribed for item {1}", item.Type, type);
+                return;
+            }
+            this.idArray_1[type].Add(item.Type);
         }
 
         internal void Unsubscribe(PortfolioStatisticsItem item, int type)
         {  
-            throw new NotImplementedException();
+            if (this.idArray_1[type] != null && this.idArray_1[type].Contains(item.Type))
+                this.idArray_1[type].Remove(item.Type);
+            else
+                Console.WriteLine("PortfolioStatistics::Unsubscribe Item {0} is not subscribed for item {1}", item.Type, type);
         }
 
         internal void Add(Fill fill)
         {
-            throw new NotImplementedException();
+            var id = fill.Instrument.Id;
+            if (this.detectors[id] == null)
+            {
+                var detector = new TradeDetector(TradeDetectionType.FIFO, this.portfolio);
+                detector.Detected += (sender, e) =>
+                {
+                    var info = e.TradeInfo;
+                    foreach (var item in Items)
+                        item.OnRoundTrip(info);
+                };
+                this.detectors[id] = detector;
+            }
+            this.detectors[id].Add(fill);
         }
 
         internal void OnFill(Fill fill)
