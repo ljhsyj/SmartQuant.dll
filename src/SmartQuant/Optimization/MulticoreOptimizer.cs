@@ -121,6 +121,7 @@ namespace SmartQuant.Optimization
             }
 
             EventCount = frameworks.Sum(framework => framework.EventManager.EventCount);
+
             for (int i = 0; i < nStrategies; ++i)
             {
                 frameworks[i] = null;

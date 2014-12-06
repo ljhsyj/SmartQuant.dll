@@ -283,7 +283,6 @@ namespace SmartQuant
             }
         }
             
-
         public EventBus(Framework framework, EventBusMode mode = EventBusMode.Simulation)
         {
             this.eventBusMode_0 = EventBusMode.Simulation;
@@ -306,6 +305,11 @@ namespace SmartQuant
             queue.Enqueue((Event) new OnQueueOpened(queue));
             bus.eventPipe_0.Add((IEventQueue) queue);
             this.eventQueue_0[this.int_0++] = queue;
+        }
+
+        public void Detach(EventBus bus)
+        {
+            throw new NotImplementedException();
         }
 
         public Event Dequeue()

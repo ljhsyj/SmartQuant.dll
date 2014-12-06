@@ -15,7 +15,7 @@ namespace SmartQuant
         private EventBus bus;
         private bool stepping;
         private byte stepEvent;
-        private volatile bool running;
+        private volatile bool exit;
         private Thread thread;
         private IdArray<EventGate> gates;
 
@@ -50,7 +50,6 @@ namespace SmartQuant
             Status = EventManagerStatus.Stopped;
             stepping = false;
             stepEvent = EventType.Bar;
-            running = true;
             this.gates = new IdArray<EventGate>(1024);
 //            this.gates[EventType.OnProviderConnected] = new EventManager.Delegate0(this.method_2);
 //            this.gates[EventType.OnProviderDisconnected] = new EventManager.Delegate0(this.method_3);
@@ -176,11 +175,18 @@ namespace SmartQuant
             BarFactory.Clear();
             BarSliceFactory.Clear();
         }
-
-        // Called before it is disposed.
-        internal void Close()
+         
+        public void Dispose()
         {
-            running = false;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+            this.exit = true;
             this.thread.Join();
         }
 
@@ -188,7 +194,7 @@ namespace SmartQuant
         {
             Console.WriteLine("{0} Event manager thread started: Framework = {1} Clock = {2}", DateTime.Now, this.framework.Name, this.framework.Clock.GetModeAsString());
             Status = EventManagerStatus.Running;
-            while (running)
+            while (exit)
             {
                 if (Status != EventManagerStatus.Running && (Status != EventManagerStatus.Paused || !this.stepping))
                     Thread.Sleep(1);

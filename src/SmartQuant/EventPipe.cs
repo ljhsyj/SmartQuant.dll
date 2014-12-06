@@ -125,6 +125,14 @@ namespace SmartQuant
                 this.linkedList_0.Add(queue);
         }
 
+        public void Remove(IEventQueue queue)
+        {
+            if (queue.IsSynched)
+                this.linkedList_1.Remove(queue);
+            else
+                this.linkedList_0.Remove(queue);
+        }
+
         public bool IsEmpty()
         {
             if (this.linkedList_0.Count != 0)

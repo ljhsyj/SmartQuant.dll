@@ -233,8 +233,10 @@ namespace SmartQuant
                     OrderServer.Dispose();
                 if (ProviderManager != null)
                     ProviderManager.Dispose();
+                if (DataManager != null)
+                    DataManager.Dispose();
                 if (EventManager != null)
-                    EventManager.Close();
+                    EventManager.Dispose();
             }
             disposed = true;
         }

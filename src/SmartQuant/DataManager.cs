@@ -14,6 +14,7 @@ namespace SmartQuant
         private Framework framework;
         private Thread thread;
         private volatile bool exit;
+        private bool disposed;
 
         public DataServer Server { get; private set; }
 
@@ -93,7 +94,7 @@ namespace SmartQuant
 
         public List<DataSeries> GetDataSeriesList(Instrument instrument = null, string pattern = null)
         {
-            return this.Server.GetDataSeriesList(instrument, pattern);
+            return Server.GetDataSeriesList(instrument, pattern);
         }
 
         public void DeleteDataSeries(Instrument instrument, byte type, BarType barType = BarType.Time, long barSize = 60)
@@ -106,52 +107,54 @@ namespace SmartQuant
 
         public void DeleteDataSeries(string name)
         {
-            this.Server.DeleteDataSeries(name);
+            Server.DeleteDataSeries(name);
         }
 
         public void Save(BarSeries series, SaveMode option = SaveMode.Add)
         {
-            Parallel.For(0, series.Count, i => Save((Bar)series[i], option));
+            for (int i = 0; i < series.Count; ++i)
+                Save((Bar)series[i], option);
         }
 
         public void Save(TickSeries series, SaveMode option = SaveMode.Add)
         {
-            Parallel.ForEach(series, s => Save(s, option));
+            foreach (var s in series)
+                Save(s, option);
         }
 
         public void Save(Tick tick, SaveMode option = SaveMode.Add)
         {
-            this.Save(tick.InstrumentId, tick, option);
+            Save(tick.InstrumentId, tick, option);
         }
 
         public void Save(Bar bar, SaveMode option = SaveMode.Add)
         {
-            this.Save(bar.InstrumentId, bar, option);
+            Save(bar.InstrumentId, bar, option);
         }
 
         public void Save(Level2 level2, SaveMode option = SaveMode.Add)
         {
-            this.Save(level2.InstrumentId, level2, option);
+            Save(level2.InstrumentId, level2, option);
         }
 
         public void Save(Level2Snapshot level2, SaveMode option = SaveMode.Add)
         {
-            this.Save(level2.InstrumentId, level2, option);
+            Save(level2.InstrumentId, level2, option);
         }
 
         public void Save(Level2Update level2, SaveMode option = SaveMode.Add)
         {
-            this.Save(level2.InstrumentId, level2, option);
+            Save(level2.InstrumentId, level2, option);
         }
 
         public void Save(Fundamental fundamental, SaveMode option = SaveMode.Add)
         {
-            this.Save(fundamental.InstrumentId, fundamental, option);
+            Save(fundamental.InstrumentId, fundamental, option);
         }
 
         public void Save(News news, SaveMode option = SaveMode.Add)
         {
-            this.Save(news.InstrumentId, news, option);
+            Save(news.InstrumentId, news, option);
         }
 
         public void Save(Instrument instrument, DataObject obj, SaveMode option = SaveMode.Add)
@@ -313,6 +316,19 @@ namespace SmartQuant
         public BarSeries GetHistoricalBars(IHistoricalDataProvider provider, Instrument instrument, DateTime dateTime1, DateTime dateTime2, BarType barType, long barSize)
         {
             return null;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+            this.disposed = true;
         }
     }
 }

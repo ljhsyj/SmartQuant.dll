@@ -50,6 +50,11 @@ namespace SmartQuant
             EventManager.OnEvent(trade);
         }
 
+        public void EmitBar(Bar bar)
+        {
+            EventManager.OnEvent(bar);
+        }
+
         public virtual void Subscribe(Instrument instrument)
         {
             OnSubscribe(instrument);
