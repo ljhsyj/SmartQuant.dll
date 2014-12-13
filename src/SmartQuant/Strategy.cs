@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SmartQuant
 {
@@ -192,6 +193,22 @@ namespace SmartQuant
         public void AddExchangeReminder(DateTime dateTime, object data = null)
         {
             this.framework.ExchangeClock.AddReminder((dt, obj) => OnExchangeReminder(dt, obj), dateTime, data);
+        }
+
+        public object GetParameter(string name)
+        {
+            var field = GetType().GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (field == null)
+                return null;
+            return field.GetCustomAttributes(typeof(ParameterAttribute), true).Length > 0 ? field.GetValue(this) : null;
+        }
+
+        public void SetParameter(string name, object value)
+        {
+            var field = GetType().GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (field == null || field.GetCustomAttributes(typeof(ParameterAttribute), true).Length <= 0)
+                return;
+            field.SetValue(this, value);
         }
 
         public void AddInstruments(string[] symbols)
@@ -599,146 +616,181 @@ namespace SmartQuant
             throw new NotImplementedException();
         }
 
-        public void AddStop (Stop stop)
+        public void AddStop(Stop stop)
         {
             throw new NotImplementedException();
         }
-        public Order Buy (short providerId, Instrument instrument, double qty, string text)
+
+        public Order Buy(short providerId, Instrument instrument, double qty, string text)
         {
             throw new NotImplementedException();
         }
-        public Order Buy (IExecutionProvider provider, Instrument instrument, double qty, string text)
+
+        public Order Buy(IExecutionProvider provider, Instrument instrument, double qty, string text)
         {
             throw new NotImplementedException();
         }
-        public Order Buy (Instrument instrument, double qty, string text)
+
+        public Order Buy(Instrument instrument, double qty, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyLimit (short providerId, Instrument instrument, double qty, double price, string text)
+
+        public Order BuyLimit(short providerId, Instrument instrument, double qty, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyLimit (IExecutionProvider provider, Instrument instrument, double qty, double price, string text)
+
+        public Order BuyLimit(IExecutionProvider provider, Instrument instrument, double qty, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyLimit (Instrument instrument, double qty, double price, string text)
+
+        public Order BuyLimit(Instrument instrument, double qty, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyStop (short providerId, Instrument instrument, double qty, double stopPx, string text)
+
+        public Order BuyStop(short providerId, Instrument instrument, double qty, double stopPx, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyStop (IExecutionProvider provider, Instrument instrument, double qty, double stopPx, string text)
+
+        public Order BuyStop(IExecutionProvider provider, Instrument instrument, double qty, double stopPx, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyStop (Instrument instrument, double qty, double stopPx, string text)
+
+        public Order BuyStop(Instrument instrument, double qty, double stopPx, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyStopLimit (short providerId, Instrument instrument, double qty, double stopPx, double price, string text)
+
+        public Order BuyStopLimit(short providerId, Instrument instrument, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyStopLimit (IExecutionProvider provider, Instrument instrument, double qty, double stopPx, double price, string text)
+
+        public Order BuyStopLimit(IExecutionProvider provider, Instrument instrument, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyStopLimit (Instrument instrument, double qty, double stopPx, double price, string text)
+
+        public Order BuyStopLimit(Instrument instrument, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyStopLimitOrder (Instrument instrument, double qty, double stopPx, double price, string text)
+
+        public Order BuyStopLimitOrder(Instrument instrument, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order BuyStopOrder (Instrument instrument, double qty, double stopPx, string text)
+
+        public Order BuyStopOrder(Instrument instrument, double qty, double stopPx, string text)
         {
             throw new NotImplementedException();
         }
-        public Strategy GetStrategy (string name)
+
+        public Strategy GetStrategy(string name)
         {
             throw new NotImplementedException();
         }
-        protected internal virtual void OnStopStatusChanged_ (Stop stop)
+
+        protected internal virtual void OnStopStatusChanged_(Stop stop)
         {
             throw new NotImplementedException();
         }
-        public Order Order (Instrument instrument, OrderType type, OrderSide side, double qty, double stopPx, double price, string text)
+
+        public Order Order(Instrument instrument, OrderType type, OrderSide side, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public void RemoveStrategy (Strategy strategy)
+
+        public void RemoveStrategy(Strategy strategy)
         {
             throw new NotImplementedException();
         }
-        public void Respond (DataObject data)
+
+        public void Respond(DataObject data)
         {
             throw new NotImplementedException();
         }
-        public void Respond (DataObject data, int commandId)
+
+        public void Respond(DataObject data, int commandId)
         {
             throw new NotImplementedException();
         }
-        public Order Sell (short providerId, Instrument instrument, double qty, string text)
+
+        public Order Sell(short providerId, Instrument instrument, double qty, string text)
         {
             throw new NotImplementedException();
         }
-        public Order Sell (IExecutionProvider provider, Instrument instrument, double qty, string text)
+
+        public Order Sell(IExecutionProvider provider, Instrument instrument, double qty, string text)
         {
             throw new NotImplementedException();
         }
-        public Order Sell (Instrument instrument, double qty, string text)
+
+        public Order Sell(Instrument instrument, double qty, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellLimit (short providerId, Instrument instrument, double qty, double price, string text)
+
+        public Order SellLimit(short providerId, Instrument instrument, double qty, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellLimit (IExecutionProvider provider, Instrument instrument, double qty, double price, string text)
+
+        public Order SellLimit(IExecutionProvider provider, Instrument instrument, double qty, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellLimit (Instrument instrument, double qty, double price, string text)
+
+        public Order SellLimit(Instrument instrument, double qty, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellStop (short providerId, Instrument instrument, double qty, double stopPx, string text)
+
+        public Order SellStop(short providerId, Instrument instrument, double qty, double stopPx, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellStop (IExecutionProvider provider, Instrument instrument, double qty, double stopPx, string text)
+
+        public Order SellStop(IExecutionProvider provider, Instrument instrument, double qty, double stopPx, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellStop (Instrument instrument, double qty, double stopPx, string text)
+
+        public Order SellStop(Instrument instrument, double qty, double stopPx, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellStopLimit (short providerId, Instrument instrument, double qty, double stopPx, double price, string text)
+
+        public Order SellStopLimit(short providerId, Instrument instrument, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellStopLimit (IExecutionProvider provider, Instrument instrument, double qty, double stopPx, double price, string text)
+
+        public Order SellStopLimit(IExecutionProvider provider, Instrument instrument, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellStopLimit (Instrument instrument, double qty, double stopPx, double price, string text)
+
+        public Order SellStopLimit(Instrument instrument, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellStopLimitOrder (Instrument instrument, double qty, double stopPx, double price, string text)
+
+        public Order SellStopLimitOrder(Instrument instrument, double qty, double stopPx, double price, string text)
         {
             throw new NotImplementedException();
         }
-        public Order SellStopOrder (Instrument instrument, double qty, double stopPx, string text)
+
+        public Order SellStopOrder(Instrument instrument, double qty, double stopPx, string text)
         {
             throw new NotImplementedException();
         }
+
         public string GetStatusAsString()
         {
             switch (this.Status)
