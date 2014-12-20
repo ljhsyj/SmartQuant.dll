@@ -27,6 +27,21 @@ namespace SmartQuant
             streamersById[streamer.TypeId] = streamer;
         }
 
+        public bool HasStreamer(object obj)
+        {
+            return HasStreamer(obj.GetType());
+        }
+
+        public bool HasStreamer(Type type)
+        {
+            return this.streamersByType.ContainsKey(type);
+        }
+
+        public bool HasStreamer(int typeId)
+        {
+            return this.streamersById[typeId] != null;
+        }
+
         public void Serialize(BinaryWriter writer, object obj)
         {
             var streamer = streamersByType[obj.GetType()];
